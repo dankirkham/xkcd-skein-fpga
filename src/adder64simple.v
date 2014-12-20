@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 module adder64simple(
 	input [63:0] operand1_i,
 	input [63:0] operand2_i,

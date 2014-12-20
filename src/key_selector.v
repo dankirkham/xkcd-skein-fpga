@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module key_selector (
 	input mode_i,
 	input [1023:0] key_i,
