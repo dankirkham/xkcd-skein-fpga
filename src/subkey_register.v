@@ -3,7 +3,6 @@ module subkey_register (
 	input rst_i,
 	input write_i,
 	input [63:0] word_i,
-	input control_i,
 	
 	output [63:0] subkey_o
     );
