@@ -1,4 +1,4 @@
-module tweak_selector (
+module tweak_select (
 	input mode_i,
 	output [191:0] tweak_o
     );

@@ -1,4 +1,4 @@
-module tweak_demux (
+module tweak_word_select (
 	input [1:0] select_i,
 	input [191:0] tweak_i,
 	output [63:0] tweak_word_o
