@@ -1,4 +1,4 @@
-module key_demux (
+module key_word_select (
 	input [4:0] select_i,
 	input [1087:0] key_i,
 	output [63:0] key_word_o
