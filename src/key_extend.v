@@ -1,4 +1,4 @@
-module key_extender (
+module key_extend (
 	input [1023:0] key_i,
 	output [1087:0] key_o
     );
