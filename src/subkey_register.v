@@ -1,4 +1,4 @@
-module subkey_register (
+module subkey_word_register (
 	input clk_i,
 	input rst_i,
 	input write_i,
