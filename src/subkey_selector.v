@@ -10,7 +10,7 @@ module subkey_selector (
 	output [63:0] word_o
     );
 	
-reg [3:0] key_word_select;
+reg [4:0] key_word_select;
 
 wire control_13_w;
 wire control_14_w;
@@ -32,7 +32,7 @@ subkey_word_select_demux subkey_word_select_demux (
 subkey_register13 subkey_register (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
-	.write_i(rst_i),
+	.write_i(control_13_w),
 	.word_i(add64_word_i),
 	
 	.subkey_o(subkey_word_13_w)
@@ -41,7 +41,7 @@ subkey_register13 subkey_register (
 subkey_register14 subkey_register (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
-	.write_i(rst_i),
+	.write_i(control_14_w),
 	.word_i(add64_word_i),
 	
 	.subkey_o(subkey_word_14_w)
@@ -50,7 +50,7 @@ subkey_register14 subkey_register (
 subkey_register15 subkey_register (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
-	.write_i(rst_i),
+	.write_i(control_15_w),
 	.word_i(add64_word_i),
 	
 	.subkey_o(subkey_word_15_w)
