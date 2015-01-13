@@ -2,6 +2,8 @@ module key_constant (
 	output [1023:0] key_o
     );
 
+reg [1023:0] key;
+	
 assign key_o = key;
 
 always @(*) begin
