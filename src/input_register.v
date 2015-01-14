@@ -23,7 +23,7 @@ always @(posedge clk) begin
 	state_q <= state_d;
 	
 	if (zero_i) begin
-		state_q <= 64'd0;
+		state_q <= 1024'd0;
 	end
 end
 
