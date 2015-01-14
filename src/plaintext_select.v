@@ -13,7 +13,7 @@ assign plaintext_o = plaintext;
 always @(*) begin
 	if (mode_i) // Zeros
 	begin
-		plaintext[1023:0] = 64'b0;
+		plaintext[1023:0] = 1024'b0;
 	end else begin // Nonce mode
 		plaintext[1023:512] = 512'b0; // Zero pad
 		plaintext[511:256] = nonce_i; // Nonce
