@@ -1,4 +1,4 @@
-modulde input_x1_select (
+module input_x1_select (
 	input [1023:0] input_register_i,
 	input [3:0] word_i,
 	output [63:0] x1_o,
