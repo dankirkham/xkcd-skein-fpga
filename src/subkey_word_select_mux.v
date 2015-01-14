@@ -1,4 +1,4 @@
-module subkey_word_select_demux (
+module subkey_word_select_mux (
 	input [3:0] select_i,
 	input [63:0] word_default_i,
 	input [63:0] word_13_i,

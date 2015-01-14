@@ -56,7 +56,7 @@ subkey_register15 subkey_register (
 	.subkey_o(subkey_word_15_w)
     );
 	
-subkey_word_select_demux subkey_word_select_demux (
+subkey_word_select_mux subkey_word_select_mux (
 	.select_i(subkey_word_select_i),
 	.word_default_i(key_word_i),
 	.word_13_i(subkey_word_13_w),
