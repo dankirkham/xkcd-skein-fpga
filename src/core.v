@@ -17,7 +17,7 @@ module core (
 	input [1023:0] key_constant_i,
 	input [4:0] subkey_i,
 	input hash_register_write_i,
-	output reg [1023:0] hash_register_o
+	output [1023:0] hash_register_o
 );
 
 wire [1023:0] input_register_o_w;

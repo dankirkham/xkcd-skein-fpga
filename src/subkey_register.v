@@ -1,4 +1,4 @@
-module subkey_word_register (
+module subkey_register (
 	input clk_i,
 	input rst_i,
 	input write_i,
@@ -19,7 +19,7 @@ always @(*) begin
 	end
 end
 
-always @(posedge clk) begin
+always @(posedge clk_i) begin
 	subkey_q <= subkey_d;
 	
 	if (rst_i) begin

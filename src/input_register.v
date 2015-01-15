@@ -18,7 +18,7 @@ always @(*) begin
 	end
 end
 
-always @(posedge clk) begin
+always @(posedge clk_i) begin
 	state_q <= state_d;
 end
 

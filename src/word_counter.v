@@ -11,11 +11,11 @@ reg [3:0] word_counter_d, word_counter_q;
 assign word_counter_o = word_counter_q;
 
 always @(*) begin
-	if (word_counter_reset_o == 1'b1)
+	if (word_counter_reset_i == 1'b1)
 		word_counter_d = 4'd0;
-	else if (word_counter_plus_1_o == 1'b1)
+	else if (word_counter_plus_1_i == 1'b1)
 		word_counter_d = word_counter_q + 4'd1;
-	else if (word_counter_plus_2_o == 1'b1)
+	else if (word_counter_plus_2_i == 1'b1)
 		word_counter_d = word_counter_q + 4'd2;
 	else
 		word_counter_d = word_counter_q;

@@ -26,10 +26,10 @@ subkey_word_select_demux subkey_word_select_demux (
 	.control_i(write_i),
 	.control_13_o(control_13_w),
 	.control_14_o(control_14_w),
-	.control_15_o(control_15_w),
+	.control_15_o(control_15_w)
     );
 	
-subkey_register13 subkey_register (
+subkey_register subkey_register13 (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
 	.write_i(control_13_w),
@@ -38,7 +38,7 @@ subkey_register13 subkey_register (
 	.subkey_o(subkey_word_13_w)
     );
 	
-subkey_register14 subkey_register (
+subkey_register subkey_register14 (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
 	.write_i(control_14_w),
@@ -47,7 +47,7 @@ subkey_register14 subkey_register (
 	.subkey_o(subkey_word_14_w)
     );
 	
-subkey_register15 subkey_register (
+subkey_register subkey_register15 (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
 	.write_i(control_15_w),

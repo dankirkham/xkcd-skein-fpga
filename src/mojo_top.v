@@ -33,7 +33,7 @@ wire [1023:0] hash_w;
 // these signals should be high-z when not used
 assign spi_miso = 1'bz;
 assign spi_channel = 4'bzzzz;
-assign led[7:0] = sum_w[7:0];
+assign led[7:0] = hash_w[7:0];
 
 avr_interface avr_interface1 (
     .clk(clk),

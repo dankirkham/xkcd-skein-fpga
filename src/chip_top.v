@@ -1,8 +1,8 @@
 module chip_top (
 	input clk_i,
 	input rst_i,
-	output reg [1023:0] hash_o,
-	output reg ready_o
+	output [1023:0] hash_o,
+	output ready_o
 );
 
 wire [255:0] nonce_temp_o_w;
@@ -22,7 +22,7 @@ wire [7:0] rotate_constant_w;
 wire [2:0] d_w;
 wire [2:0] j_w;
 wire [6:0] round_w;
-wire [4:0] word_w;
+wire [3:0] word_w;
 wire hash_mode_w;
 wire y0_add_select_w;
 wire word_counter_reset_w;
@@ -31,7 +31,7 @@ wire word_counter_plus_2_w;
 wire round_counter_increment_w;
 wire round_counter_reset_w;
 wire input_register_write_w;
-wire output_register_write_w;
+wire output_register_write_enable_w;
 wire key_register_write_w;
 wire subkey_register_write_w;
 wire x0_key_select_w;
@@ -65,7 +65,7 @@ state_machine state_machine (
 	
 	// Moore Outputs
 	.input_register_write_o(input_register_write_w),
-	.output_register_write_o(output_register_write_w),
+	.output_register_write_o(output_register_write_enable_w),
 	.key_register_write_o(key_register_write_w),
 	.subkey_register_write_o(subkey_register_write_w),
 	.x0_key_select_o(x0_key_select_w),
@@ -98,7 +98,7 @@ hash_mode_register hash_mode_register (
 
 output_register_write_enable output_register_write_enable (
 	.write_bits_i(y0_add_mode_select_o_w),
-	.write_enable_i(output_register_write_w),
+	.write_enable_i(output_register_write_enable_w),
 	.write_bits_o(output_register_write_w)
 );
 
@@ -117,8 +117,8 @@ tweak_select tweak_select (
 
 tweak_word_select tweak_word_select (
 	.select_i(tweak_word_select_w),
-	tweak_i(tweak_select_o_w),
-	tweak_word_o(tweak_word_select_o_w)
+	.tweak_i(tweak_select_o_w),
+	.tweak_word_o(tweak_word_select_o_w)
 );
 
 tweak_add_type_select_logic tweak_add_type_select_logic (

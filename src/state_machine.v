@@ -84,6 +84,7 @@ always @(*) begin // Mealy Outputs and nextstate
 			end else begin
 				word_counter_plus_2_o = 1'b1;
 				nextstate = STATE_THREEFISH;
+			end
 				
 		STATE_THREEFISH_IR_WRITE:
 			if ((round_counter_i % 4) == 7'd0)
@@ -116,37 +117,51 @@ always @(*) begin // Moore Outputs
 
 	case (state)
 		STATE_SUBKEY_GENERATE:
+		begin
 			x0_key_select_o = 1'b1; // Key
 			x1_tweak_subkey_select_o = 2'b01; // Tweak
 			subkey_register_write_o = 1'b1;
+		end
 			
 		STATE_INIT_PLAINTEXT:
+		begin
 			output_register_plaintext_select_o = 1'b1; // Plaintext
 			input_register_write_o = 1'b1;
+		end
 			
 		STATE_SUBKEY_ADD:
+		begin
 			x0_key_select_o = 1'b0; // X0
 			x1_tweak_subkey_select_o = 2'b10; // Subkey
 			y0_add_select_o = 1'b0; // Add Mode
 			output_register_write_o = 1'b1;
+		end
 			
 		STATE_SUBKEY_ADD_IR_WRITE:
+		begin
 			output_register_plaintext_select_o = 1'b0; // Output Register
 			input_register_write_o = 1'b1;
+		end
 			
 		STATE_THREEFISH:
+		begin
 			x0_key_select_o = 1'b0; // X0
 			x1_tweak_subkey_select_o = 2'b00; // X1
 			y0_add_select_o = 1'b1; // Y0 Mode
 			output_register_write_o = 1'b1;
+		end
 			
 		STATE_THREEFISH_IR_WRITE:
+		begin
 			output_register_plaintext_select_o = 1'b0; // Output Register
 			input_register_write_o = 1'b1;
+		end
 		
 		STATE_FINALIZE_HASH:
+		begin
 			key_register_write_o = 1'b1;
 			hash_mode_toggle_o = 1'b1;
+		end
 	endcase
 end
 
