@@ -1,7 +1,6 @@
 module core (
 	input clk_i,
 	input rst_i,
-	input input_register_zero_i,
 	input input_register_write_i,
 	input [3:0] word_i,
 	input x0_key_select_i,
@@ -17,6 +16,8 @@ module core (
 	input [255:0] nonce_i,
 	input [1023:0] key_constant_i,
 	input [4:0] subkey_i
+	input hash_register_write_i,
+	output reg [1023:0] hash_register_o,
     );
 
 wire [1023:0] input_register_o_w;
@@ -36,14 +37,15 @@ wire [63:0] x1_tweak_subkey_select_o_w;
 wire [63:0] adder64simple_o_w;
 wire [63:0] rotator_o_w;
 wire [63:0] xor_o_w;
+wire [1023:0] xor2_o_w;
 wire [1023:0] output_select_block_o_w;
 wire [3:0] subkey_selector_key_word_select_w;
 
 assign xor_o_w = adder64simple_o_w ^ rotator_o_w;
+assign xor2_o_w = output_register_block_o_w ^ plaintext_select_o_w;
 	
 input_register input_register (
 	.clk_i(clk_i),
-	.zero_i(input_register_zero_i),
 	.write_i(input_register_write_i),
 	.state_i(output_register_plaintext_select_o_w),
 	.state_o(input_register_o_w)
@@ -105,7 +107,7 @@ output_register_block output_register_block (
 key_register key_register (
 	.clk_i(clk_i),
 	.write_i(key_register_write_i),
-	.key_i(output_register_block_o_w),
+	.key_i(xor2_o_w),
 	.key_o(key_register_o_w)
 );
 
@@ -155,6 +157,13 @@ plaintext_select plaintext_select (
 	.nonce_i(nonce_i),
 	.core_i(core_constant_temp_o_w),
 	.plaintext_o(plaintext_select_o_w)
+);
+
+hash_register hash_register(
+	.clk_i(clk_i),
+	.input_i(xor2_o_w),
+	.write_i(hash_register_write_i),
+	.output_o(hash_register_o)
 );
 
 endmodule

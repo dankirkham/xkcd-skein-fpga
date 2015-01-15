@@ -1,6 +1,5 @@
 module input_register (
 	input clk_i,
-	input zero_i,
 	input write_i,
 	input [1023:0] state_i,
 	
@@ -21,10 +20,6 @@ end
 
 always @(posedge clk) begin
 	state_q <= state_d;
-	
-	if (zero_i) begin
-		state_q <= 1024'd0;
-	end
 end
 
 endmodule

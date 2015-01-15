@@ -1,4 +1,4 @@
-module debug_register (
+module hash_register (
 	input clk_i,
 	input [1023:0] input_i,
 	input write_i,
