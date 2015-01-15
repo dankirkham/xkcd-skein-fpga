@@ -6,7 +6,7 @@ module core (
 	input x0_key_select_i,
 	input [1:0] x1_tweak_subkey_select_i,
 	input [63:0] tweak_word_i,
-	input [7:0] rotate_constant_i,
+	input [5:0] rotate_constant_i,
 	input [15:0] Y1_select_i,
 	input [15:0] output_register_write_i,
 	input key_register_write_i,

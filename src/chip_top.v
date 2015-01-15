@@ -18,7 +18,7 @@ wire [15:0] or_w;
 wire [15:0] output_register_write_w;
 wire [15:0] y0_add_mode_select_o_w;
 wire [15:0] word_to_bit_o_w;
-wire [7:0] rotate_constant_w;
+wire [5:0] rotate_constant_w;
 wire [2:0] d_w;
 wire [2:0] j_w;
 wire [6:0] round_w;
