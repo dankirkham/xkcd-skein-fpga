@@ -39,7 +39,7 @@ wire [63:0] rotator_o_w;
 wire [63:0] xor_o_w;
 wire [1023:0] xor2_o_w;
 wire [1023:0] output_select_block_o_w;
-wire [3:0] subkey_selector_key_word_select_w;
+wire [4:0] subkey_selector_key_word_select_w;
 
 assign xor_o_w = adder64simple_o_w ^ rotator_o_w;
 assign xor2_o_w = output_register_block_o_w ^ plaintext_select_o_w;

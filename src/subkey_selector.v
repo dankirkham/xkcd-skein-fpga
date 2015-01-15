@@ -6,7 +6,7 @@ module subkey_selector (
 	input write_i,
 	input [63:0] add64_word_i,
 	input [63:0] key_word_i,
-	output [3:0] key_word_select_o,
+	output [4:0] key_word_select_o,
 	output [63:0] word_o
     );
 	

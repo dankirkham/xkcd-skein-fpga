@@ -1,5 +1,5 @@
 module tweak_add_type_select_logic (
-	input [4:0] word_i,
+	input [3:0] word_i,
 	output [1:0] tweak_add_type_o
 );
 
