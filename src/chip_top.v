@@ -61,7 +61,7 @@ state_machine state_machine (
 	.word_counter_plus_2_o(word_counter_plus_2_w),	
 	.round_counter_increment_o(round_counter_increment_w),
 	.round_counter_reset_o(round_counter_reset_w),
-	.hash_register_write_o(),
+	.hash_register_write_o(hash_register_write_w),
 	
 	// Moore Outputs
 	.input_register_write_o(input_register_write_w),

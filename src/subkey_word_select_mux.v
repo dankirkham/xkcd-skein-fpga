@@ -7,7 +7,7 @@ module subkey_word_select_mux (
 	output [63:0] word_o
     );
 	 
-reg word;
+reg [63:0] word;
 
 assign word_o = word;
 

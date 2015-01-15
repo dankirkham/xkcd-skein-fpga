@@ -10,14 +10,14 @@ module subkey_selector (
 	output [63:0] word_o
     );
 	
-reg [4:0] key_word_select;
+reg [3:0] key_word_select;
 
 wire control_13_w;
 wire control_14_w;
 wire control_15_w;
-wire subkey_word_13_w;
-wire subkey_word_14_w;
-wire subkey_word_15_w;
+wire [63:0] subkey_word_13_w;
+wire [63:0] subkey_word_14_w;
+wire [63:0] subkey_word_15_w;
 	
 assign key_word_select_o = key_word_select;
 
