@@ -1,19 +1,17 @@
 module hash_mode_register (
 	input clk_i,
-	input [1:0] chip_mode_i,
-	input [3:0] word_counter_i,
-	input [6:0] round_counter_i,
+	input toggle_i,
 	output hash_mode_o
 );
 
 reg hash_mode_d, hash_mode_q;
+assign hash_mode_o = hash_mode_q;
 
 always @(*) begin
-	if ((chip_mode_i == 2'b10) && (word_counter_i == 4'd14) && (round_counter_i == 7'd80)) begin
+	if (toggle_i == 1'b1) begin
 		hash_mode_d = ~hash_mode_q;
-	end else begin
+	else
 		hash_mode_d = hash_mode_q;
-	end
 end
 
 always @(posedge clk_i) begin
