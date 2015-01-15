@@ -15,10 +15,10 @@ module core (
 	input output_register_plaintext_select_i,
 	input [255:0] nonce_i,
 	input [1023:0] key_constant_i,
-	input [4:0] subkey_i
+	input [4:0] subkey_i,
 	input hash_register_write_i,
-	output reg [1023:0] hash_register_o,
-    );
+	output reg [1023:0] hash_register_o
+);
 
 wire [1023:0] input_register_o_w;
 wire [63:0] input_x0_select_o_w;

@@ -4,7 +4,7 @@ module word_counter (
 	input word_counter_plus_1_i,
 	input word_counter_plus_2_i,
 	
-	output [3:0] word_counter_o;
+	output [3:0] word_counter_o
 );
 
 reg [3:0] word_counter_d, word_counter_q;

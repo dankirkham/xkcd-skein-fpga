@@ -27,7 +27,7 @@ always @(*) begin
 		14: key_word[63:0] = key_i[959:896];
 		15: key_word[63:0] = key_i[1023:960];
 		default: key_word[63:0] = key_i[1087:1024];
-	end case
+	endcase
 end
 
 endmodule

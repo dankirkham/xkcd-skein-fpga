@@ -80,7 +80,7 @@ word_counter word_counter (
 	.word_counter_reset_i(word_counter_reset_w),
 	.word_counter_plus_1_i(word_counter_plus_1_w),
 	.word_counter_plus_2_i(word_counter_plus_2_w),
-	.word_counter_o(word_w);
+	.word_counter_o(word_w)
 );
 
 round_counter round_counter (

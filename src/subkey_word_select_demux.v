@@ -3,7 +3,7 @@ module subkey_word_select_demux (
 	input control_i,
 	output control_13_o,
 	output control_14_o,
-	output control_15_o,
+	output control_15_o
     );
 	 
 reg control_13;

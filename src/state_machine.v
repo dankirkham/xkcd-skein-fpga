@@ -52,7 +52,7 @@ always @(*) begin // Mealy Outputs and nextstate
 				word_counter_reset_o = 1'b1;
 				nextstate = STATE_INIT_PLAINTEXT;
 			end else begin
-				word_counter_plus_1_o = 1b'1;
+				word_counter_plus_1_o = 1'b1;
 				nextstate = STATE_SUBKEY_GENERATE;
 			end
 			
@@ -64,7 +64,7 @@ always @(*) begin // Mealy Outputs and nextstate
 				word_counter_reset_o = 1'b1;
 				nextstate = STATE_SUBKEY_ADD_IR_WRITE;
 			end else begin
-				word_counter_plus_1_o = 1b'1;
+				word_counter_plus_1_o = 1'b1;
 				nextstate = STATE_SUBKEY_ADD;
 			end
 			

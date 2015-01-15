@@ -1,7 +1,7 @@
 module input_x0_select (
 	input [1023:0] input_register_i,
 	input [3:0] word_i,
-	output [63:0] x0_o,
+	output [63:0] x0_o
 );
 
 reg [63:0] x0;

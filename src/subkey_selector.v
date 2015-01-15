@@ -19,7 +19,7 @@ wire subkey_word_13_w;
 wire subkey_word_14_w;
 wire subkey_word_15_w;
 	
-assign key_word_select_o = key_word_select
+assign key_word_select_o = key_word_select;
 
 subkey_word_select_demux subkey_word_select_demux (
 	.select_i(subkey_word_select_i),

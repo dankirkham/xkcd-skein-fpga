@@ -8,7 +8,7 @@ reg hash_mode_d, hash_mode_q;
 assign hash_mode_o = hash_mode_q;
 
 always @(*) begin
-	if (toggle_i == 1'b1) begin
+	if (toggle_i == 1'b1)
 		hash_mode_d = ~hash_mode_q;
 	else
 		hash_mode_d = hash_mode_q;
