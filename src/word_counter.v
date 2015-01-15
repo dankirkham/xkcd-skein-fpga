@@ -1,8 +1,8 @@
 module word_counter (
 	input clk_i,
-	input word_counter_reset_o,
-	input word_counter_plus_1_o,
-	input word_counter_plus_2_o,
+	input word_counter_reset_i,
+	input word_counter_plus_1_i,
+	input word_counter_plus_2_i,
 	
 	output [3:0] word_counter_o;
 );
