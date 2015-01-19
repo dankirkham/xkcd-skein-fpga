@@ -17,8 +17,8 @@ always @(*) begin
 	if (increment_i && ready_i)
 		nonce_d = incremented_nonce_i;
 	else if (shift_in_rx_data_i)
-		//nonce_d = {nonce_q[247:0], [7:0]rx_data_i}; // MSB first
-		nonce_d = {[7:0]rx_data_i, nonce_q[255:8]}; // LSB first
+		//nonce_d = {nonce_q[247:0], rx_data_i[7:0]}; // MSB first
+		nonce_d = {rx_data_i[7:0], nonce_q[255:8]}; // LSB first
 end
 
 always @(posedge clk_i) begin
