@@ -9,16 +9,16 @@ reg waiting_d, waiting_q;
 assign ping_waiting_o = waiting_q;
 
 always @(*) begin
-	waiting_q = waiting_d;
+	waiting_d = waiting_q;
 
 	if (send_ping_i)
-		waiting_q = 1'b1;
+		waiting_d = 1'b1;
 	else if (reset_ping_waiting_i)
-		waiting_q = 1'b0;
+		waiting_d = 1'b0;
 end
 
 always @(posedge clk_i) begin
-	waiting_d <= waiting_q;
+	waiting_q <= waiting_d;
 end
 
 endmodule
