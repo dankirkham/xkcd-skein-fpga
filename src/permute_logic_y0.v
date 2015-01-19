@@ -16,6 +16,7 @@ always @(*) begin
 		10 : word_select = 16'b0001000000000000; // 12
 		12 : word_select = 16'b0100000000000000; // 14
 		14 : word_select = 16'b0000000100000000; // 8
+		default : word_select =  16'b0000000000000000;
 	endcase
 end
 	
