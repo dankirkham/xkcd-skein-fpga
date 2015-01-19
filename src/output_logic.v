@@ -23,7 +23,7 @@ always @(*) begin
 		12 : word_select = 16'b0001000000000000;
 		13 : word_select = 16'b0010000000000000;
 		14 : word_select = 16'b0100000000000000;
-		15 : word_select = 16'b1000000000000000;
+		default : word_select = 16'b1000000000000000;
 	endcase
 end
 	

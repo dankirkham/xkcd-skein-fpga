@@ -15,22 +15,24 @@ assign control_14_o = control_14;
 assign control_15_o = control_15;
 
 always @(*) begin
-	if (select_i == 4'd13) begin
-		control_13 = 1'b1;
-		control_14 = 1'b0;
-		control_15 = 1'b0;
-	end else if (select_i == 4'd14) begin
-		control_13 = 1'b0;
-		control_14 = 1'b1;
-		control_15 = 1'b0;
-	end else if (select_i == 4'd15) begin
-		control_13 = 1'b0;
-		control_14 = 1'b0;
-		control_15 = 1'b1;
-	end else begin
-		control_13 = 1'b0;
-		control_14 = 1'b0;
-		control_15 = 1'b0;
+	control_13 = 1'b0;
+	control_14 = 1'b0;
+	control_15 = 1'b0;
+
+	if (control_i) begin
+		if (select_i == 4'd13) begin
+			control_13 = 1'b1;
+			control_14 = 1'b0;
+			control_15 = 1'b0;
+		end else if (select_i == 4'd14) begin
+			control_13 = 1'b0;
+			control_14 = 1'b1;
+			control_15 = 1'b0;
+		end else if (select_i == 4'd15) begin
+			control_13 = 1'b0;
+			control_14 = 1'b0;
+			control_15 = 1'b1;
+		end
 	end
 end
 
