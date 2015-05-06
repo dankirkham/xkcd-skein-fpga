@@ -4,7 +4,7 @@ module receiver (
 	input [7:0] data_i,
 	input timed_out_i,
 	input nonce_register_ready_i,
-	
+
 	output reg timeout_counter_reset_o,
 	output reg start_o,
 	output reg stop_o,
@@ -18,7 +18,7 @@ localparam	FIRST_HEADER	= 0,
 			SECOND_HEADER	= 1,
 			COMMAND			= 2,
 			NONCE_WAIT		= 3;
-			
+
 always @(*) begin
 	timeout_counter_reset_o = 1'b0;
 	start_o = 1'b0;
@@ -38,7 +38,7 @@ always @(*) begin
 		end else begin
 			nextstate = FIRST_HEADER;
 		end
-		
+
 		SECOND_HEADER:
 		if (timed_out_i) begin
 			nextstate = FIRST_HEADER;
@@ -47,7 +47,7 @@ always @(*) begin
 				if (data_i == 8'd52) begin //'4' = 52
 					timeout_counter_reset_o = 1'b1;
 					nextstate = COMMAND;
-				end else if (data_i = 8'd100) begin //'d' = 100
+				end else if (data_i == 8'd100) begin //'d' = 100
 					timeout_counter_reset_o = 1'b1;
 					nextstate = SECOND_HEADER;
 				end else begin
@@ -57,7 +57,7 @@ always @(*) begin
 				nextstate = SECOND_HEADER;
 			end
 		end
-		
+
 		COMMAND:
 		if (timed_out_i) begin
 			nextstate = FIRST_HEADER;
@@ -82,7 +82,7 @@ always @(*) begin
 				nextstate = COMMAND;
 			end
 		end
-		
+
 		NONCE_WAIT:
 		if (nonce_register_ready_i) begin
 			nextstate = FIRST_HEADER;
@@ -94,5 +94,5 @@ end
 
 always @(posedge clk_i)
 	state <= nextstate;
-
+	
 endmodule

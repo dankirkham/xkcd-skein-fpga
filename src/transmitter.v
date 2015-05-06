@@ -6,7 +6,7 @@ module transmitter (
 	input byte_counter_zero_i,
 	input chip_enabled_i,
 	input [7:0] nonce_byte_i,
-	
+
 	output reg tx_new_o,
 	output reg [7:0] tx_data_o,
 	output reg reset_ping_waiting_o,
@@ -53,7 +53,7 @@ always @(*) begin
 				end
 			end
 		end
-		
+
 		SEND_PING:
 		if (tx_busy_i) begin
 			nextstate = SEND_PING;
@@ -65,7 +65,7 @@ always @(*) begin
 			else
 				tx_data_o = 8'd48;
 		end
-		
+
 		SEND_NONCE:
 		if (tx_busy_i) begin
 			nextstate = SEND_NONCE;
@@ -78,7 +78,7 @@ always @(*) begin
 			else
 				nextstate = SEND_NONCE;
 		end
-		
+
 		FOOTER:
 		if (tx_busy_i) begin
 			nextstate = FOOTER;
@@ -95,4 +95,3 @@ always @(posedge clk_i) begin
 end
 
 endmodule
-	

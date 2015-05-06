@@ -1,11 +1,15 @@
 module chip_top (
 	input clk_i,
 	input rst_i,
-	output [1023:0] hash_o,
-	output ready_o
+	input rx_new_i,
+	input [7:0] rx_data_i,
+	input tx_busy_i,
+	output tx_new_o,
+	output [7:0] tx_data_o,
+	output enabled_o
 );
 
-wire [255:0] nonce_temp_o_w;
+wire [255:0] nonce_w;
 wire [1023:0] key_constant_o_w;
 wire [191:0] tweak_select_o_w;
 wire [63:0] tweak_word_select_o_w;
@@ -41,28 +45,28 @@ wire hash_mode_toggle_w;
 wire [1:0] tweak_add_type_w;
 wire hash_register_write_w;
 wire [1023:0] hash_register_w;
+wire nonce_ready;
+wire nonce_receive;
 
 assign subkey_w = round_w % 4;
 assign or_w = permute_logic_y0_o_w | permute_logic_y1_o_w;
 assign d_w = round_w[6:4];
 assign j_w = word_w[3:1];
-assign ready_o = hash_register_write_w;
-assign hash_o = hash_register_w;
 
 state_machine state_machine (
 	.clk_i(clk_i),
 	.round_counter_i(round_w),
 	.word_counter_i(word_w),
 	.hash_mode_i(hash_mode_w),
-	
+
 	// Mealy Outputs
 	.word_counter_reset_o(word_counter_reset_w),
 	.word_counter_plus_1_o(word_counter_plus_1_w),
-	.word_counter_plus_2_o(word_counter_plus_2_w),	
+	.word_counter_plus_2_o(word_counter_plus_2_w),
 	.round_counter_increment_o(round_counter_increment_w),
 	.round_counter_reset_o(round_counter_reset_w),
 	.hash_register_write_o(hash_register_write_w),
-	
+
 	// Moore Outputs
 	.input_register_write_o(input_register_write_w),
 	.output_register_write_o(output_register_write_enable_w),
@@ -73,6 +77,19 @@ state_machine state_machine (
 	.output_register_plaintext_select_o(output_register_plaintext_select_w),
 	.hash_mode_toggle_o(hash_mode_toggle_w),
 	.y0_add_select_o(y0_add_select_w)
+);
+
+serial_interface serial_interface (
+  .clk_i(clk_i),
+  .rx_new_i(rx_new_i),
+  .rx_data_i(rx_data_i),
+  .tx_busy_i(tx_busy_i),
+  .nonce_ready_i(nonce_ready),
+  .nonce_i(nonce_w),
+  .tx_new_o(tx_new_o),
+  .tx_data_o(tx_data_o),
+  .nonce_receive_o(nonce_receive),
+  .chip_enabled_o(enabled_o)
 );
 
 word_counter word_counter (
@@ -102,8 +119,14 @@ output_register_write_enable output_register_write_enable (
 	.write_bits_o(output_register_write_w)
 );
 
-nonce_temp nonce_temp (
-	.nonce_o(nonce_temp_o_w)
+nonce_register_top nonce_register_top (
+	.clk_i(clk_i),
+	.receive_new_nonce_i(nonce_receive),
+	.increment_i(hash_register_write_w),
+	.rx_new_i(rx_new_i),
+	.rx_data_i(rx_data_i),
+	.ready_o(nonce_ready),
+	.nonce_o(nonce_w)
 );
 
 key_constant key_constant (
@@ -138,7 +161,7 @@ permute_logic_y0 permute_logic_y0 (
 	.word_i(word_w),
 	.word_select_o(permute_logic_y0_o_w)
 );
-	
+
 permute_logic_y1 permute_logic_y1 (
 	.word_i(word_w),
 	.word_select_o(permute_logic_y1_o_w)
@@ -177,7 +200,7 @@ core core0 (
 	.hash_mode_i(hash_mode_w),
 	.subkey_write_i(subkey_register_write_w),
 	.output_register_plaintext_select_i(output_register_plaintext_select_w),
-	.nonce_i(nonce_temp_o_w),
+	.nonce_i(nonce_w),
 	.key_constant_i(key_constant_o_w),
 	.subkey_i(subkey_w),
 	.hash_register_write_i(hash_register_write_w),

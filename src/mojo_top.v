@@ -27,23 +27,23 @@ wire tx_busy;
 wire rst = ~rst_n; // make reset active high
 wire rx_new;
 wire [7:0] rx_data;
-wire ready_w;
-wire [1023:0] hash_w;
+wire enabled_w;
 
 // these signals should be high-z when not used
 assign spi_miso = 1'bz;
 assign spi_channel = 4'bzzzz;
-assign led[7:0] = hash_w[7:0];
+assign led[7:1] = 8'b0000000;
+assign led[0] = enabled_w;
 
 avr_interface avr_interface1 (
     .clk(clk),
     .rst(rst),
     .cclk(cclk),
-	 
+
 	 // Serial AVR Interface
     .tx(avr_rx),
     .rx(avr_tx),
-	 
+
     // Serial TX User Interface
     .tx_data(tx_data),
     .new_tx_data(tx_new),
@@ -55,21 +55,15 @@ avr_interface avr_interface1 (
     .new_rx_data(rx_new)
 );
 
-transmitter transmitter1 (
-	.clk_i(clk),
-	.rst_i(rst),
-	.tx_data_o(tx_data),
-	.tx_new_o(tx_new),
-	.tx_busy_i(tx_busy),
-	.word_i(hash_w[63:0]),
-	.ready_i(ready_w)
-);
-
 chip_top chip_top (
 	.clk_i(clk),
 	.rst_i(rst),
-	.hash_o(hash_w),
-	.ready_o(ready_w)
+  .rx_new_i(rx_new),
+  .rx_data_i(rx_data),
+  .tx_busy_i(tx_busy),
+  .tx_new_o(tx_new),
+  .tx_data_o(tx_data),
+	.enabled_o(enabled_w)
 );
 
 endmodule

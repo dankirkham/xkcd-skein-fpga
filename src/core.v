@@ -1,4 +1,5 @@
 module core (
+	// Control Logic
 	input clk_i,
 	input rst_i,
 	input input_register_write_i,
@@ -13,10 +14,12 @@ module core (
 	input hash_mode_i,
 	input subkey_write_i,
 	input output_register_plaintext_select_i,
-	input [255:0] nonce_i,
-	input [1023:0] key_constant_i,
 	input [4:0] subkey_i,
 	input hash_register_write_i,
+	input [1023:0] key_constant_i,
+
+	// Data Flow
+	input [255:0] nonce_i,
 	output [1023:0] hash_register_o
 );
 
@@ -43,14 +46,14 @@ wire [4:0] subkey_selector_key_word_select_w;
 
 assign xor_o_w = adder64simple_o_w ^ rotator_o_w;
 assign xor2_o_w = output_register_block_o_w ^ plaintext_select_o_w;
-	
+
 input_register input_register (
 	.clk_i(clk_i),
 	.write_i(input_register_write_i),
 	.state_i(output_register_plaintext_select_o_w),
 	.state_o(input_register_o_w)
 );
-	
+
 input_x0_select input_x0_select (
 	.input_register_i(input_register_o_w),
 	.word_i(word_i),
@@ -103,7 +106,7 @@ output_register_block output_register_block (
 	.input_i(output_select_block_o_w),
 	.output_o(output_register_block_o_w)
 );
-	
+
 key_register key_register (
 	.clk_i(clk_i),
 	.write_i(key_register_write_i),
@@ -140,7 +143,7 @@ subkey_selector subkey_selector (
 	.key_word_select_o(subkey_selector_key_word_select_w),
 	.word_o(subkey_selector_o_w)
 );
-	
+
 core_constant_temp core_constant_temp (
 	.core_o(core_constant_temp_o_w)
 );
