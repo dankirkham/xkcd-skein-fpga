@@ -13,7 +13,7 @@ assign nonce_o = nonce_q;
 
 always @(*) begin
 	nonce_d = nonce_q;
-	
+
 	if (increment_i && ready_i)
 		nonce_d = incremented_nonce_i;
 	else if (shift_in_rx_data_i)

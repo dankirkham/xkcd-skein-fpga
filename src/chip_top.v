@@ -6,7 +6,8 @@ module chip_top (
 	input tx_busy_i,
 	output tx_new_o,
 	output [7:0] tx_data_o,
-	output enabled_o
+	output enabled_o,
+	output nonce_ready_o
 );
 
 wire [255:0] nonce_w;
@@ -52,6 +53,7 @@ assign subkey_w = round_w % 4;
 assign or_w = permute_logic_y0_o_w | permute_logic_y1_o_w;
 assign d_w = round_w[6:4];
 assign j_w = word_w[3:1];
+assign nonce_ready_o = nonce_ready;
 
 state_machine state_machine (
 	.clk_i(clk_i),

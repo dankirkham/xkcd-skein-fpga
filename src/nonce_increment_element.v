@@ -5,13 +5,13 @@ module nonce_increment_element (
 	output carry_o
 );
 
-reg [6:0] sum;
+reg [5:0] sum;
 
-assign byte_o = {1'b1, sum[5:0], 1'b0};
-assign carry_o = sum[6];
+assign byte_o = {2'b01, sum[4:0], 1'b0};
+assign carry_o = sum[5];
 
 always @(*) begin
-	sum[6:0] = byte_i[6:1] + 1;
+	sum[5:0] = byte_i[4:1] + 1;
 end
 
 endmodule

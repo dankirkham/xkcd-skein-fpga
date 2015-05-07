@@ -36,20 +36,22 @@ always @(*) begin
 		if (tx_busy_i) begin
 			nextstate = IDLE;
 		end else begin
-			if (send_nonce_i) begin
-				nextstate = SEND_NONCE;
-				reset_nonce_waiting_o = 1'b1;
-				reset_byte_counter_o = 1'b1;
-				tx_new_o = 1'b1;
-				tx_data_o = 8'd100;
-			end else begin
-				if (send_ping_i) begin
-					nextstate = SEND_PING;
-					reset_ping_waiting_o = 1'b1;
+			if (chip_enabled_i) begin
+				if (send_nonce_i) begin
+					nextstate = SEND_NONCE;
+					reset_nonce_waiting_o = 1'b1;
+					reset_byte_counter_o = 1'b1;
 					tx_new_o = 1'b1;
 					tx_data_o = 8'd100;
 				end else begin
-					nextstate = IDLE;
+					if (send_ping_i) begin
+						nextstate = SEND_PING;
+						reset_ping_waiting_o = 1'b1;
+						tx_new_o = 1'b1;
+						tx_data_o = 8'd100;
+					end else begin
+						nextstate = IDLE;
+					end
 				end
 			end
 		end

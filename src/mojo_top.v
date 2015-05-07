@@ -28,11 +28,13 @@ wire rst = ~rst_n; // make reset active high
 wire rx_new;
 wire [7:0] rx_data;
 wire enabled_w;
+wire nonce_ready_w;
 
 // these signals should be high-z when not used
 assign spi_miso = 1'bz;
 assign spi_channel = 4'bzzzz;
-assign led[7:1] = 8'b0000000;
+assign led[7:2] = 8'b000000;
+assign led[1] = nonce_ready_w;
 assign led[0] = enabled_w;
 
 avr_interface avr_interface1 (
@@ -63,7 +65,8 @@ chip_top chip_top (
   .tx_busy_i(tx_busy),
   .tx_new_o(tx_new),
   .tx_data_o(tx_data),
-	.enabled_o(enabled_w)
+	.enabled_o(enabled_w),
+  .nonce_ready_o(nonce_ready_w)
 );
 
 endmodule
