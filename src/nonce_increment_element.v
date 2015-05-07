@@ -11,7 +11,7 @@ assign byte_o = {2'b01, sum[4:0], 1'b0};
 assign carry_o = sum[5];
 
 always @(*) begin
-	sum[5:0] = byte_i[4:1] + 1;
+	sum[5:0] = byte_i[4:1] + carry_i;
 end
 
 endmodule
