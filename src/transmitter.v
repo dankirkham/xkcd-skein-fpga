@@ -6,6 +6,7 @@ module transmitter (
 	input byte_counter_zero_i,
 	input chip_enabled_i,
 	input [7:0] nonce_byte_i,
+	input [9:0] nonce_bits_off_i,
 
 	output reg tx_new_o,
 	output reg [7:0] tx_data_o,
@@ -15,12 +16,14 @@ module transmitter (
 	output reg decrement_byte_counter_o
 );
 
-reg [1:0] state, nextstate;
+reg [2:0] state, nextstate;
 
 localparam	IDLE		= 0,
 			SEND_PING	= 1,
 			SEND_NONCE	= 2,
-			FOOTER		= 3;
+			SEND_BITS_OFF_1 = 3,
+			SEND_BITS_OFF_2 = 4,
+			FOOTER		= 5;
 
 always @(*) begin
 	nextstate = IDLE;
@@ -76,9 +79,27 @@ always @(*) begin
 			tx_new_o = 1'b1;
 			tx_data_o = nonce_byte_i;
 			if (byte_counter_zero_i)
-				nextstate = FOOTER;
+				nextstate = SEND_BITS_OFF_1;
 			else
 				nextstate = SEND_NONCE;
+		end
+
+		SEND_BITS_OFF_1:
+		if (tx_busy_i) begin
+			nextstate = SEND_BITS_OFF_1;
+		end else begin
+			tx_new_o = 1'b1;
+			tx_data_o = nonce_bits_off_i[7:0];
+			nextstate = SEND_BITS_OFF_2;
+		end
+
+		SEND_BITS_OFF_2:
+		if (tx_busy_i) begin
+			nextstate = SEND_BITS_OFF_2;
+		end else begin
+			tx_new_o = 1'b1;
+			tx_data_o = {6'b000000, nonce_bits_off_i[9:8]};
+			nextstate = FOOTER;
 		end
 
 		FOOTER:

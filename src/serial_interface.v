@@ -5,10 +5,12 @@ module serial_interface (
   input tx_busy_i,
   input nonce_ready_i,
   input [255:0] nonce_i,
+  input [9:0] nonce_bits_off_i,
   output tx_new_o,
   output [7:0] tx_data_o,
   output nonce_receive_o,
-  output chip_enabled_o
+  output chip_enabled_o,
+  output reset_best_nonce_o
 );
 
 wire timeout_counter_reset;
@@ -29,6 +31,7 @@ wire byte_counter_zero;
 
 assign chip_enabled_o = chip_enabled;
 assign nonce_receive_o = nonce_receive;
+assign reset_best_nonce_o = nonce_send;
 
 receiver receiver (
 	.clk_i(clk_i),
@@ -51,6 +54,7 @@ transmitter transmitter (
 	.byte_counter_zero_i(byte_counter_zero),
 	.chip_enabled_i(chip_enabled),
 	.nonce_byte_i(nonce_byte),
+  .nonce_bits_off_i(nonce_bits_off_i),
 
 	.tx_new_o(tx_new_o),
 	.tx_data_o(tx_data_o),

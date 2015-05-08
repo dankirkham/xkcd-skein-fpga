@@ -48,6 +48,9 @@ wire hash_register_write_w;
 wire [1023:0] hash_register_w;
 wire nonce_ready;
 wire nonce_receive;
+wire reset_best_nonce;
+wire [255:0] best_nonce;
+wire [9:0] best_bits_off;
 
 assign subkey_w = round_w % 4;
 assign or_w = permute_logic_y0_o_w | permute_logic_y1_o_w;
@@ -87,11 +90,13 @@ serial_interface serial_interface (
   .rx_data_i(rx_data_i),
   .tx_busy_i(tx_busy_i),
   .nonce_ready_i(nonce_ready),
-  .nonce_i(nonce_w),
+  .nonce_i(best_nonce),
+	.nonce_bits_off_i(best_bits_off),
   .tx_new_o(tx_new_o),
   .tx_data_o(tx_data_o),
   .nonce_receive_o(nonce_receive),
-  .chip_enabled_o(enabled_o)
+  .chip_enabled_o(enabled_o),
+	.reset_best_nonce_o(reset_best_nonce)
 );
 
 word_counter word_counter (
@@ -206,7 +211,9 @@ core core0 (
 	.key_constant_i(key_constant_o_w),
 	.subkey_i(subkey_w),
 	.hash_register_write_i(hash_register_write_w),
-	.hash_register_o(hash_register_w)
+	.best_nonce_o(best_nonce),
+	.best_bits_off_o(best_bits_off),
+	.reset_best_nonce_i(reset_best_nonce)
 );
 
 endmodule

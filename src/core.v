@@ -17,10 +17,12 @@ module core (
 	input [4:0] subkey_i,
 	input hash_register_write_i,
 	input [1023:0] key_constant_i,
+	input reset_best_nonce_i,
 
 	// Data Flow
 	input [255:0] nonce_i,
-	output [1023:0] hash_register_o
+	output [255:0] best_nonce_o,
+	output [9:0] best_bits_off_o
 );
 
 wire [1023:0] input_register_o_w;
@@ -43,6 +45,8 @@ wire [63:0] xor_o_w;
 wire [1023:0] xor2_o_w;
 wire [1023:0] output_select_block_o_w;
 wire [4:0] subkey_selector_key_word_select_w;
+wire [1023:0] hash_xor_w;
+wire [9:0] bits_off;
 
 assign xor_o_w = adder64simple_o_w ^ rotator_o_w;
 assign xor2_o_w = output_register_block_o_w ^ plaintext_select_o_w;
@@ -162,11 +166,30 @@ plaintext_select plaintext_select (
 	.plaintext_o(plaintext_select_o_w)
 );
 
-hash_register hash_register(
+/*hash_register hash_register(
 	.clk_i(clk_i),
 	.input_i(xor2_o_w),
 	.write_i(hash_register_write_i),
 	.output_o(hash_register_o)
+);*/
+
+hash_xor hash_xor (
+  .hash_i(xor2_o_w),
+  .hash_xor_o(hash_xor_w)
+);
+
+hash_bits_off hash_bits_off (
+  .hash_xor_i(hash_xor_w),
+  .bits_off_o(bits_off)
+);
+
+hash_best hash_best (
+  .clk_i(clk_i),
+  .bits_off_i(bits_off),
+  .nonce_i(nonce_i),
+  .reset_i(reset_best_nonce_i),
+  .best_nonce_o(best_nonce_o),
+  .best_bits_off_o(best_bits_off_o)
 );
 
 endmodule
