@@ -4,7 +4,7 @@ module hash_register (
 	input write_i,
 	output [1023:0] output_o
 	);
-	
+
 reg [1023:0] output_d, output_q;
 assign output_o = output_q;
 
