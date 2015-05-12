@@ -15,6 +15,9 @@ assign best_nonce_o = best_nonce_q;
 assign best_bits_off_o = best_bits_off_q;
 
 always @(*) begin
+  best_nonce_d = best_nonce_q;
+  best_bits_off_d = best_bits_off_q;
+  
   if (reset_i) begin
     best_nonce_d = best_nonce_q;
     best_bits_off_d = 10'b1111111111;
@@ -24,9 +27,6 @@ always @(*) begin
         best_nonce_d = nonce_i;
         best_bits_off_d = bits_off_i;
       end
-    end else begin
-      best_nonce_d = best_nonce_q;
-      best_bits_off_d = best_bits_off_q;
     end
   end
 end
