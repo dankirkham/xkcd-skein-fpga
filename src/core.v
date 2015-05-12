@@ -181,6 +181,7 @@ hash_xor hash_xor (
 
 hash_bits_off_top hash_bits_off_top (
   .clk_i(clk_i),
+	.rst_i(rst_i),
   .hash_xor_i(hash_xor_w),
   .new_hash_ready_i(hash_register_write_i),
   .hash_bits_off_o(bits_off),

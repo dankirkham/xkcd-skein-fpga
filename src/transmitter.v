@@ -1,5 +1,6 @@
 module transmitter (
 	input clk_i,
+	input rst_i,
 	input tx_busy_i,
 	input send_nonce_i,
 	input send_ping_i,
@@ -114,7 +115,11 @@ always @(*) begin
 end
 
 always @(posedge clk_i) begin
-	state <= nextstate;
+	if (rst_i) begin
+		state <= IDLE;
+	end else begin
+		state <= nextstate;
+	end
 end
 
 endmodule

@@ -60,6 +60,7 @@ assign nonce_ready_o = nonce_ready;
 
 state_machine state_machine (
 	.clk_i(clk_i),
+	.rst_i(rst_i),
 	.round_counter_i(round_w),
 	.word_counter_i(word_w),
 	.hash_mode_i(hash_mode_w),
@@ -86,6 +87,7 @@ state_machine state_machine (
 
 serial_interface serial_interface (
   .clk_i(clk_i),
+	.rst_i(rst_i),
   .rx_new_i(rx_new_i),
   .rx_data_i(rx_data_i),
   .tx_busy_i(tx_busy_i),

@@ -1,5 +1,6 @@
 module hash_bits_off_top (
   input clk_i,
+  input rst_i,
   input [1023:0] hash_xor_i,
   input new_hash_ready_i,
   output [9:0] hash_bits_off_o,
@@ -36,6 +37,7 @@ hash_bits_off_counter hash_bits_off_counter (
 
 hash_bits_off_state_machine hash_bits_off_state_machine (
   .clk_i(clk_i),
+  .rst_i(rst_i),
   .new_hash_ready_i(new_hash_ready_i),
   .bit_counter_done_i(bit_counter_done),
   .shift_add_and_decrement_o(shift_add_and_decrement),

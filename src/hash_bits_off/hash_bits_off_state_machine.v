@@ -1,5 +1,6 @@
 module hash_bits_off_state_machine (
   input clk_i,
+  input rst_i,
   input new_hash_ready_i,
   input bit_counter_done_i,
 
@@ -43,7 +44,12 @@ always @(*) begin
     shift_add_and_decrement_o = 1'b0;
 end
 
-always @(posedge clk_i)
-  state <= nextstate;
+always @(posedge clk_i) begin
+  if (rst_i) begin
+    state <= STATE_IDLE;
+  end else begin
+    state <= nextstate;
+  end
+end
 
 endmodule

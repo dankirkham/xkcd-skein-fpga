@@ -1,5 +1,6 @@
 module serial_interface (
   input clk_i,
+  input rst_i,
   input rx_new_i,
   input [7:0] rx_data_i,
   input tx_busy_i,
@@ -35,6 +36,7 @@ assign reset_best_nonce_o = nonce_send;
 
 receiver receiver (
 	.clk_i(clk_i),
+  .rst_i(rst_i),
 	.new_data_i(rx_new_i),
 	.data_i(rx_data_i),
 	.timed_out_i(timeout_counter_timed_out),
@@ -48,6 +50,7 @@ receiver receiver (
 
 transmitter transmitter (
 	.clk_i(clk_i),
+  .rst_i(rst_i),
 	.tx_busy_i(tx_busy_i),
 	.send_nonce_i(nonce_send),
 	.send_ping_i(ping_send),

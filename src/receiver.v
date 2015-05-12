@@ -1,5 +1,6 @@
 module receiver (
 	input clk_i,
+	input rst_i,
 	input new_data_i,
 	input [7:0] data_i,
 	input timed_out_i,
@@ -92,7 +93,12 @@ always @(*) begin
 	endcase
 end
 
-always @(posedge clk_i)
-	state <= nextstate;
-	
+always @(posedge clk_i) begin
+	if (rst_i) begin
+		state <= FIRST_HEADER;
+	end else begin
+		state <= nextstate;
+	end
+end
+
 endmodule
