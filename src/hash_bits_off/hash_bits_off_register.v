@@ -8,6 +8,8 @@ module hash_bits_off_register (
 
 reg [9:0] hash_bits_off_register_d, hash_bits_off_register_q;
 
+assign hash_bits_off_register_o = hash_bits_off_register_q;
+
 always @(*) begin
   if (reset_i) begin
     hash_bits_off_register_d = 10'd0;
