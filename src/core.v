@@ -47,7 +47,6 @@ wire [1023:0] output_select_block_o_w;
 wire [4:0] subkey_selector_key_word_select_w;
 wire [1023:0] hash_xor_w;
 wire [9:0] bits_off;
-wire bits_off_ready;
 
 assign xor_o_w = adder64simple_o_w ^ rotator_o_w;
 assign xor2_o_w = output_register_block_o_w ^ plaintext_select_o_w;
@@ -167,25 +166,14 @@ plaintext_select plaintext_select (
 	.plaintext_o(plaintext_select_o_w)
 );
 
-/*hash_register hash_register(
-	.clk_i(clk_i),
-	.input_i(xor2_o_w),
-	.write_i(hash_register_write_i),
-	.output_o(hash_register_o)
-);*/
-
 hash_xor hash_xor (
   .hash_i(xor2_o_w),
   .hash_xor_o(hash_xor_w)
 );
 
 hash_bits_off_top hash_bits_off_top (
-  .clk_i(clk_i),
-	.rst_i(rst_i),
   .hash_xor_i(hash_xor_w),
-  .new_hash_ready_i(hash_register_write_i),
-  .hash_bits_off_o(bits_off),
-  .done_o(bits_off_ready)
+  .hash_bits_off_o(bits_off)
 );
 
 hash_best hash_best (
@@ -193,7 +181,7 @@ hash_best hash_best (
   .bits_off_i(bits_off),
   .nonce_i(nonce_i),
   .reset_i(reset_best_nonce_i),
-	.new_hash_i(bits_off_ready),
+	.new_hash_i(hash_register_write_i),
   .best_nonce_o(best_nonce_o),
   .best_bits_off_o(best_bits_off_o)
 );
