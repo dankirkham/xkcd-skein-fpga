@@ -1,7 +1,7 @@
 # Arithmetic Logic Unit (ALU)
 The ALU is responsible for performing the major arithmetic operations necessary to compute the hash, such as addition, XOR, and bit rotation. It is also responsible for comparing the computed hash value to find the best possible hash.
 
-![Arithmetic Logic Unit](alu.svg?raw=true)
+![Arithmetic Logic Unit](../gfx/alu.png)
 
 ## Design Requirements
 - 64-bit word size
