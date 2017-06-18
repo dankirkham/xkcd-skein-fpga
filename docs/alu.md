@@ -35,7 +35,7 @@ The ALU has 11 total control bits, shown as follows:
   - 01: Rotate left 16 bits
   - 10: Write lowest 16 bits
   - 11: Write full 64 bits
-- 2 bits for Counter Register
+- 2 bits for Bit Counter Register
   - Write
   - Increment
 - 1 bit for Compare Register
@@ -76,9 +76,7 @@ Used to store the current best hash-bits-off count to be compared with the hash 
 ### Operators
 
 #### Comparator
-The Comparator finds the lowest value between the Bit Counter Register and the Compare Register and selects the register with the lowest value on the Comparator Demux. In addition, it also selects the corresponding nonce value that goes with each bits-off count. This happens on the Pass-through Demux. Nonce values must be stored in the Primary and Secondary Registers.
-
-TODO: At a technical level, how does the comparator work?
+The Comparator finds the lowest value between the Bit Counter Register and the Compare Register and selects the register with the lowest value on the Comparator Demux. In addition, it also selects the corresponding nonce value that goes with each bits-off count. This happens on the Pass-through Demux. Nonce values must be stored in the Primary and Secondary Registers. The comparator is implemented as described [here](https://en.wikipedia.org/wiki/Digital_comparator#Implementation).
 
 #### XOR
 64-bit XOR of Primary and Secondary for use in Skein hash calculation
