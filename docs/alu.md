@@ -119,18 +119,18 @@ The ALU has 13 total control bits, shown as follows:
 ![Arithmetic Logic Unit Control Bits](../gfx/alu-control.png)
 
 ### Opcode Decoding
-| Operation                                                    | Primary Register | Secondary Register | Bit Counter Register | Comparator Register | Comparator Demux | Pass-through Demux | Output Demux |
-| ------------------------------------------------------------ | ---------------- | ------------------ | -------------------- | ------------------- | ---------------- | ------------------ | ------------ |
-| Write Primary Register                                       | 111              | 00                 | 00                   | 0                   | X                | X                  | XX           |
-| Write Primary Register Lower 16-bits                         | 110              | 00                 | 00                   | 0                   | X                | X                  | XX           |
-| Rotate Primary Register Left 16-bits                         | 010              | 00                 | 00                   | 0                   | X                | X                  | XX           |
-| Rotate Primary Register Left 1-bit and Increment Bit Counter | 001              | 00                 | 01                   | 0                   | X                | X                  | XX           |
-| Write Secondary Register                                     | 000              | 11                 | 00                   | 0                   | X                | X                  | XX           |
-| Write Secondary Register Lower 16-bits                       | 000              | 10                 | 00                   | 0                   | X                | X                  | XX           |
-| Rotate Secondary Register Left 16-bits                       | 000              | 01                 | 00                   | 0                   | X                | X                  | XX           |
-| XOR                                                          | 000              | 00                 | 00                   | 0                   | X                | X                  | 10           |
-| Add                                                          | 000              | 00                 | 00                   | 0                   | X                | X                  | 11           |
-| Write Bit Counter                                            | 000              | 00                 | 10                   | 0                   | X                | X                  | XX           |
-| Write Comparator Register & Compare                          | 000              | 00                 | 00                   | 1                   | 0                | X                  | 00           |
-| Comparator Nonce Pass-through                                | 000              | 00                 | 00                   | 0                   | X                | 0                  | 01           |
-| Primary Register Pass-through                                | 000              | 00                 | 00                   | 0                   | X                | 1                  | 01           |
+| Operation                                                    | Opcode | Primary Register | Secondary Register | Bit Counter Register | Comparator Register | Comparator Demux | Pass-through Demux | Output Demux |
+| ------------------------------------------------------------ | ------ | ---------------- | ------------------ | -------------------- | ------------------- | ---------------- | ------------------ | ------------ |
+| Write Primary Register                                       | 0x0    | 111              | 00                 | 00                   | 0                   | X                | X                  | XX           |
+| Write Primary Register Lower 16-bits                         | 0x1    | 110              | 00                 | 00                   | 0                   | X                | X                  | XX           |
+| Rotate Primary Register Left 16-bits                         | 0x2    | 010              | 00                 | 00                   | 0                   | X                | X                  | XX           |
+| Rotate Primary Register Left 1-bit and Increment Bit Counter | 0x3    | 001              | 00                 | 01                   | 0                   | X                | X                  | XX           |
+| Write Secondary Register                                     | 0x4    | 000              | 11                 | 00                   | 0                   | X                | X                  | XX           |
+| Write Secondary Register Lower 16-bits                       | 0x5    | 000              | 10                 | 00                   | 0                   | X                | X                  | XX           |
+| Rotate Secondary Register Left 16-bits                       | 0x6    | 000              | 01                 | 00                   | 0                   | X                | X                  | XX           |
+| XOR                                                          | 0x7    | 000              | 00                 | 00                   | 0                   | X                | X                  | 10           |
+| Add                                                          | 0x8    | 000              | 00                 | 00                   | 0                   | X                | X                  | 11           |
+| Write Bit Counter                                            | 0x9    | 000              | 00                 | 10                   | 0                   | X                | X                  | XX           |
+| Write Comparator Register & Compare                          | 0xA    | 000              | 00                 | 00                   | 1                   | 0                | X                  | 00           |
+| Comparator Nonce Pass-through                                | 0xB    | 000              | 00                 | 00                   | 0                   | X                | 0                  | 01           |
+| Primary Register Pass-through                                | 0xC    | 000              | 00                 | 00                   | 0                   | X                | 1                  | 01           |
