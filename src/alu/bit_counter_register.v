@@ -15,7 +15,7 @@ always @(*) begin
   if (write_i)
     bit_counter_d = primary_register_i[9:0];
   else if (increment_i)
-    bit_counter_d = bit_counter_q + primary_register_i[0];
+    bit_counter_d = bit_counter_q + {9'd0, primary_register_i[0]};
   else
     bit_counter_d = bit_counter_q;
 end
