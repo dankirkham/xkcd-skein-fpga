@@ -67,19 +67,23 @@ The Comparator Demultiplexer has two modes, the first mode simply selects the Bi
 The Output Demultiplexer allows the selection of what goes to the output of the ALU. There are four inputs to this demultiplexer and one output.
 
 ## Operations
-- Write Primary Register
-- Write Primary Register Lower 16-bits
-- Rotate Primary Register Left 16-bits
-- Rotate Primary Register Left 1-bit and Increment Bit Counter
-- Write Secondary Register
-- Write Secondary Register Lower 16-bits
-- Rotate Secondary Register Left 16-bits
-- XOR
-- Add
-- Write Bit Counter
-- Write Comparator Register & Compare
-- Comparator Nonce Pass-through
-- Primary Register Pass-through
+| Opcode | Operation                                                    |
+| ------ | ------------------------------------------------------------ |
+| 0x0    | Write Primary Register                                       |
+| 0x1    | Write Primary Register Lower 16-bits                         |
+| 0x2    | Rotate Primary Register Left 16-bits                         |
+| 0x3    | Rotate Primary Register Left 1-bit and Increment Bit Counter |
+| 0x4    | Write Secondary Register                                     |
+| 0x5    | Write Secondary Register Lower 16-bits                       |
+| 0x6    | Rotate Secondary Register Left 16-bits                       |
+| 0x7    | XOR                                                          |
+| 0x8    | Add                                                          |
+| 0x9    | Write Bit Counter                                            |
+| 0xA    | Write Comparator Register & Compare                          |
+| 0xB    | Comparator Nonce Pass-through                                |
+| 0xC    | Primary Register Pass-through                                |
+| 0xD    | Bit Counter Pass-through                                     |
+| 0xE    | Compare                                                      |
 
 ## Control Bits
 The ALU has 13 total control bits, shown as follows:
@@ -124,7 +128,7 @@ The ALU has 13 total control bits, shown as follows:
 | Write Primary Register                                       | 0x0    | 111              | 00                 | 00                   | 0                   | X                | X                  | XX           |
 | Write Primary Register Lower 16-bits                         | 0x1    | 110              | 00                 | 00                   | 0                   | X                | X                  | XX           |
 | Rotate Primary Register Left 16-bits                         | 0x2    | 010              | 00                 | 00                   | 0                   | X                | X                  | XX           |
-| Rotate Primary Register Left 1-bit and Increment Bit Counter | 0x3    | 001              | 00                 | 01                   | 0                   | X                | X                  | XX           |
+| Rotate Primary Register Left 1-bit and Increment Bit Counter | 0x3    | 001              | 00                 | 01                   | 0                   | 1                | X                  | 00           |
 | Write Secondary Register                                     | 0x4    | 000              | 11                 | 00                   | 0                   | X                | X                  | XX           |
 | Write Secondary Register Lower 16-bits                       | 0x5    | 000              | 10                 | 00                   | 0                   | X                | X                  | XX           |
 | Rotate Secondary Register Left 16-bits                       | 0x6    | 000              | 01                 | 00                   | 0                   | X                | X                  | XX           |
@@ -134,3 +138,5 @@ The ALU has 13 total control bits, shown as follows:
 | Write Comparator Register & Compare                          | 0xA    | 000              | 00                 | 00                   | 1                   | 0                | X                  | 00           |
 | Comparator Nonce Pass-through                                | 0xB    | 000              | 00                 | 00                   | 0                   | X                | 0                  | 01           |
 | Primary Register Pass-through                                | 0xC    | 000              | 00                 | 00                   | 0                   | X                | 1                  | 01           |
+| Bit Counter Pass-through                                     | 0xD    | 000              | 00                 | 00                   | 0                   | 1                | X                  | 00           |
+| Compare                                                      | 0xE    | 000              | 00                 | 00                   | 0                   | 0                | X                  | 00           |
