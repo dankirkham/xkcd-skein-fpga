@@ -6,7 +6,6 @@ module alu (
   output [63:0] output_o
 );
 
-wire [63:0] input_w;
 wire [63:0] primary_register_w;
 wire [63:0] secondary_register_w;
 wire [9:0] bit_counter_register_w;
@@ -47,14 +46,14 @@ bit_counter_register bit_counter_register0 (
   .clk_i(clk_i),
   .write_i(bit_counter_register_control_w[1]),
   .increment_i(bit_counter_register_control_w[0]),
-  .primary_register_i(primary_register_w),
+  .primary_register_i(primary_register_w[9:0]),
   .bit_counter_o(bit_counter_register_w)
 );
 
 comparator_register comparator_register0 (
   .clk_i(clk_i),
   .write_i(comparator_register_control_w),
-  .secondary_register_i(secondary_register_w),
+  .secondary_register_i(secondary_register_w[9:0]),
   .comparator_register_o(comparator_register_w)
 );
 

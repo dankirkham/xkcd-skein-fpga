@@ -2,7 +2,7 @@ module comparator_register (
   input clk_i,
   input write_i,
 
-  input [63:0] secondary_register_i,
+  input [9:0] secondary_register_i,
 
   output [9:0] comparator_register_o
 );
@@ -12,7 +12,7 @@ assign comparator_register_o = comparator_register_q;
 
 always @(*) begin
   if (write_i)
-    comparator_register_d = secondary_register_i[9:0];
+    comparator_register_d = secondary_register_i;
   else
     comparator_register_d = comparator_register_q;
 end
