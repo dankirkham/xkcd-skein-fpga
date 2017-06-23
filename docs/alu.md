@@ -7,7 +7,6 @@ The ALU is responsible for performing the major arithmetic operations necessary 
 - 64-bit word size
 - Addition
 - XOR
-- Rotate Right
 - Rotate Left
 - Bit Counter
 - Result Comparison
@@ -117,6 +116,11 @@ When loading a value shorter than 64-bits, make sure that the upper bits are zer
 ### Writing Constants to Memory
 1. Load value from Constants ROM to Primary Register.
 2. Pass-through Primary Register. (0xC)
+### Rotate Left n bits
+1. Load value into Primary Register
+2. Rotate Primary Register Left 16-bits. (0x2) Do this `n / 16` times.
+3. Rotate Primary Register Left 1-bit. (0x3) Do this `n % 16` times.
+4. Read Primary Register. (0xC)
 
 ## Control Bits
 The ALU has 13 total control bits, shown as follows:
