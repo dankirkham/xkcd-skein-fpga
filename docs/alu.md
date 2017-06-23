@@ -94,6 +94,9 @@ When loading a value shorter than 64-bits, make sure that the upper bits are zer
 5. Write [Primary/Secondary] Register lowest 16-bits.
 6. Rotate [Primary/Secondary] Register left 16-bits.
 7. Write [Primary/Secondary] Register lowest 16-bits.
+### Loading Value from Constants ROM
+Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at a time.
+1. Write Primary Register
 ### Addition and XOR
 1. Load value from RAM or Constants ROM to Primary Register. See [Loading Value from RAM](#loading-value-from-ram).
 2. Load value from RAM to Secondary Register.
