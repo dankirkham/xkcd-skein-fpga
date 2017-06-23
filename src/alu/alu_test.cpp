@@ -297,20 +297,12 @@ int main(int argc, char **argv, char **env) {
     cout << "Fail!" << endl;
   }
 
-  // Write Comparator Register & Compare
+  // Write Comparator Register
   top->opcode_i = 0xA;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
   top->eval();
-
-  cout << std::to_string(top->output_o) << endl;
-
-  if (top->output_o == 237) {
-    cout << "Pass!" << endl;
-  } else {
-    cout << "Fail!" << endl;
-  }
 
   // Compare
   top->opcode_i = 0xE;
@@ -319,13 +311,41 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
-  cout << std::to_string(top->output_o) << endl;
-
   if (top->output_o == 237) {
     cout << "Pass!" << endl;
   } else {
     cout << "Fail!" << endl;
   }
+
+  // Write Primary Register
+  top->input_i = 0xDEAD;
+  top->opcode_i = 0x0;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  // Write Secondary Register
+  top->input_i = 1337;
+  top->opcode_i = 0x4;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  // Pass-through nonce
+  top->opcode_i = 0xB;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  if (top->output_o == 1337) {
+    cout << "Pass!" << endl;
+  } else {
+    cout << "Fail!" << endl;
+  }
+
 
   delete top;
 
