@@ -85,6 +85,39 @@ The Output Demultiplexer allows the selection of what goes to the output of the 
 | 0xD    | Bit Counter Pass-through                                     |
 | 0xE    | Compare                                                      |
 
+## Usage
+### Loading Value from RAM
+When loading a value shorter than 64-bits, make sure that the upper bits are zeroed. This can be done by writing a zero from the 64-bit Constants ROM to the Primary Register. The Secondary Register does not have this luxury, and zeroing it is much more difficult. Good luck.
+1. Write [Primary/Secondary] Register lowest 16-bits.
+2. Rotate [Primary/Secondary] Register left 16-bits.
+3. Write [Primary/Secondary] Register lowest 16-bits.
+4. Rotate [Primary/Secondary] Register left 16-bits.
+5. Write [Primary/Secondary] Register lowest 16-bits.
+6. Rotate [Primary/Secondary] Register left 16-bits.
+7. Write [Primary/Secondary] Register lowest 16-bits.
+### Addition and XOR
+1. Load value from RAM or Constants ROM to Primary Register.
+2. Load value from RAM to Secondary Register.
+3. Perform XOR or Addition.
+### Counting Bits
+1. Load zero from Constants ROM to Primary Register.
+2. Write Bit Counter.
+3. Write value from RAM to Primary Register.
+4. Count all 64 bits. (Run 0x3 64 times.)
+5. Read Bit Counter. (0xD)
+### Nonce Comparison
+1. Load result_bits from RAM to Primary Register. (Optional: This should already be here when counting bits.)
+2. Write Bit Counter Register. (Optional: This should already be here when counting bits.)
+3. Load result_nonce from RAM to Primary Register.
+4. Load best_bits from RAM to Secondary Register.
+5. Write Comparator Register.
+6. Load best_nonce from RAM to Secondary Register.
+7. Compare. Lowest bits off count will be at ALU output.
+8. Nonce Pass-through (0xB). Nonce corresponding to lowest bits off will be at ALU output.
+### Writing Constants to Memory
+1. Load value from Constants ROM to Primary Register.
+2. Pass-through Primary Register. (0xC)
+
 ## Control Bits
 The ALU has 13 total control bits, shown as follows:
 
