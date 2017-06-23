@@ -95,7 +95,7 @@ When loading a value shorter than 64-bits, make sure that the upper bits are zer
 6. Rotate [Primary/Secondary] Register left 16-bits.
 7. Write [Primary/Secondary] Register lowest 16-bits.
 ### Addition and XOR
-1. Load value from RAM or Constants ROM to Primary Register.
+1. Load value from RAM or Constants ROM to Primary Register. See [Loading Value from RAM](#loading-value-from-ram).
 2. Load value from RAM to Secondary Register.
 3. Perform XOR or Addition.
 ### Counting Bits
@@ -105,7 +105,7 @@ When loading a value shorter than 64-bits, make sure that the upper bits are zer
 4. Count all 64 bits. (Run 0x3 64 times.)
 5. Read Bit Counter. (0xD)
 ### Nonce Comparison
-1. Load result_bits from RAM to Primary Register. (Optional: This should already be here when counting bits.)
+1. Load result_bits from RAM to Primary Register. (Optional: This should already be here when counting bits.) See [Loading Value from RAM](#loading-value-from-ram).
 2. Write Bit Counter Register. (Optional: This should already be here when counting bits.)
 3. Load result_nonce from RAM to Primary Register.
 4. Load best_bits from RAM to Secondary Register.
@@ -117,7 +117,7 @@ When loading a value shorter than 64-bits, make sure that the upper bits are zer
 1. Load value from Constants ROM to Primary Register.
 2. Pass-through Primary Register. (0xC)
 ### Rotate Left n bits
-1. Load value into Primary Register
+1. Load value into Primary Register See [Loading Value from RAM](#loading-value-from-ram).
 2. Rotate Primary Register Left 16-bits. (0x2) Do this `n / 16` times.
 3. Rotate Primary Register Left 1-bit. (0x3) Do this `n % 16` times.
 4. Read Primary Register. (0xC)
