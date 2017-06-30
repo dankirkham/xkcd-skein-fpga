@@ -16,6 +16,7 @@ Loads a 64-bit word from the RAM at the specified address to either the Primary 
 Syntax: `Load <Address> <Primary or Secondary>`
 
 Implementation:
+
 | Instruction | RAM Address        | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | ---------- | ------------------------------------------------- |
 | 1           | \<Address> * 4     | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits |
@@ -32,6 +33,7 @@ Loads a 64-bit word from the Constants ROM at the specified address to the Prima
 Syntax: `Constant <Address>`
 
 Implementation:
+
 | Instruction | Constant Address  | ALU Opcode | ALU Operation                                     |
 | ----------- | ----------------- | ---------- | ------------------------------------------------- |
 | 1           | <Address>         | 0x0        | Write Primary Register                            |
@@ -42,6 +44,7 @@ Adds the value stored in the Primary Register to the value stored in the Seconda
 Syntax: `Add <Address>`
 
 Implementation:
+
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           | Don't care         | 0         | 0x8        | Add                                               |
@@ -56,6 +59,7 @@ XORs the value stored in the Primary Register with the value stored in the Secon
 Syntax: `XOR <Address>`
 
 Implementation:
+
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           | Don't care         | 0         | 0x7        | XOR                                               |
@@ -70,6 +74,7 @@ Saves the value stored in the Primary Register to the RAM at the specified addre
 Syntax: `Save <Address>`
 
 Implementation:
+
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
@@ -83,6 +88,7 @@ Saves the lower 10-bits stored in the Primary Register to the Bit Counter Regist
 Syntax: `SaveBitCounter`
 
 Implementation:
+
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           |                    | 0         | 0x9        | Write Bit Counter                                 |
@@ -93,6 +99,7 @@ Saves the lower 10-bits stored in the Secondary Register to the Comparator Regis
 Syntax: `SaveComparatorAndCompare <Address>`
 
 Implementation:
+
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           | \<Address> * 4     | 1         | 0xA        | Write Comparator Register & Compare               |
@@ -108,6 +115,7 @@ Increments the Bit Counter Register once for each one bit stored in the Primary 
 Syntax: `Count`
 
 Implementation:
+
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                                |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------------------ |
 | 1-64        | Don't Care         | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
