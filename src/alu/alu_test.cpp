@@ -79,6 +79,14 @@ int main(int argc, char **argv, char **env) {
     cout << "Fail!" << endl;
   }
 
+  // Write Primary register
+  top->input_i = 0xDEADBEEF;
+  top->opcode_i = 0x0;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
   // Write Secondary Register
   top->opcode_i = 0x4;
   top->input_i = 0x5ca1ab1e;
@@ -94,14 +102,44 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  // Pass-through primary register
+  top->opcode_i = 0xC;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
   if (top->output_o == 0x13B4F6A0D) {
     cout << "Pass!" << endl;
   } else {
     cout << "Fail!" << endl;
   }
 
+  // Write Primary register
+  top->input_i = 0xDEADBEEF;
+  top->opcode_i = 0x0;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  // Write Secondary Register
+  top->opcode_i = 0x4;
+  top->input_i = 0x5ca1ab1e;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
   // XOR
   top->opcode_i = 0x7;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  // Pass-through primary register
+  top->opcode_i = 0xC;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;

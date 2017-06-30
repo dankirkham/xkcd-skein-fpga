@@ -12,6 +12,7 @@ wire [9:0] bit_counter_register_w;
 wire [9:0] comparator_register_w;
 wire [9:0] comparator_demux_w;
 wire [63:0] passthrough_demux_w;
+wire [63:0] input_demux_w;
 wire [63:0] xor_w;
 wire [63:0] adder_w;
 wire [63:0] output_w;
@@ -25,13 +26,14 @@ wire comparator_register_control_w;
 wire comparator_demux_control_w;
 wire passthrough_demux_control_w;
 wire [1:0] output_demux_control_w;
+wire input_demux_control_w;
 
 assign output_o = output_w;
 
 primary_register primary_register0 (
   .clk_i(clk_i),
   .control_i(primary_register_control_w),
-  .input_i(input_i),
+  .input_i(input_demux_w),
   .primary_register_o(primary_register_w)
 );
 
@@ -83,7 +85,8 @@ opcode_decoder opcode_decoder0 (
   .comparator_register_control_o(comparator_register_control_w),
   .comparator_demux_control_o(comparator_demux_control_w),
   .passthrough_demux_control_o(passthrough_demux_control_w),
-  .output_demux_control_o(output_demux_control_w)
+  .output_demux_control_o(output_demux_control_w),
+  .input_demux_control_o(input_demux_control_w)
 );
 
 passthrough_demux passthrough_demux0 (
@@ -109,6 +112,13 @@ output_demux output_demux0 (
   .adder_i(adder_w),
   .select_i(output_demux_control_w),
   .output_o(output_w)
+);
+
+input_demux input_demux0 (
+  .alu_input_i(input_i),
+  .alu_output_i(output_w),
+  .select_i(input_demux_control_w),
+  .output_o(input_demux_w)
 );
 
 endmodule
