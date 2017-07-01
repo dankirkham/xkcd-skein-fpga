@@ -26,7 +26,7 @@ always @(*) begin
   case (opcode_i)
     4'h0: control_lines = 13'b1110000000000; // Write Primary Register
     4'h1: control_lines = 13'b1100000000000; // Write Primary Register Lower 16-bits
-    4'h2: control_lines = 13'b0100000001010; // Rotate Primary Register Left 16-bits
+    4'h2: control_lines = 13'b0100100001010; // Rotate Primary and Secondary Register Left 16-bits
     4'h3: control_lines = 13'b0010001010000; // Rotate Primary Register Left 1-bit and Increment Bit Counter
     4'h4: control_lines = 13'b0001100000000; // Write Secondary Register
     4'h5: control_lines = 13'b0001000000000; // Write Secondary Register Lower 16-bits

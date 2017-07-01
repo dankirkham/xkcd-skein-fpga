@@ -28,10 +28,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Write Primary Register Test: ";
   if (top->output_o == 0xDEADBEEF) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write primary register
@@ -73,10 +74,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Bit Counter Test: ";
   if (top->output_o == 24) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Primary register
@@ -109,10 +111,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Adder Test: ";
   if (top->output_o == 0x13B4F6A0D) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Primary register
@@ -145,10 +148,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "XOR Test: ";
   if (top->output_o == (0xDEADBEEF ^ 0x5ca1ab1e)) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Primary Register
@@ -219,15 +223,23 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "16-bit Primary Register Write Test: ";
   if (top->output_o == 0xCEEDEBEEDEADBEEF) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Secondary Register
   top->input_i = 0;
   top->opcode_i = 0x4;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  // Rotate Primary and Secondary Register Left 16-bits
+  top->opcode_i = 0x2;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -241,8 +253,8 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
-  // Rotate Secondary Register Left 16-bits
-  top->opcode_i = 0X6;
+  // Rotate Primary and Secondary Register Left 16-bits
+  top->opcode_i = 0x2;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -256,8 +268,8 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
-  // Rotate Secondary Register Left 16-bits
-  top->opcode_i = 0x6;
+  // Rotate Primary and Secondary Register Left 16-bits
+  top->opcode_i = 0x2;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -271,8 +283,8 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
-  // Rotate Secondary Register Left 16-bits
-  top->opcode_i = 0x6;
+  // Rotate Primary and Secondary Register Left 16-bits
+  top->opcode_i = 0x2;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -286,6 +298,21 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  // Pass-through primary register
+  top->opcode_i = 0xC;
+  top->clk_i ^= 1;
+  top->eval();
+  top->clk_i ^= 1;
+  top->eval();
+
+  cout << "Secondary Register 16-bit Write Should Not Tamper with Primary Register Test: ";
+  // Make sure it hasn't changed
+  if (top->output_o == 0xCEEDEBEEDEADBEEF) {
+    cout << "\033[1;35mPass!\033[0m" << endl;
+  } else {
+    cout << "\033[1;31mFail!\033[0m" << endl;
+  }
+
   // XOR
   top->opcode_i = 0x7;
   top->clk_i ^= 1;
@@ -293,10 +320,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Secondary Register 16-bit Write Test: ";
   if (top->output_o == (0xCEEDEBEEDEADBEEF ^ 0x5CA1AB1EBA5EBA11)) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Primary Register
@@ -329,10 +357,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Bit Counter Write Test: ";
   if (top->output_o == 435) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Comparator Register
@@ -349,10 +378,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Bit Count Comparison Test: ";
   if (top->output_o == 237) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
   // Write Primary Register
@@ -378,10 +408,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i ^= 1;
   top->eval();
 
+  cout << "Nonce Pass-through Test: ";
   if (top->output_o == 1337) {
-    cout << "Pass!" << endl;
+    cout << "\033[1;35mPass!\033[0m" << endl;
   } else {
-    cout << "Fail!" << endl;
+    cout << "\033[1;31mFail!\033[0m" << endl;
   }
 
 
