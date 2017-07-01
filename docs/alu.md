@@ -90,6 +90,9 @@ The Input Demultiplexer allows the selection of what input goes to the Primary R
 ## Usage
 ### Loading Value from RAM
 When loading a value shorter than 64-bits, make sure that the upper bits are zeroed. This can be done by writing a zero from the 64-bit Constants ROM to the Primary Register. The Secondary Register does not have this luxury, and zeroing it is much more difficult. Good luck.
+
+Since the Primary and Secondary Registers Rotate at the same time, both registers must be rotated left 16-bits before any writing occurs. This is done so that writing to one register does not corrupt the data stored in the other register. The purpose of making both registers rotate together is to support the Nonce Pass-through instruction. Since it is unknown which register is being passed-through to RAM, both registers are rotated at the same time.
+
 1. Rotate Primary and Secondary Register left 16-bits.
 2. Write [Primary/Secondary] Register lowest 16-bits.
 3. Rotate Primary and Secondary Register left 16-bits.
