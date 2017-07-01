@@ -1,6 +1,8 @@
 # Assembly Language
 
-The assembly language specified here is used to abstract away the lower level machine-language instructions. It also serves to translate the logical address space to the physical address space. All assembly language instructions are high level, meaning they use the logical address space. All interaction with the physical address space happens under-the-hood by the assembler.
+The assembly language specified here is used to abstract away the lower level machine-language instructions. It provides memory access instruction. This contrasts to the ALU operations which have zero knowledge of memory addressing.
+
+The assembler serves to translate the logical address space to the physical address space. All assembly language instructions are high level, meaning they use the logical address space. All interaction with the physical address space happens under-the-hood by the assembler.
 
 ## RAM Address Spaces
 ### Logical
@@ -121,15 +123,14 @@ Implementation:
 | 1-64        | Don't Care         | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
 
 ### RotateLeft
-Rotates left the Primary Register a specified number of bits. Since the ALU can rotate only 8-bits or 1-bit at a time, the machine-level implementation of this instruction can vary in length. For this reason, the "Instruction" column is replaced with a "Repetitions" column. **Caution:** The instruction voids the value stored in the Bit Counter Register. This is because of the "Rotate Primary Register Left 1-bit and Increment Bit Counter" ALU operation.
+Rotates left the Primary Register a specified number of bits. Since the ALU can rotate only 16-bits or 1-bit at a time, the machine-level implementation of this instruction can vary in length. For this reason, the "Instruction" column is replaced with a "Repetitions" column. **Caution:** The instruction voids the value stored in the Bit Counter Register. This is because of the "Rotate Primary Register Left 1-bit and Increment Bit Counter" ALU operation.
+
+TODO: This instruction can be further improved by implementing the 16-bit rotations during the write back to memory. This would require an Address to be provided to the RotateLeft instruction.
 
 Syntax: `RotateLeft <Bits>`
 
 Implementation:
-1. Rotate Primary Register Left 16-bits. (0x2) Do this `<Bits> / 16` times.
-2. Rotate Primary Register Left 1-bit. (0x3) Do this `<Bits> % 16` times.
-
 | Repetitions       | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                                |
 | ----------------- | ------------------ | --------- | ---------- | ------------------------------------------------------------ |
-| int(<Bits> / 16)  | 0                  | 0         | 0x2        | Rotate Primary Register Left 16-bits                         |
-| <Bits> mod 16     | 0                  | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
+| int(\<Bits> / 16) | 0                  | 0         | 0x2        | Rotate Primary Register Left 16-bits                         |
+| \<Bits> mod 16    | 0                  | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
