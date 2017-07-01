@@ -126,13 +126,14 @@ Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at
 8. Nonce Pass-through (0xB). Nonce corresponding to lowest bits off will be at ALU output.
 ### Writing Constants to Memory
 1. Load value from Constants ROM to Primary Register.
-2. Rotate Primary Register left 16-bits. First 16-bits are written to RAM.
-3. Rotate Primary Register left 16-bits. Second 16-bits are written to RAM.
-4. Rotate Primary Register left 16-bits. Third 16-bits are written to RAM.
-5. Rotate Primary Register left 16-bits. Fourth 16-bits are written to RAM.
+2. Rotate Primary and Secondary  Register left 16-bits. First 16-bits are written to RAM.
+3. Rotate Primary and Secondary  Register left 16-bits. Second 16-bits are written to RAM.
+4. Rotate Primary and Secondary  Register left 16-bits. Third 16-bits are written to RAM.
+5. Rotate Primary and Secondary  Register left 16-bits. Fourth 16-bits are written to RAM.
 ### Rotate Left n bits
+TODO: The rotate left 16-bit instructions should actually just be implemented in the memory addressing when writing back to RAM.
 1. Load value into Primary Register See [Loading Value from RAM](#loading-value-from-ram).
-2. Rotate Primary Register Left 16-bits. (0x2) Do this `n / 16` times.
+2. Rotate Primary and Secondary Register Left 16-bits. (0x2) Do this `n / 16` times.
 3. Rotate Primary Register Left 1-bit. (0x3) Do this `n % 16` times.
 4. Read Primary Register. (0xC)
 
