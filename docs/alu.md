@@ -73,7 +73,7 @@ The Input Demultiplexer allows the selection of what input goes to the Primary R
 | ------ | ------------------------------------------------------------ |
 | 0x0    | Write Primary Register                                       |
 | 0x1    | Write Primary Register Lower 16-bits                         |
-| 0x2    | Rotate Primary Register Left 16-bits                         |
+| 0x2    | Rotate Primary and Secondary Register Left 16-bits           |
 | 0x3    | Rotate Primary Register Left 1-bit and Increment Bit Counter |
 | 0x4    | Write Secondary Register                                     |
 | 0x5    | Write Secondary Register Lower 16-bits                       |
@@ -90,13 +90,14 @@ The Input Demultiplexer allows the selection of what input goes to the Primary R
 ## Usage
 ### Loading Value from RAM
 When loading a value shorter than 64-bits, make sure that the upper bits are zeroed. This can be done by writing a zero from the 64-bit Constants ROM to the Primary Register. The Secondary Register does not have this luxury, and zeroing it is much more difficult. Good luck.
-1. Write [Primary/Secondary] Register lowest 16-bits.
-2. Rotate [Primary/Secondary] Register left 16-bits.
-3. Write [Primary/Secondary] Register lowest 16-bits.
-4. Rotate [Primary/Secondary] Register left 16-bits.
-5. Write [Primary/Secondary] Register lowest 16-bits.
-6. Rotate [Primary/Secondary] Register left 16-bits.
-7. Write [Primary/Secondary] Register lowest 16-bits.
+1. Rotate Primary and Secondary Register left 16-bits.
+2. Write [Primary/Secondary] Register lowest 16-bits.
+3. Rotate Primary and Secondary Register left 16-bits.
+4. Write [Primary/Secondary] Register lowest 16-bits.
+5. Rotate Primary and Secondary Register left 16-bits.
+6. Write [Primary/Secondary] Register lowest 16-bits.
+7. Rotate Primary and Secondary Register left 16-bits.
+8. Write [Primary/Secondary] Register lowest 16-bits.
 ### Loading Value from Constants ROM
 Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at a time.
 1. Write Primary Register
@@ -104,10 +105,10 @@ Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at
 1. Load value from RAM or Constants ROM to Primary Register. See [Loading Value from RAM](#loading-value-from-ram).
 2. Load value from RAM to Secondary Register.
 3. Perform XOR or Addition, Result is written to Primary Register.
-4. Rotate [Primary/Secondary] Register left 16-bits. First 16-bits are written to RAM.
-5. Rotate [Primary/Secondary] Register left 16-bits. Second 16-bits are written to RAM.
-6. Rotate [Primary/Secondary] Register left 16-bits. Third 16-bits are written to RAM.
-7. Fourth 16 bits is written to RAM.
+4. Rotate Primary and Secondary Register left 16-bits. First 16-bits are written to RAM.
+5. Rotate Primary and Secondary Register left 16-bits. Second 16-bits are written to RAM.
+6. Rotate Primary and Secondary Register left 16-bits.Rotate Primary Register left 16-bits. Third 16-bits are written to RAM.
+7. Rotate Primary and Secondary Register left 16-bits. Fourth 16-bits are written to RAM.
 ### Counting Bits
 1. Load zero from Constants ROM to Primary Register.
 2. Write Bit Counter.
@@ -125,7 +126,10 @@ Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at
 8. Nonce Pass-through (0xB). Nonce corresponding to lowest bits off will be at ALU output.
 ### Writing Constants to Memory
 1. Load value from Constants ROM to Primary Register.
-2. Pass-through Primary Register. (0xC)
+2. Rotate Primary Register left 16-bits. First 16-bits are written to RAM.
+3. Rotate Primary Register left 16-bits. Second 16-bits are written to RAM.
+4. Rotate Primary Register left 16-bits. Third 16-bits are written to RAM.
+5. Rotate Primary Register left 16-bits. Fourth 16-bits are written to RAM.
 ### Rotate Left n bits
 1. Load value into Primary Register See [Loading Value from RAM](#loading-value-from-ram).
 2. Rotate Primary Register Left 16-bits. (0x2) Do this `n / 16` times.
@@ -177,7 +181,7 @@ The ALU has 13 total control bits, shown as follows:
 | ------------------------------------------------------------ | ------ | ---------------- | ------------------ | -------------------- | ------------------- | ---------------- | ------------------ | ------------ | ----------- |
 | Write Primary Register                                       | 0x0    | 111              | 00                 | 00                   | 0                   | X                | X                  | XX           | 0           |
 | Write Primary Register Lower 16-bits                         | 0x1    | 110              | 00                 | 00                   | 0                   | X                | X                  | XX           | 0           |
-| Rotate Primary Register Left 16-bits                         | 0x2    | 010              | 00                 | 00                   | 0                   | X                | 1                  | 01           | 0           |
+| Rotate Primary and Secondary Register Left 16-bits           | 0x2    | 010              | 01                 | 00                   | 0                   | X                | 1                  | 01           | 0           |
 | Rotate Primary Register Left 1-bit and Increment Bit Counter | 0x3    | 001              | 00                 | 01                   | 0                   | 1                | X                  | 00           | 0           |
 | Write Secondary Register                                     | 0x4    | 000              | 11                 | 00                   | 0                   | X                | X                  | XX           | 0           |
 | Write Secondary Register Lower 16-bits                       | 0x5    | 000              | 10                 | 00                   | 0                   | X                | X                  | XX           | 0           |
