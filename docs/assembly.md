@@ -1,8 +1,8 @@
 # Assembly Language
 
-The assembly language specified here is used to abstract away the lower level machine-language instructions. It provides memory access instruction. This contrasts to the ALU operations which have zero knowledge of memory addressing.
+The assembly language specified here is used to abstract away the lower level machine-language instructions and to provide memory access. This contrasts to the ALU operations which have zero knowledge of memory addressing.
 
-The assembler serves to translate the logical address space to the physical address space. All assembly language instructions are high level, meaning they use the logical address space. All interaction with the physical address space happens under-the-hood by the assembler.
+The assembler also serves to translate the logical address space to the physical address space. All assembly language instructions are high level, meaning they use the logical address space. All interaction with the physical address space happens under-the-hood by the assembler.
 
 ## RAM Address Spaces
 ### Logical
@@ -130,6 +130,7 @@ TODO: This instruction can be further improved by implementing the 16-bit rotati
 Syntax: `RotateLeft <Bits>`
 
 Implementation:
+
 | Repetitions       | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                                |
 | ----------------- | ------------------ | --------- | ---------- | ------------------------------------------------------------ |
 | int(\<Bits> / 16) | 0                  | 0         | 0x2        | Rotate Primary Register Left 16-bits                         |
