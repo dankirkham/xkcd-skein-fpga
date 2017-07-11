@@ -40,7 +40,7 @@ Implementation:
 | 1           | <Address>         | 0x0        | Write Primary Register                            |
 
 ### Count
-Increments the Bit Counter Register once for each one bit stored in the Primary Register. This counts the bits in one 64-bit word. For actual bits-off calculation, the Bit Counter Register must be zerod, and then a `Load` instruction followed by a `Count` instruction must be repeated 16 times (to count all 1024 bits).
+Increments the Bit Counter Register once for each one bit stored in the Primary Register. This counts the bits in one 64-bit word. For actual bits-off calculation, the Bit Counter Register must be zeroed, and then a `Load` instruction followed by a `Count` instruction must be repeated 16 times (to count all 1024 bits). Upon completion, the counted value will be stored in the Bit Counter Register.
 
 Syntax: `Count`
 
@@ -57,15 +57,16 @@ Syntax: `Load <Address> <Primary or Secondary>`
 
 Implementation:
 
-| Instruction | RAM Address        | ALU Opcode | ALU Operation                                     |
-| ----------- | ------------------ | ---------- | ------------------------------------------------- |
-| 1           | \<Address> * 4     | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits |
-| 2           | Don't care         | 0x2 or 0x6 | Rotate Primary or Secondary Register Left 16-bits |
-| 3           | \<Address> * 4 + 1 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits |
-| 4           | Don't care         | 0x2 or 0x6 | Rotate Primary or Secondary Register Left 16-bits |
-| 5           | \<Address> * 4 + 2 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits |
-| 6           | Don't care         | 0x2 or 0x6 | Rotate Primary or Secondary Register Left 16-bits |
-| 7           | \<Address> * 4 + 3 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits |
+| Instruction | RAM Address        | ALU Opcode | ALU Operation                                      |
+| ----------- | ------------------ | ---------- | -------------------------------------------------- |
+| 1           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 2           | \<Address> * 4     | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 3           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 4           | \<Address> * 4 + 1 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 5           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 6           | \<Address> * 4 + 2 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 7           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 8           | \<Address> * 4 + 3 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
 
 ### RotateLeft
 Rotates left the Primary Register a specified number of bits. Since the ALU can rotate only 16-bits or 1-bit at a time, the machine-level implementation of this instruction can vary in length. For this reason, the "Instruction" column is replaced with a "Repetitions" column. **Caution:** The instruction voids the value stored in the Bit Counter Register. This is because of the "Rotate Primary Register Left 1-bit and Increment Bit Counter" ALU operation.
@@ -120,7 +121,20 @@ Implementation:
 ### SaveNonce
 Saves to RAM either the Primary Register or Secondary Register value, depending on the values stored in the Bit Counter Register and Comparator Register. If `Bit Counter Register >= Comparator Register`, then the Secondary Register is stored in RAM at the specified address. If `Bit Counter Register < Comparator Register`, then the Primary Register is stored in RAM at the specified address.
 
-**This instruction is not yet implemented because it requires ALU changes.**
+Syntax: `SaveNonce <Address`
+
+Implementation:
+
+| Instruction | RAM Address        | ALU Opcode | ALU Operation                                      |
+| ----------- | ------------------ | ---------- | -------------------------------------------------- |
+| 1           | \<Address> * 4     | 0xB        | Comparator Nonce Pass-through                      |
+| 2           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 3           | \<Address> * 4 + 1 | 0xB        | Comparator Nonce Pass-through                      |
+| 4           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 5           | \<Address> * 4 + 2 | 0xB        | Comparator Nonce Pass-through                      |
+| 6           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
+| 7           | \<Address> * 4 + 3 | 0xB        | Comparator Nonce Pass-through                      |
+| 8           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
 
 ### XOR
 XORs the value stored in the Primary Register with the value stored in the Secondary Register and stores it in RAM at the specified address. **Caution:** The instruction overwrites the value stored in the Primary Register. When this instruction is finished the XOR result will be stored in the Primary Register.
