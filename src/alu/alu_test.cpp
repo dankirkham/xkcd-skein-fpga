@@ -239,7 +239,7 @@ int main(int argc, char **argv, char **env) {
   top->eval();
 
   // Rotate Primary and Secondary Register Left 16-bits
-  top->opcode_i = 0x2;
+  top->opcode_i = 0x6;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -254,7 +254,7 @@ int main(int argc, char **argv, char **env) {
   top->eval();
 
   // Rotate Primary and Secondary Register Left 16-bits
-  top->opcode_i = 0x2;
+  top->opcode_i = 0x6;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -269,7 +269,7 @@ int main(int argc, char **argv, char **env) {
   top->eval();
 
   // Rotate Primary and Secondary Register Left 16-bits
-  top->opcode_i = 0x2;
+  top->opcode_i = 0x6;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
@@ -284,7 +284,7 @@ int main(int argc, char **argv, char **env) {
   top->eval();
 
   // Rotate Primary and Secondary Register Left 16-bits
-  top->opcode_i = 0x2;
+  top->opcode_i = 0x6;
   top->clk_i ^= 1;
   top->eval();
   top->clk_i ^= 1;
