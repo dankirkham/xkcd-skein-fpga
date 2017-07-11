@@ -73,11 +73,11 @@ The Input Demultiplexer allows the selection of what input goes to the Primary R
 | ------ | ------------------------------------------------------------ |
 | 0x0    | Write Primary Register                                       |
 | 0x1    | Write Primary Register Lower 16-bits                         |
-| 0x2    | Rotate Primary and Secondary Register Left 16-bits           |
+| 0x2    | Rotate Primary Register Left 16-bits                         |
 | 0x3    | Rotate Primary Register Left 1-bit and Increment Bit Counter |
 | 0x4    | Write Secondary Register                                     |
 | 0x5    | Write Secondary Register Lower 16-bits                       |
-| 0x6    | Rotate Secondary Register Left 16-bits                       |
+| 0x6    | Rotate Primary and Secondary Register Left 16-bits           |
 | 0x7    | XOR                                                          |
 | 0x8    | Add                                                          |
 | 0x9    | Write Bit Counter                                            |
@@ -89,7 +89,7 @@ The Input Demultiplexer allows the selection of what input goes to the Primary R
 
 ## Usage
 ### Loading Value from RAM
-When loading a value shorter than 64-bits, make sure that the upper bits are zeroed. This can be done by writing a zero from the 64-bit Constants ROM to the Primary Register. The Secondary Register does not have this luxury, and zeroing it is much more difficult. Good luck.
+When loading a value shorter than 64-bits, make sure that the upper bits are zeroed. This can be done by writing a zero from the 64-bit Constants ROM to the Primary or Secondary Register.
 
 Since the Primary and Secondary Registers Rotate at the same time, both registers must be rotated left 16-bits before any writing occurs. This is done so that writing to one register does not corrupt the data stored in the other register. The purpose of making both registers rotate together is to support the Nonce Pass-through instruction. Since it is unknown which register is being passed-through to RAM, both registers are rotated at the same time.
 
@@ -103,23 +103,23 @@ Since the Primary and Secondary Registers Rotate at the same time, both register
 8. Write [Primary/Secondary] Register lowest 16-bits.
 ### Loading Value from Constants ROM
 Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at a time.
-1. Write Primary Register
+1. Write [Primary/Secondary] Register
 ### Addition and XOR
 1. Load value from RAM or Constants ROM to Primary Register. See [Loading Value from RAM](#loading-value-from-ram).
-2. Load value from RAM to Secondary Register.
+2. Load value from RAM or Constants ROM to Secondary Register.
 3. Perform XOR or Addition, Result is written to Primary Register.
-4. Rotate Primary and Secondary Register left 16-bits. First 16-bits are written to RAM.
-5. Rotate Primary and Secondary Register left 16-bits. Second 16-bits are written to RAM.
-6. Rotate Primary and Secondary Register left 16-bits.Rotate Primary Register left 16-bits. Third 16-bits are written to RAM.
-7. Rotate Primary and Secondary Register left 16-bits. Fourth 16-bits are written to RAM.
+4. Rotate Primary Register left 16-bits. First 16-bits are written to RAM.
+5. Rotate Primary Register left 16-bits. Second 16-bits are written to RAM.
+6. Rotate Primary Register left 16-bits. Third 16-bits are written to RAM.
+7. Rotate Primary Register left 16-bits. Fourth 16-bits are written to RAM.
 ### Counting Bits
 1. Load zero from Constants ROM to Primary Register.
-2. Write Bit Counter.
+2. Write Bit Counter to zero it.
 3. Write value from RAM to Primary Register.
 4. Count all 64 bits. (Run 0x3 64 times.)
 5. Read Bit Counter. (0xD)
 ### Nonce Comparison
-1. Load result_bits from RAM to Primary Register. (Optional: This should already be here when counting bits.) See [Loading Value from RAM](#loading-value-from-ram).
+1. Load result_bits from RAM to Primary Register. (Optional: This should already be here after counting bits.) See [Loading Value from RAM](#loading-value-from-ram).
 2. Write Bit Counter Register. (Optional: This should already be here when counting bits.)
 3. Load result_nonce from RAM to Primary Register.
 4. Load best_bits from RAM to Secondary Register.
@@ -129,14 +129,14 @@ Constants ROM to ALU input is 64-bit, so there is no need to shift in 16 bits at
 8. Nonce Pass-through (0xB). Nonce corresponding to lowest bits off will be at ALU output.
 ### Writing Constants to Memory
 1. Load value from Constants ROM to Primary Register.
-2. Rotate Primary and Secondary  Register left 16-bits. First 16-bits are written to RAM.
-3. Rotate Primary and Secondary  Register left 16-bits. Second 16-bits are written to RAM.
-4. Rotate Primary and Secondary  Register left 16-bits. Third 16-bits are written to RAM.
-5. Rotate Primary and Secondary  Register left 16-bits. Fourth 16-bits are written to RAM.
+2. Rotate Primary and Secondary Register left 16-bits. First 16-bits are written to RAM.
+3. Rotate Primary and Secondary Register left 16-bits. Second 16-bits are written to RAM.
+4. Rotate Primary and Secondary Register left 16-bits. Third 16-bits are written to RAM.
+5. Rotate Primary and Secondary Register left 16-bits. Fourth 16-bits are written to RAM.
 ### Rotate Left n bits
 TODO: The rotate left 16-bit instructions should actually just be implemented in the memory addressing when writing back to RAM.
 1. Load value into Primary Register See [Loading Value from RAM](#loading-value-from-ram).
-2. Rotate Primary and Secondary Register Left 16-bits. (0x2) Do this `n / 16` times.
+2. Rotate Primary Register Left 16-bits. (0x2) Do this `n / 16` times.
 3. Rotate Primary Register Left 1-bit. (0x3) Do this `n % 16` times.
 4. Read Primary Register. (0xC)
 
@@ -185,11 +185,11 @@ The ALU has 13 total control bits, shown as follows:
 | ------------------------------------------------------------ | ------ | ---------------- | ------------------ | -------------------- | ------------------- | ---------------- | ------------------ | ------------ | ----------- |
 | Write Primary Register                                       | 0x0    | 111              | 00                 | 00                   | 0                   | X                | X                  | XX           | 0           |
 | Write Primary Register Lower 16-bits                         | 0x1    | 110              | 00                 | 00                   | 0                   | X                | X                  | XX           | 0           |
-| Rotate Primary and Secondary Register Left 16-bits           | 0x2    | 010              | 01                 | 00                   | 0                   | X                | 1                  | 01           | 0           |
+| Rotate Primary Register Left 16-bits                         | 0x2    | 010              | 00                 | 00                   | 0                   | X                | 1                  | 01           | 0           |
 | Rotate Primary Register Left 1-bit and Increment Bit Counter | 0x3    | 001              | 00                 | 01                   | 0                   | 1                | X                  | 00           | 0           |
 | Write Secondary Register                                     | 0x4    | 000              | 11                 | 00                   | 0                   | X                | X                  | XX           | 0           |
 | Write Secondary Register Lower 16-bits                       | 0x5    | 000              | 10                 | 00                   | 0                   | X                | X                  | XX           | 0           |
-| Rotate Secondary Register Left 16-bits                       | 0x6    | 000              | 01                 | 00                   | 0                   | X                | X                  | XX           | 0           |
+| Rotate Primary and Secondary Register Left 16-bits           | 0x6    | 010              | 01                 | 00                   | 0                   | X                | X                  | XX           | 0           |
 | XOR                                                          | 0x7    | 111              | 00                 | 00                   | 0                   | X                | X                  | 10           | 1           |
 | Add                                                          | 0x8    | 111              | 00                 | 00                   | 0                   | X                | X                  | 11           | 1           |
 | Write Bit Counter                                            | 0x9    | 000              | 00                 | 10                   | 0                   | X                | X                  | XX           | 0           |
