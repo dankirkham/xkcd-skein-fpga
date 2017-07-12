@@ -2,7 +2,7 @@
 
 The assembly language specified here is used to abstract away the lower level machine-language instructions and to provide memory access. This contrasts to the ALU operations which have zero knowledge of memory addressing.
 
-The assembler also serves to translate the logical address space to the physical address space. All assembly language instructions are high level, meaning they use the logical address space. All interaction with the physical address space happens under-the-hood by the assembler.
+The assembler also serves to translate the logical address space to the physical address space. All assembly language instructions are high level, meaning they use the logical address space. All interaction with the physical address space happens under-the-hood by the assembler. 64-bit words are stored in RAM little-endian, 16-bits at a time.
 
 ## RAM Address Spaces
 ### Logical
@@ -14,19 +14,15 @@ The physical address space is the lower-level address space. It uses a 16-bit wo
 ## Instructions
 
 ### Add
-Adds the value stored in the Primary Register to the value stored in the Secondary Register and stores it in RAM at the specified address. **Caution:** The instruction overwrites the value stored in the Primary Register. When this instruction is finished the sum will be stored in the Primary Register.
+Adds the value stored in the Primary Register to the value stored in the Secondary Register and stores it in the Primary Register.
 
-Syntax: `Add <Address>`
+Syntax: `Add`
 
 Implementation:
 
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           | Don't care         | 0         | 0x8        | Add                                               |
-| 2           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 3           | \<Address> * 4 + 1 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 4           | \<Address> * 4 + 2 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 5           | \<Address> * 4 + 3 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
 
 ### Constant
 Loads a 64-bit word from the Constants ROM at the specified address to the Primary Register.
@@ -60,27 +56,28 @@ Implementation:
 | Instruction | RAM Address        | ALU Opcode | ALU Operation                                      |
 | ----------- | ------------------ | ---------- | -------------------------------------------------- |
 | 1           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 2           | \<Address> * 4     | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 2           | \<Address> * 4 + 3 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
 | 3           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 4           | \<Address> * 4 + 1 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 4           | \<Address> * 4 + 2 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
 | 5           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 6           | \<Address> * 4 + 2 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 6           | \<Address> * 4 + 1 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
 | 7           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 8           | \<Address> * 4 + 3 | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
+| 8           | \<Address> * 4     | 0x1 or 0x5 | Write Primary or Secondary Register Lower 16-bits  |
 
 ### RotateLeft
-Rotates left the Primary Register a specified number of bits. Since the ALU can rotate only 16-bits or 1-bit at a time, the machine-level implementation of this instruction can vary in length. For this reason, the "Instruction" column is replaced with a "Repetitions" column. **Caution:** The instruction voids the value stored in the Bit Counter Register. This is because of the "Rotate Primary Register Left 1-bit and Increment Bit Counter" ALU operation.
+Rotates left the value in the Primary Register and stores it to RAM. Since the ALU can rotate only 16-bits or 1-bit at a time, the machine-level implementation of this instruction can vary in length. For this reason, the "Instruction" column is replaced with a "Repetitions" column. **Caution:** The instruction voids the value stored in the Primary Register and Bit Counter Register. This is because the 16-bit rotations are actually RAM address manipulations and because of the "Rotate Primary Register Left 1-bit and Increment Bit Counter" ALU operation, respectively.
 
-TODO: This instruction can be further improved by implementing the 16-bit rotations during the write back to memory. This would require an Address to be provided to the RotateLeft instruction.
-
-Syntax: `RotateLeft <Bits>`
+Syntax: `RotateLeft <Bits> <Address>`
 
 Implementation:
 
-| Repetitions       | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                                |
-| ----------------- | ------------------ | --------- | ---------- | ------------------------------------------------------------ |
-| int(\<Bits> / 16) | 0                  | 0         | 0x2        | Rotate Primary Register Left 16-bits                         |
-| \<Bits> mod 16    | 0                  | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
+| Repetitions       | RAM Address                                  | RAM Write | ALU Opcode | ALU Operation                                                |
+| ----------------- | -------------------------------------------- | --------- | ---------- | ------------------------------------------------------------ |
+| \<Bits> mod 16    | 0                                            | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
+| 1                 | \<Address> * 4 + int(\<Bits> / 16)           | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
+| 1                 | \<Address> * 4 + (1 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
+| 1                 | \<Address> * 4 + (2 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
+| 1                 | \<Address> * 4 + (3 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
 
 ### Save
 Saves the value stored in the Primary Register to the RAM at the specified address.
@@ -91,10 +88,10 @@ Implementation:
 
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
-| 1           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 2           | \<Address> * 4 + 1 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 3           | \<Address> * 4 + 2 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 4           | \<Address> * 4 + 3 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 1           | \<Address> * 4 + 3 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 2           | \<Address> * 4 + 2 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 3           | \<Address> * 4 + 1 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 4           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
 
 ### SaveBitCounter
 Saves the lower 10-bits stored in the Primary Register to the Bit Counter Register.
@@ -107,46 +104,53 @@ Implementation:
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           |                    | 0         | 0x9        | Write Bit Counter                                 |
 
-### SaveComparator
-Saves the lower 10-bits stored in the Secondary Register to the Comparator Register. Then writes to RAM either the Bit Counter Register or the Comparator Register, whichever is lower.
+### SaveBitsOff
+Writes to RAM either the Bit Counter Register or the Comparator Register, whichever is one lower.
 
-Syntax: `SaveComparatorAndCompare <Address>`
+Syntax: `SaveComparator <Address>`
 
 Implementation:
 
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
-| 1           | \<Address> * 4     | 1         | 0xA        | Write Comparator Register & Compare               |
+| 1           | \<Address> * 4     | 1         | 0xE        | Compare                                           |
+
+### SaveComparator
+Saves the lower 10-bits stored in the Secondary Register to the Comparator Register.
+
+Syntax: `SaveComparator`
+
+Implementation:
+
+| Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
+| ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
+| 1           |                    | 0         | 0xA        | Write Comparator Register                         |
 
 ### SaveNonce
 Saves to RAM either the Primary Register or Secondary Register value, depending on the values stored in the Bit Counter Register and Comparator Register. If `Bit Counter Register >= Comparator Register`, then the Secondary Register is stored in RAM at the specified address. If `Bit Counter Register < Comparator Register`, then the Primary Register is stored in RAM at the specified address.
 
-Syntax: `SaveNonce <Address`
+Syntax: `SaveNonce <Address>`
 
 Implementation:
 
 | Instruction | RAM Address        | ALU Opcode | ALU Operation                                      |
 | ----------- | ------------------ | ---------- | -------------------------------------------------- |
-| 1           | \<Address> * 4     | 0xB        | Comparator Nonce Pass-through                      |
+| 1           | \<Address> * 4 + 3 | 0xB        | Comparator Nonce Pass-through                      |
 | 2           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 3           | \<Address> * 4 + 1 | 0xB        | Comparator Nonce Pass-through                      |
+| 3           | \<Address> * 4 + 2 | 0xB        | Comparator Nonce Pass-through                      |
 | 4           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 5           | \<Address> * 4 + 2 | 0xB        | Comparator Nonce Pass-through                      |
+| 5           | \<Address> * 4 + 1 | 0xB        | Comparator Nonce Pass-through                      |
 | 6           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 7           | \<Address> * 4 + 3 | 0xB        | Comparator Nonce Pass-through                      |
+| 7           | \<Address> * 4     | 0xB        | Comparator Nonce Pass-through                      |
 | 8           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
 
 ### XOR
-XORs the value stored in the Primary Register with the value stored in the Secondary Register and stores it in RAM at the specified address. **Caution:** The instruction overwrites the value stored in the Primary Register. When this instruction is finished the XOR result will be stored in the Primary Register.
+XORs the value stored in the Primary Register with the value stored in the Secondary Register and stores it in the Primary Register.
 
-Syntax: `XOR <Address>`
+Syntax: `XOR`
 
 Implementation:
 
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
 | 1           | Don't care         | 0         | 0x7        | XOR                                               |
-| 2           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 3           | \<Address> * 4 + 1 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 4           | \<Address> * 4 + 2 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 5           | \<Address> * 4 + 3 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
