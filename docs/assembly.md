@@ -88,10 +88,10 @@ Implementation:
 
 | Instruction | RAM Address        | RAM Write | ALU Opcode | ALU Operation                                     |
 | ----------- | ------------------ | --------- | ---------- | ------------------------------------------------- |
-| 1           | \<Address> * 4 + 3 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 2           | \<Address> * 4 + 2 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 3           | \<Address> * 4 + 1 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
-| 4           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 1           | \<Address> * 4     | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 2           | \<Address> * 4 + 1 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 3           | \<Address> * 4 + 2 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
+| 4           | \<Address> * 4 + 3 | 1         | 0x2        | Rotate Primary Register Left 16-bits              |
 
 ### SaveBitCounter
 Saves the lower 10-bits stored in the Primary Register to the Bit Counter Register.
@@ -135,13 +135,13 @@ Implementation:
 
 | Instruction | RAM Address        | ALU Opcode | ALU Operation                                      |
 | ----------- | ------------------ | ---------- | -------------------------------------------------- |
-| 1           | \<Address> * 4 + 3 | 0xB        | Comparator Nonce Pass-through                      |
+| 1           | \<Address> * 4     | 0xB        | Comparator Nonce Pass-through                      |
 | 2           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 3           | \<Address> * 4 + 2 | 0xB        | Comparator Nonce Pass-through                      |
+| 3           | \<Address> * 4 + 1 | 0xB        | Comparator Nonce Pass-through                      |
 | 4           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 5           | \<Address> * 4 + 1 | 0xB        | Comparator Nonce Pass-through                      |
+| 5           | \<Address> * 4 + 2 | 0xB        | Comparator Nonce Pass-through                      |
 | 6           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
-| 7           | \<Address> * 4     | 0xB        | Comparator Nonce Pass-through                      |
+| 7           | \<Address> * 4 + 3 | 0xB        | Comparator Nonce Pass-through                      |
 | 8           | Don't care         | 0x6        | Rotate Primary and Secondary Register Left 16-bits |
 
 ### XOR
