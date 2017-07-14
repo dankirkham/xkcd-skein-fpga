@@ -75,9 +75,9 @@ Implementation:
 | ----------------- | -------------------------------------------- | --------- | ---------- | ------------------------------------------------------------ |
 | \<Bits> mod 16    | 0                                            | 0         | 0x3        | Rotate Primary Register Left 1-bit and Increment Bit Counter |
 | 1                 | \<Address> * 4 + int(\<Bits> / 16)           | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
-| 1                 | \<Address> * 4 + (1 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
-| 1                 | \<Address> * 4 + (2 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
 | 1                 | \<Address> * 4 + (3 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
+| 1                 | \<Address> * 4 + (2 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
+| 1                 | \<Address> * 4 + (1 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Rotate Primary Register Left 16-bits                         |
 
 ### Save
 Saves the value stored in the Primary Register to the RAM at the specified address.
@@ -107,7 +107,7 @@ Implementation:
 ### SaveBitsOff
 Writes to RAM either the Bit Counter Register or the Comparator Register, whichever is one lower.
 
-Syntax: `SaveComparator <Address>`
+Syntax: `SaveBitsOff <Address>`
 
 Implementation:
 
