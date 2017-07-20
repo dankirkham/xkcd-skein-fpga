@@ -1,7 +1,7 @@
 # RAM Tester
 This module is used to test RAM on real FPGA hardware. It can test both the Xilinx Spartan 6 Block RAM IP core and the `block_ram.v` that I've implemented. Verification of both these RAMs is important because, to my knowledge, the Xilinx IP cannot be used with Verilator. If both modules are functionally identical, `block_ram.v` can be used for Verilator simulation.
 
-![Arithmetic Logic Unit](../gfx/ram_tester.png)
+![RAM Tester](../gfx/ram_tester.png)
 
 ## Components
 
@@ -36,3 +36,6 @@ The RAM tester has 5 internal control bits.
   - Select
     - 0: Low Byte
     - 1: High Byte
+
+## State Machine
+![RAM Tester State Machine](../gfx/ram_tester_state_machine.png)
