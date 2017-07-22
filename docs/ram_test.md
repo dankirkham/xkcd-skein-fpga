@@ -1,6 +1,10 @@
 # RAM Tester
 This module is used to test RAM on real FPGA hardware. It can test both the Xilinx Spartan 6 Block RAM IP core and the `block_ram.v` that I've implemented. Verification of both these RAMs is important because, to my knowledge, the Xilinx IP cannot be used with Verilator. If both modules are functionally identical, `block_ram.v` can be used for Verilator simulation.
 
+**TODO:** How can the RAM Tester module send the header byte back to the host? A "Transmitter Demux" may need to be added that can select between the Data Register Demux output and the header byte.
+
+**TODO:** A header constant combinational logic circuit should be added that sets the header constant used by the state machine and the transmitter demux.
+
 ![RAM Tester](../gfx/ram_tester.png)
 
 ## Components
@@ -16,6 +20,12 @@ Selects between the 8-bit RX byte and the 16-bit data word coming from the RAM. 
 
 ### Byte Select Demux
 Selects between the high and low byte of the Data Register output. This is used to send the 16-bit data read from the RAM back to the UART, one byte at a time.
+
+### Transmitter Demux
+Selects between the Byte Select Demux output and the Header Constant.
+
+### Header Constant
+A constant 8-bit output that is used to select what header is used by the serial interface.
 
 ### Control Logic
 Contains a state machine and a UART timeout timer for controlling the overall module.
@@ -36,6 +46,80 @@ The RAM tester has 5 internal control bits.
   - Select
     - 0: Low Byte
     - 1: High Byte
+- Transmitter Demux
+  - Select
+    - 0: Data Register Demux
+    - 1: Header
 
 ## State Machine
 ![RAM Tester State Machine](../gfx/ram_tester_state_machine.png)
+
+### Outputs
+- UART Signals
+  - new_tx_data
+- RAM Signals
+  - write
+- Internal Control Signals
+  - address_register_write
+  - data_register_write_low
+  - data_register_write_high
+  - data_register_demux
+  - byte_select_demux
+  - transmitter_demux
+- Timeout Timer
+  - timeout_timer_reset
+
+### State Specific Outputs
+- Ready
+  - Mealy
+    - timeout_timer_reset
+    - next_state
+- Receive Address Byte
+  - Mealy
+    - address_register_write
+    - next_state
+- Receive R/W Byte
+  - Mealy
+    - next_state
+- Receive Low Data Byte
+  - Mealy
+    - data_register_write_low
+    - next_state
+  - Moore
+    - data_register_demux
+- Receive High Data Byte
+  - Mealy
+    - data_register_write_high
+    - next_state
+  - Moore
+    - data_register_demux
+- Write RAM
+  - Moore
+    - write
+    - next_state
+- Read RAM
+  - Moore
+    - data_register_demux
+    - data_register_write_low
+    - data_register_write_high
+    - next_state
+- Send Header
+  - Mealy
+    - new_tx_data
+    - next_state
+  - Moore
+    - transmitter_demux
+- Send Low Data Byte
+  - Mealy
+    - new_tx_data
+    - next_state
+  - Moore
+    - transmitter_demux
+    - byte_select_demux
+- Send High Data Byte
+  - Mealy
+    - new_tx_data
+    - next_state
+  - Moore
+    - transmitter_demux
+    - byte_select_demux
