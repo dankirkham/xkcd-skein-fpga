@@ -1,9 +1,7 @@
 # RAM Tester
 This module is used to test RAM on real FPGA hardware. It can test both the Xilinx Spartan 6 Block RAM IP core and the `block_ram.v` that I've implemented. Verification of both these RAMs is important because, to my knowledge, the Xilinx IP cannot be used with Verilator. If both modules are functionally identical, `block_ram.v` can be used for Verilator simulation.
 
-**TODO:** How can the RAM Tester module send the header byte back to the host? A "Transmitter Demux" may need to be added that can select between the Data Register Demux output and the header byte.
-
-**TODO:** A header constant combinational logic circuit should be added that sets the header constant used by the state machine and the transmitter demux.
+**TODO:** The RAM tester module needs to know the clock rate of the FPGA in order to find out the max value of the timeout timer.
 
 ![RAM Tester](../gfx/ram_tester.png)
 
@@ -96,13 +94,13 @@ The RAM tester has 5 internal control bits.
 - Write RAM
   - Moore
     - write
-    - next_state
+    - next_state (implemented as Mealy)
 - Read RAM
   - Moore
     - data_register_demux
     - data_register_write_low
     - data_register_write_high
-    - next_state
+    - next_state (implemented as Mealy)
 - Send Header
   - Mealy
     - new_tx_data
