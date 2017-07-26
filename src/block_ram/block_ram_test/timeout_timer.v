@@ -30,7 +30,7 @@ always @(*) begin
 end
 
 always @(posedge clk_i) begin
-  counter_d <= counter_q;
+  counter_q <= counter_d;
 end
 
 endmodule
