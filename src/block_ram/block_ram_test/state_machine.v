@@ -104,7 +104,11 @@ always @(*) begin // Mealy Outputs and nextstate
       nextstate = READY;
 
     READ_RAM:
+    begin
+      data_register_write_low_o = 1'b1;
+      data_register_write_high_o = 1'b1;
       nextstate = SEND_HEADER;
+    end
 
     SEND_HEADER:
       if (tx_busy_i) begin
@@ -157,8 +161,6 @@ always @(*) begin // Moore Outputs
     READ_RAM:
     begin
       data_register_demux_o = 1'b1;
-      data_register_write_low_o = 1'b1;
-      data_register_write_high_o = 1'b1;
     end
 
     SEND_HEADER:
