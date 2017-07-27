@@ -38,7 +38,7 @@ wire write_w;
 // these signals should be high-z when not used
 assign spi_miso = 1'bz;
 assign spi_channel = 4'bzzzz;
-assign led[7:2] = 8'b000000;
+assign led = address_w;
 
 avr_interface avr_interface1 (
     .clk(clk),
