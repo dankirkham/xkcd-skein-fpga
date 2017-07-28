@@ -85,4 +85,18 @@ block_ram block_ram0 (
   .data_o(data_from_ram_w)
 );
 
+//block_ram_skein block_ram_skein0(
+//  .clka(clk),
+//  .wea(write_w),
+//  .addra(address_w),
+//  .dina(data_to_ram_w),
+//  .douta(data_from_ram_w),
+//  .clkb(),
+//  .web(),
+//  .addrb(),
+//  .dinb(),
+//  .doutb()
+//);
+
+
 endmodule
