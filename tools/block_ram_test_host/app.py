@@ -8,7 +8,7 @@ def write_ram(serial_port, address, data):
     message += b'\x01' # Write byte
     message += data.to_bytes(2, byteorder='little') # Two Data bytes
 
-    logging.debug("Writing {} to RAM at Address {}".format(data, address))
+    logging.debug("Writing {} ({}) to RAM at Address {} ({})".format(data, hex(data), address, hex(address)))
     serial_port.write(message)
 
 def read_ram(serial_port, address):
@@ -18,10 +18,17 @@ def read_ram(serial_port, address):
 
     serial_port.write(message)
 
-    logging.debug("Reading from RAM at Address {}".format(address))
+    header_byte = serial_port.read(1)
+    header = int.from_bytes(header_byte, byteorder='little')
+    if header == 0x9A:
+        logging.debug("Received correct header byte.")
+    else:
+        logging.error("Received incorrect header byte {} ({})".format(header, hex(header)))
+
+    logging.debug("Reading from RAM at Address {} ({})".format(address, hex(address)))
     data_bytes = serial_port.read(2)
     data = int.from_bytes(data_bytes, byteorder='little')
-    logging.debug("Read {} from RAM at Address {}".format(data, address))
+    logging.debug("Read {} ({}) from RAM at Address {} ({})".format(data, hex(data), address, hex(address)))
 
     return data
 
