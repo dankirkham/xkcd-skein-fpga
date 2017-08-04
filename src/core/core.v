@@ -18,7 +18,8 @@ module core #(
   // Output Mux
   input output_select_i,
 
-  output [15:0] ram_o
+  output [15:0] ram_o,
+  output [63:0] output_o
 );
 
 wire [23:0] core_id_w;
@@ -26,6 +27,8 @@ wire output_enable_w;
 wire [63:0] input_mux_w;
 wire [63:0] alu_output_w;
 wire [63:0] output_mux_w;
+
+assign ram_o = output_mux_w[15:0];
 
 alu alu0 (
   .clk_i(clk_i),
@@ -60,7 +63,8 @@ core_id_module #(.CORE_ID(CORE_ID)) core_id_module (
 
 core_output_enable core_output_enable0 (
   .input_i(output_mux_w),
-  .enable_i(output_enable_w)
+  .enable_i(output_enable_w),
+  .output_o(output_o)
 );
 
 endmodule
