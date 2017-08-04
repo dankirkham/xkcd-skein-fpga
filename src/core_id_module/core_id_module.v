@@ -1,5 +1,5 @@
 module core_id_module #(
-  parameter CORE_ID = 0
+  parameter CORE_ID /*verilator public*/ = 0
   )(
   input clk_i,
   input [23:0] core_selection_i,
