@@ -58,3 +58,6 @@ _xmsgs/
 
 # verilator objects
 obj_dir/
+
+# cpp build dir
+build/
