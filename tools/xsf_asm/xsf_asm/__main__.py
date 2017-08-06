@@ -1,6 +1,7 @@
 import argparse
 import logging
-from xsf_asm import generate, parse
+import re
+from xsf_asm import generate, parse, output
 
 def main():
     argument_parser = argparse.ArgumentParser()
@@ -17,6 +18,24 @@ def main():
 
     generator = generate.Generator()
     ml_instructions = generator.generate(asm_instructions)
+
+    outputter = output.Outputter()
+
+
+
+    if args.o:
+        output_filename = outputter.output(ml_instructions, args.o)
+    else:
+        m = re.search("^(.*)\.asm", args.input_file)
+
+        if m:
+            output_filename = m.group(1) + '.ml'
+        else:
+            output_filename = args.input_file + '.ml'
+
+    f = open(output_filename, "w")
+
+    outputter.output(ml_instructions, f)
 
 if __name__ == "__main__":
     main()
