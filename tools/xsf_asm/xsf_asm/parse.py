@@ -93,6 +93,8 @@ class Parser:
             line -- string with one instruction and an optional comment
         """
 
+        line = line.strip()
+
         logging.debug("Parsing line: {}".format(line))
 
         instruction, comment = self._seperate_comment(line)
