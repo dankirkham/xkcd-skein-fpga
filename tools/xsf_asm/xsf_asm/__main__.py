@@ -1,6 +1,7 @@
 import argparse
+# import generate
 import logging
-import parse
+import xsf_asm.parse
 
 def main():
     argument_parser = argparse.ArgumentParser()
@@ -11,9 +12,11 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG)
 
-    f = open(args.input_file, "r")
-    parse.parse(f)
+    parser = parse.Parser()
 
+    f = open(args.input_file, "r")
+
+    asm_instructions = parser.parse(f)
 
 if __name__ == "__main__":
     main()
