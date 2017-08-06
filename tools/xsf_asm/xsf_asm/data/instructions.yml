@@ -1,0 +1,28 @@
+Add: no_operands
+Constant:
+  - type: int
+CoreId: no_operands
+Count: no_operands
+Load:
+  - type: int
+  - type: choice
+    values:
+      - Primary
+      - Secondary
+Nonce:
+  - type: int
+Read:
+  - type: int
+RotateLeft:
+  - type: int
+  - type: int
+Save:
+  - type: int
+SaveBitCounter: no_operands
+SaveBitsOff:
+  - type: int
+SaveComparator: no_operands
+SaveNonce:
+  - type: int
+SelectCore: no_operands
+XOR: no_operands
