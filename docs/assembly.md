@@ -33,7 +33,7 @@ Implementation:
 
 | Instruction | Address Bus        | RAM Write | ALU Opcode | Input Select | Output Select | Output Enable | Save Core Selection |
 | ----------- | ------------------ | --------- | ---------- | ------------ | ------------- | ------------- | ------------------- |
-| 1           | <Address>          | 0         | 0x0        | 00           | Don't Care    | 0             | 0                   |
+| 1           | \<Address>         | 0         | 0x0        | 00           | Don't Care    | 0             | 0                   |
 
 ### CoreId
 Loads the Core ID from the Core ID Module and stores it into the Primary Register.
