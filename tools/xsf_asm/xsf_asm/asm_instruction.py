@@ -1,4 +1,4 @@
-class AssemblyLanguageInstruction:
+class AsmInstruction:
     """Object that holds information about an assembly language instruction.
     Generally, created by a Parser and consumed by a Generator."""
 

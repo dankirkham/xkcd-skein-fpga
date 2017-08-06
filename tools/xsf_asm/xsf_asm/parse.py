@@ -1,4 +1,4 @@
-from xsf_asm.assembly_language_instruction import AssemblyLanguageInstruction
+from xsf_asm.asm_instruction import AsmInstruction
 from enum import Enum
 import logging
 import os
@@ -19,7 +19,7 @@ class ParserError(Exception):
 
 class Parser:
     """Reads assembly language file, ensures all instructions are of valid
-    syntax, and creates AssemblyLanguageInstruction objects that can be used by
+    syntax, and creates AsmInstruction objects that can be used by
     code generators."""
 
     def __init__(self):
@@ -87,7 +87,7 @@ class Parser:
 
     def _parse_line(self, line):
         """Parse a line that may contain a comment and return an
-        AssemblyLanguageInstruction object
+        AsmInstruction object
 
         Attributes:
             line -- string with one instruction and an optional comment
@@ -115,11 +115,11 @@ class Parser:
             operator = None
             operands = None
 
-        return AssemblyLanguageInstruction(operator, operands, comment)
+        return AsmInstruction(operator, operands, comment)
 
     def parse(self, lines):
         """Parse an assembly language program and return a list of
-        AssemblyLanguageInstruction objects.
+        AsmInstruction objects.
 
         Attributes:
             lines -- list of instruction strings
