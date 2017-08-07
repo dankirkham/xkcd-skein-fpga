@@ -1,6 +1,6 @@
 # xsf_asm
 
-An assembler for the [xkcd-skein-fpga](https://github.com/dankirkham/xkcd-skein-fpga) machine language. For a specification of the assembly language, see the [documentation](https://github.com/dankirkham/xkcd-skein-fpga/docs/assembly.md).
+An assembler for the [xkcd-skein-fpga](https://github.com/dankirkham/xkcd-skein-fpga) machine language. For a specification of the assembly language, see the [documentation](https://github.com/dankirkham/xkcd-skein-fpga/tree/master/docs/assembly.md).
 
 ## Installation
 
@@ -8,7 +8,7 @@ Requires Python 3.6
 
 ```
 cd xsf_asm/
-python3 setup.py
+python3 setup.py install
 ```
 
 ## Usage
