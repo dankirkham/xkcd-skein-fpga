@@ -26,7 +26,7 @@ def generate_rotate_left(asm: AsmInstruction, instructions: List[MlInstruction])
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=asm.comment if bits % 16 == 0 else None
     ))
 
     instructions.append(MlInstruction(
