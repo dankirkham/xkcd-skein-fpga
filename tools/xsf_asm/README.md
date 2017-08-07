@@ -1,6 +1,6 @@
 # xsf_asm
 
-An assembler for the [xkcd-skein-fpga](https://github.com/dankirkham/xkcd-skein-fpga) machine language. For a specification of the assembly language, see the [Assembly Language Documentation](https://github.com/dankirkham/xkcd-skein-fpga/tree/masterdocs/assembly.md). An assembly language file can be used to program the Hasher Core and it can also be used by the Hasher Core Simulator for verification.
+An assembler for the [xkcd-skein-fpga](https://github.com/dankirkham/xkcd-skein-fpga) machine language. For a specification of the assembly language, see the [Assembly Language Documentation](https://github.com/dankirkham/xkcd-skein-fpga/tree/master/docs/assembly.md). An assembly language file can be used to program the Hasher Core and it can also be used by the Hasher Core Simulator for verification.
 
 ## Installation
 
