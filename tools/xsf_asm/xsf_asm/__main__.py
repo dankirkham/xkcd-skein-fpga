@@ -21,10 +21,8 @@ def main():
 
     outputter = output.Outputter()
 
-
-
     if args.o:
-        output_filename = outputter.output(ml_instructions, args.o)
+        output_filename = args.o
     else:
         m = re.search("^(.*)\.asm", args.input_file)
 
