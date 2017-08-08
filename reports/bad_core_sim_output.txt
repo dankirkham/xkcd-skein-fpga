@@ -1,0 +1,129 @@
+obj_dir/Vcore_sim test/*.ml
+Instruction: // CoreSimInput 10; Output: 0; Comment = CoreSimInput 10
+Instruction: 00240; Output: 0; Comment = Save '10' to RAM at Address 0
+Instruction: 00e40; Output: 0
+Instruction: 00a40; Output: 0
+Instruction: 00640; Output: 0
+Instruction: // CoreSimInput 1337; Output: 0; Comment = CoreSimInput 1337
+Instruction: 01240; Output: 0; Comment = Save '1337' to RAM at Address 1
+Instruction: 01e40; Output: 0
+Instruction: 01a40; Output: 0
+Instruction: 01640; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load Address 0 '10' to Primary Register
+Instruction: 00c28; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 00828; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 00428; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 00028; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load Address 1 '1337' to Secondary Register
+Instruction: 01ca8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 018a8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 014a8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 010a8; Output: 0
+Instruction: 00100; Output: 0; Comment = Add Primary and Secondary Register together
+Instruction: 02e40; Output: 0; Comment = RotateLeft 48 bits and store at 2
+Instruction: 03a40; Output: 0
+Instruction: 03640; Output: 0
+Instruction: 03240; Output: 0
+Instruction: // CoreSimInput 0; Output: 0; Comment = CoreSimInput 0
+Instruction: 00181; Output: 0; Comment = Select the core
+Instruction: 02186; Output: 0; Comment = Read RAM at address 2
+Instruction: 02586; Output: 0
+Instruction: 02986; Output: 0
+Instruction: 02d86; Output: 1347
+1347 == 1347: [1;35mPass![0m
+Instruction: // CoreSimAssert 1347; Output: 0; Comment = CoreSimAssert 1347
+Instruction: // CoreSimInput 0; Output: 0; Comment = CoreSimInput 0
+Instruction: 00181; Output: 0; Comment = Select the core
+Instruction: // CoreSimInput 412; Output: 0; Comment = CoreSimInput 412
+Instruction: 00240; Output: 0; Comment = Save '412' to RAM at Address 0
+Instruction: 00e40; Output: 0
+Instruction: 00a40; Output: 0
+Instruction: 00640; Output: 0
+Instruction: // CoreSimInput 414; Output: 0; Comment = CoreSimInput 414
+Instruction: 01240; Output: 0; Comment = Save '414' to RAM at Address 1
+Instruction: 01e40; Output: 0
+Instruction: 01a40; Output: 0
+Instruction: 01640; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load Address 0 '412' to Primary Register
+Instruction: 00c28; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 00828; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 00428; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 00028; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load Address 1 '414' to Secondary Register
+Instruction: 01ca8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 018a8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 014a8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 010a8; Output: 0
+Instruction: 00120; Output: 0; Comment = Save Primary Register value to Bit Counter '412'
+Instruction: 00140; Output: 0; Comment = Save Secondary Register value to Comparator Register '414'
+Instruction: // CoreSimInput 2301902359540000000; Output: 0; Comment = CoreSimInput 2301902359540000000
+Instruction: 02240; Output: 0; Comment = Save '2301902359540000000' to RAM at Address 2
+Instruction: 02e40; Output: 0
+Instruction: 02a40; Output: 0
+Instruction: 02640; Output: 0
+Instruction: // CoreSimInput 677000000000000; Output: 0; Comment = CoreSimInput 677000000000000
+Instruction: 03240; Output: 0; Comment = Save '677000000000000' to RAM at Address 3
+Instruction: 03e40; Output: 0
+Instruction: 03a40; Output: 0
+Instruction: 03640; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load 2301902359540000000 to Primary Register
+Instruction: 02c28; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 02828; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 02428; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 02028; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load 677000000000000 to Secondary Register
+Instruction: 03ca8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 038a8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 034a8; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 030a8; Output: 0
+Instruction: 053c0; Output: 0; Comment = Save Lowest Bits Off to RAM
+Instruction: 06360; Output: 0; Comment = Save Nonce to RAM
+Instruction: 000c0; Output: 0
+Instruction: 06f60; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 06b60; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 06760; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 000c0; Output: 0; Comment = Load Lowest Bits Off to RAM
+Instruction: 05c28; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 05828; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 05428; Output: 0
+Instruction: 000c0; Output: 0
+Instruction: 05028; Output: 0
+Instruction: 05e40; Output: 0; Comment = RotateLeft 48 bits and store at 2
+Instruction: 06a40; Output: 0
+Instruction: 06640; Output: 0
+Instruction: 06240; Output: 0
+Instruction: 05186; Output: 412; Comment = Read RAM at address 2
+Instruction: 05586; Output: 0
+Instruction: 05986; Output: 0
+Instruction: 05d86; Output: 412
+412 == 412: [1;35mPass![0m
+Instruction: // CoreSimAssert 412; Output: 0; Comment = CoreSimAssert 412
+Instruction: 06186; Output: 0; Comment = Read Nonce Saved at Address 6
+Instruction: 06586; Output: 0
+Instruction: 06986; Output: 0
+Instruction: 06d86; Output: 8178
+8178 == 8178: [1;35mPass![0m
+Instruction: // CoreSimAssert 8178; Output: 0; Comment = CoreSimAssert 8178
