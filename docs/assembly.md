@@ -107,13 +107,13 @@ Syntax: `RotateLeft <Bits> <Address>`
 
 Implementation:
 
-| Repetitions   | Address Bus                                  | RAM Write | ALU Opcode | Input Select | Output Select | Output Enable | Save Core Selection |
-| ------------- | -------------------------------------------- | --------- | ---------- | ------------ | ------------- | ------------- | ------------------- |
-| \<Bits mod 16 | Don't Care                                   | 0         | 0x3        | Don't Care   | Don't Care    | 0             | 0                   |
-| 1             | \<Address> * 4 + int(\<Bits> / 16)           | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
-| 1             | \<Address> * 4 + (3 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
-| 1             | \<Address> * 4 + (2 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
-| 1             | \<Address> * 4 + (1 + int(\<Bits> / 16) % 4) | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
+| Repetitions   | Address Bus                                    | RAM Write | ALU Opcode | Input Select | Output Select | Output Enable | Save Core Selection |
+| ------------- | ---------------------------------------------- | --------- | ---------- | ------------ | ------------- | ------------- | ------------------- |
+| \<Bits mod 16 | Don't Care                                     | 0         | 0x3        | Don't Care   | Don't Care    | 0             | 0                   |
+| 1             | \<Address> * 4 + int(\<Bits> / 16)             | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
+| 1             | \<Address> * 4 + ((3 + int(\<Bits> / 16)) % 4) | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
+| 1             | \<Address> * 4 + ((2 + int(\<Bits> / 16)) % 4) | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
+| 1             | \<Address> * 4 + ((1 + int(\<Bits> / 16)) % 4) | 1         | 0x2        | Don't Care   | 0             | 0             | 0                   |
 
 ### Save
 Saves the value stored in the Primary Register to the RAM at the specified address.

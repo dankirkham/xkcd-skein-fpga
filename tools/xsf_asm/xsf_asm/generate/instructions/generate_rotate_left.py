@@ -30,7 +30,7 @@ def generate_rotate_left(asm: AsmInstruction, instructions: List[MlInstruction])
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4 + (3 + int(bits / 16) % 4),
+        address=address * 4 + ((3 + int(bits / 16)) % 4),
         ram_write=1,
         alu_opcode=0x2,
         input_select=None,
@@ -41,7 +41,7 @@ def generate_rotate_left(asm: AsmInstruction, instructions: List[MlInstruction])
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4 + (2 + int(bits / 16) % 4),
+        address=address * 4 + ((2 + int(bits / 16)) % 4),
         ram_write=1,
         alu_opcode=0x2,
         input_select=None,
@@ -52,7 +52,7 @@ def generate_rotate_left(asm: AsmInstruction, instructions: List[MlInstruction])
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4 + (1 + int(bits / 16) % 4),
+        address=address * 4 + ((1 + int(bits / 16)) % 4),
         ram_write=1,
         alu_opcode=0x2,
         input_select=None,
