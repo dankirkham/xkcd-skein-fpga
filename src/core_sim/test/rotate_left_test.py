@@ -17,6 +17,3 @@ for bits in range(64):
     f.write("// CoreSimAssert {}\n\n".format(rotate_left(input_value, bits)))
 
 f.close()
-
-0x76A9CEF522C494EB
-0xEB76A9CEF522C494
