@@ -2,7 +2,12 @@ module core_sim (
   input clk_i,
   input [63:0] input_i,
   input [16:0] instruction_i,
-  output [63:0] output_o
+  output [63:0] output_o,
+
+  output [15:0] ram_output_o,
+  output [15:0] ram_input_o,
+  output ram_write_o,
+  output [7:0] ram_address_o
 );
 
 wire [15:0] ram_output_w;
@@ -23,6 +28,11 @@ assign input_select_w = instruction_i[4:3];
 assign output_select_w = instruction_i[2];
 assign output_enable_w = instruction_i[1];
 assign save_core_selection_w = instruction_i[0];
+
+assign ram_output_o = ram_output_w;
+assign ram_input_o = ram_input_w;
+assign ram_write_o = write_w;
+assign ram_address_o = address_w;
 
 block_ram block_ram0 (
   .clk_i(clk_i),

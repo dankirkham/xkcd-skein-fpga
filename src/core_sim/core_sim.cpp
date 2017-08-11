@@ -7,17 +7,21 @@
 #include "Vcore_sim.h"
 #include "verilated.h"
 
-void _assert(std::string assertation, bool condition) {
+bool _assert(std::string assertation, bool condition) {
   cout << assertation << ": ";
   if (condition) {
     cout << "\033[1;35mPass!\033[0m" << endl;
+    return true;
   } else {
     cout << "\033[1;31mFail!\033[0m" << endl;
+    return false;
   }
 }
 
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
+
+  int failures = 0;
 
   for (int file_index = 1; file_index < argc; file_index++) {
     Vcore_sim* top = new Vcore_sim;
@@ -52,7 +56,8 @@ int main(int argc, char **argv, char **env) {
 
         if (comment.substr(0, 13) == "CoreSimAssert") {
           uint64_t expected = stoull(comment.substr(14, comment.length() - 14));
-          _assert(to_string(expected) + " == " + to_string(top->output_o), expected == top->output_o);
+          if (!_assert(to_string(expected) + " == " + to_string(top->output_o), expected == top->output_o))
+            failures++;
         }
 
         if (instruction.length() >= 5) {
@@ -75,12 +80,16 @@ int main(int argc, char **argv, char **env) {
           } else {
             cout << endl;
           }
+
+          cout << "  RAM Address: " << to_string(top->ram_address_o) << "; RAM Output: " << to_string(top->ram_output_o) << "; RAM Input: " << to_string(top->ram_input_o) << "; RAM Write: " << to_string(top->ram_write_o) << endl;
         }
     }
 
     delete top;
     ml_file.close();
   }
+
+  cout << "Tests finished with " << to_string(failures) << " failures." << endl;
 
   exit(0);
 }
