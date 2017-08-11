@@ -36,7 +36,7 @@ Output files are currently only in a 17-bit hexadecimal format (between 0x00000 
 
 - aaaaaaaa: Address Bus (7-bit)
 - b: Ram Write Bit
-- cccc: ALU Opcode (4-bit) See [ALU Documentation](https://github.com/dankirkham/xkcd-skein-fpga/docs/alu.md)
+- cccc: ALU Opcode (4-bit) See [ALU Documentation](https://github.com/dankirkham/xkcd-skein-fpga/blob/master/docs/alu.md)
 - dd: Input Select (2-bit)
   - 00: Core Input
   - 01: RAM Output
