@@ -1,5 +1,5 @@
-run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bits_off_compare_test.ml test/build/core_id_test.ml test/build/rotate_left_test.ml test/build/unselected_core_test.ml
-# run: obj_dir/Vcore_sim test/build/core_id_test.ml
+run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bits_off_compare_test.ml test/build/core_id_test.ml test/build/rotate_left_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
+# run: obj_dir/Vcore_sim test/build/xor_test.ml
 	obj_dir/Vcore_sim test/build/*.ml
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
@@ -23,3 +23,6 @@ test/build/rotate_left_test.asm: test/rotate_left_test.py
 
 test/build/unselected_core_test.ml: test/unselected_core_test.asm
 	xsf_asm -o test/build/unselected_core_test.ml test/unselected_core_test.asm
+
+test/build/xor_test.ml: test/xor_test.asm
+	xsf_asm -o test/build/xor_test.ml test/xor_test.asm
