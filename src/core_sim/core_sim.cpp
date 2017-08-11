@@ -22,6 +22,7 @@ int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
 
   int failures = 0;
+  int assertions = 0;
 
   for (int file_index = 1; file_index < argc; file_index++) {
     Vcore_sim* top = new Vcore_sim;
@@ -56,6 +57,7 @@ int main(int argc, char **argv, char **env) {
 
         if (comment.substr(0, 13) == "CoreSimAssert") {
           uint64_t expected = stoull(comment.substr(14, comment.length() - 14));
+          assertions++;
           if (!_assert(to_string(expected) + " == " + to_string(top->output_o), expected == top->output_o))
             failures++;
         }
@@ -89,7 +91,7 @@ int main(int argc, char **argv, char **env) {
     ml_file.close();
   }
 
-  cout << "Tests finished with " << to_string(failures) << " failures." << endl;
+  cout << "Tests finished with " << to_string(failures) << " failures out of " << to_string(assertions) << " assertions." << endl;
 
   exit(0);
 }

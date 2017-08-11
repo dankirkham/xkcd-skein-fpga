@@ -1,9 +1,12 @@
-module core_sim (
+module core_sim #(
+  parameter CORE_ID /*verilator public*/ = 0
+  ) (
   input clk_i,
   input [63:0] input_i,
   input [16:0] instruction_i,
   output [63:0] output_o,
 
+  // Exposed for Verilator debugging.
   output [15:0] ram_output_o,
   output [15:0] ram_input_o,
   output ram_write_o,
@@ -29,6 +32,7 @@ assign output_select_w = instruction_i[2];
 assign output_enable_w = instruction_i[1];
 assign save_core_selection_w = instruction_i[0];
 
+// Exposed for Verilator debugging.
 assign ram_output_o = ram_output_w;
 assign ram_input_o = ram_input_w;
 assign ram_write_o = write_w;
@@ -42,7 +46,7 @@ block_ram block_ram0 (
   .data_o(ram_output_w)
 );
 
-core core0 (
+core #(.CORE_ID(CORE_ID)) core0 (
   .clk_i(clk_i),
   .ram_i(ram_output_w),
   .input_i(input_i),

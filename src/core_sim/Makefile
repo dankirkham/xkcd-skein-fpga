@@ -1,8 +1,8 @@
-run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bits_off_compare_test.ml test/build/rotate_left_test.ml
+run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bits_off_compare_test.ml test/build/rotate_left_test.ml test/build/unselected_core_test.ml
 	obj_dir/Vcore_sim test/build/*.ml
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
-	verilator -Wall --cc core_sim.v --exe core_sim.cpp -I../alu  -I../alu/comparator -I../core_id_module -I../core -I../block_ram
+	verilator -Wall --cc core_sim.v --exe core_sim.cpp -I../alu  -I../alu/comparator -I../core_id_module -I../core -I../block_ram -GCORE_ID=4645649
 	make -C obj_dir -j -f Vcore_sim.mk Vcore_sim
 
 test/build/add_test.ml: test/add_test.asm
@@ -16,3 +16,6 @@ test/build/rotate_left_test.ml: test/build/rotate_left_test.asm
 
 test/build/rotate_left_test.asm: test/rotate_left_test.py
 	python3 test/rotate_left_test.py
+
+test/build/unselected_core_test.ml: test/unselected_core_test.asm
+	xsf_asm -o test/build/unselected_core_test.ml test/unselected_core_test.asm
