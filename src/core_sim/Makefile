@@ -35,3 +35,8 @@ test/build/unselected_core_test.ml: test/unselected_core_test.asm
 
 test/build/xor_test.ml: test/xor_test.asm
 	xsf_asm -o test/build/xor_test.ml test/xor_test.asm
+
+.PHONY: clean
+clean:
+	rm -f test/build/*
+	rm -f obj_dir/*
