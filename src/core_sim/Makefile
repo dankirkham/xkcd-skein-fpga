@@ -1,5 +1,5 @@
-run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/core_id_test.ml test/build/nonce_test.ml test/build/rotate_left_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
-# run: obj_dir/Vcore_sim test/build/nonce_test.ml
+run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/core_id_test.ml test/build/nonce_test.ml test/build/rotate_left_test.ml test/build/subkey_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
+# run: obj_dir/Vcore_sim test/build/subkey_test.ml
 	obj_dir/Vcore_sim test/build/*.ml
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
@@ -29,6 +29,12 @@ test/build/rotate_left_test.asm: test/rotate_left_test.py
 
 test/build/rotate_left_test.ml: test/build/rotate_left_test.asm
 	xsf_asm -o test/build/rotate_left_test.ml test/build/rotate_left_test.asm
+
+test/build/subkey_test.asm: test/subkey_test.py
+	python3 test/subkey_test.py
+
+test/build/subkey_test.ml: test/build/subkey_test.asm
+	xsf_asm -o test/build/subkey_test.ml test/build/subkey_test.asm
 
 test/build/unselected_core_test.ml: test/unselected_core_test.asm
 	xsf_asm -o test/build/unselected_core_test.ml test/unselected_core_test.asm
