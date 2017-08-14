@@ -50,83 +50,146 @@ expected_value = [
 
 f = open("test/build/subkey_test.asm", 'w')
 
-f.write("// CoreSimInput 4645649\n")
-f.write("SelectCore // Select the core\n\n")
+def select_core():
+    """
+    Selects the Core Simulator core so that it's outputs can be read.
+    """
+    f.write("// CoreSimInput 4645649\n")
+    f.write("SelectCore // Select the core\n\n")
 
 # Initialize the RAM
-ptr = base_key_pointer
-for word in key:
-    f.write("// CoreSimInput {}\n".format(word))
-    f.write("Constant 0\n")
-    f.write("Save {}\n".format(ptr))
-    ptr += 1
+def initialize_key(key_ptr, constant_ptr):
+    """
+    Loads the key value from the Constants ROM to the RAM.
 
-ptr = base_tweak_pointer
-for word in tweak:
-    f.write("// CoreSimInput {}\n".format(word))
-    f.write("Constant 0\n")
-    f.write("Save {}\n".format(ptr))
-    ptr += 1
+    Attributes:
+    key_ptr -- Pointer to the first word in the key. Where the key should be
+    stored in RAM.
+    constant_ptr -- Pointer to the key stored in the Constants ROM.
+    """
+    for word in key:
+        f.write("// CoreSimInput {}\n".format(word))
+        f.write("Constant {}\n".format(constant_ptr))
+        f.write("Save {}\n".format(key_ptr))
+        key_ptr += 1
+        constant_ptr += 1
 
-# Extend Key
-f.write("Load 0 Primary\n")
-for i in range(1, 16):
-    f.write("Load {} Secondary\n".format(base_key_pointer + i))
+def initialize_tweak(tweak_ptr, constant_ptr):
+    """
+    Loads the tweak value from the Constants ROM to RAM. This assumes that the
+    tweak needed is stored continuously in the Constants ROM.
+
+    Attributes:
+    tweak_ptr -- Pointer to the first tweak value. This is where the tweak will
+    be stored in RAM.
+    constant_ptr -- Pointer to the tweak on the Constants ROM. This where the
+    tweak will be loaded from.
+    """
+    for word in tweak:
+        f.write("// CoreSimInput {}\n".format(word))
+        f.write("Constant {}\n".format(constant_ptr))
+        f.write("Save {}\n".format(tweak_ptr))
+        tweak_ptr += 1
+        constant_ptr += 1
+
+def calculate_key_extend(key_ptr):
+    """
+    Calculates the 17th word for the key. To extend the key, all 16 words are
+    XORed and then XORed by a constant 0x1BD11BDAA9FC1A22. Result is stored at
+    key_ptr + 16
+
+    Attributes:
+    key_ptr -- Pointer to the key to be extended.
+    """
+
+    f.write("Load 0 Primary\n")
+    for i in range(1, 16):
+        f.write("Load {} Secondary\n".format(key_ptr + i))
+        f.write("XOR\n")
+    f.write("Save {}\n".format(key_ptr + 16))
+    f.write("Load {} Secondary\n".format(key_ptr + 16))
+
+
+    f.write("// CoreSimInput {}\n".format(key_extend_word)) # This is a constant
+    f.write("Constant 0\n")
     f.write("XOR\n")
-f.write("Save {}\n".format(base_key_pointer + 16))
-f.write("Load {} Secondary\n".format(base_key_pointer + 16))
+    f.write("Save {}\n".format(key_ptr + 16))
 
+def calculate_tweak_extend(tweak_ptr):
+    """
+    Calculates the 3rd word for the tweak. To extend the tweak, the two other
+    tweak words are XORed together. The result is stored at tweak_ptr + 2.
 
-f.write("// CoreSimInput {}\n".format(key_extend_word))
-f.write("Constant 0\n")
-f.write("XOR\n")
-f.write("Save {}\n".format(base_key_pointer + 16))
+    Attributes:
+    tweak_ptr -- Pointer to the tweak to be extended.
+    """
+    f.write("Load {} Primary\n".format(tweak_ptr))
+    f.write("Load {} Secondary\n".format(tweak_ptr + 1))
+    f.write("XOR\n")
+    f.write("Save {}\n".format(tweak_ptr + 2))
 
-# Extend Tweak
-f.write("Load {} Primary\n".format(base_tweak_pointer))
-f.write("Load {} Secondary\n".format(base_tweak_pointer + 1))
-f.write("XOR\n")
-f.write("Save {}\n".format(base_tweak_pointer + 2))
+def calculate_subkey_word(s, i, key_ptr, tweak_ptr):
+    """
+    Calculates the subkey word i for subkey s. Result is stored at Primary
+    Register.
 
-# Calculate subkey
+    Attributes:
+    s -- subkey index
+    i -- word index
+    key_ptr -- pointer to first key word
+    tweak_ptr -- pointer to first tweak word
+    """
+
+    if i < 13:
+        f.write("Load {} Primary\n".format(key_ptr + ((s + i) % 17)))
+    elif i == 13:
+        f.write("Load {} Primary\n".format(key_ptr + ((s + 13) % 17)))
+        f.write("Load {} Secondary\n".format(tweak_ptr + (s % 3)))
+        f.write("Add\n")
+    elif i == 14:
+        f.write("Load {} Primary\n".format(key_ptr + ((s + 14) % 17)))
+        f.write("Load {} Secondary\n".format(tweak_ptr + ((s + 1) % 3)))
+        f.write("Add\n")
+    elif i == 15:
+        f.write("// CoreSimInput {}\n".format(s))
+        f.write("Constant 0\n")
+        f.write("Load {} Secondary\n".format(key_ptr + ((s + 15) % 17)))
+        f.write("Add\n")
+
+def check_word_64(address, expected_value):
+    """
+    Generates CoreSimAssert tests to check whether or not a value stored in RAM
+    at address is equal to expected_value.
+
+    Attributes:
+    address -- Address in RAM of the value that is to be tested.
+    expected_value -- 64-bit value to compare memory address with.
+    """
+    f.write("Read {}\n".format(address))
+    f.write("// CoreSimAssert {}\n".format((expected_value >> 48) & 0xFFFF))
+    f.write("Load {} Primary\n".format(address))
+    f.write("RotateLeft 16 {}\n".format(address))
+    f.write("Read {}\n".format(address))
+    f.write("// CoreSimAssert {}\n".format((expected_value >> 32) & 0xFFFF))
+    f.write("Load {} Primary\n".format(address))
+    f.write("RotateLeft 16 {}\n".format(address))
+    f.write("Read {}\n".format(address))
+    f.write("// CoreSimAssert {}\n".format((expected_value >> 16) & 0xFFFF))
+    f.write("Load {} Primary\n".format(address))
+    f.write("RotateLeft 16 {}\n".format(address))
+    f.write("Read {}\n".format(address))
+    f.write("// CoreSimAssert {}\n".format(expected_value & 0xFFFF))
+
+select_core()
+initialize_key(base_key_pointer, base_key_pointer)
+initialize_tweak(base_tweak_pointer, base_tweak_pointer)
+calculate_key_extend(base_key_pointer)
+calculate_tweak_extend(base_tweak_pointer)
+
 s = 0
-for i in range(0, 13):
-    f.write("Load {} Primary\n".format(base_key_pointer + ((s + i) % 17)))
-    f.write("Save {}\n".format(base_subkey_pointer + i))
-
-f.write("Load {} Primary\n".format(base_key_pointer + ((s + 13) % 17)))
-f.write("Load {} Secondary\n".format(base_tweak_pointer + (s % 3)))
-f.write("Add\n")
-f.write("Save {}\n".format(base_subkey_pointer + 13))
-
-f.write("Load {} Primary\n".format(base_key_pointer + ((s + 14) % 17)))
-f.write("Load {} Secondary\n".format(base_tweak_pointer + ((s + 1) % 3)))
-f.write("Add\n")
-f.write("Save {}\n".format(base_subkey_pointer + 14))
-
-f.write("// CoreSimInput {}\n".format(s))
-f.write("Constant 0\n")
-f.write("Load {} Secondary\n".format(base_key_pointer + ((s + 15) % 17)))
-f.write("Add\n")
-f.write("Save {}\n".format(base_subkey_pointer + 15))
-
-# Check value (corrupts subkey)
-ptr = base_subkey_pointer
-for word in expected_value:
-    f.write("Read {}\n".format(ptr))
-    f.write("// CoreSimAssert {}\n".format((word >> 48) & 0xFFFF))
-    f.write("Load {} Primary\n".format(ptr))
-    f.write("RotateLeft 16 {}\n".format(ptr))
-    f.write("Read {}\n".format(ptr))
-    f.write("// CoreSimAssert {}\n".format((word >> 32) & 0xFFFF))
-    f.write("Load {} Primary\n".format(ptr))
-    f.write("RotateLeft 16 {}\n".format(ptr))
-    f.write("Read {}\n".format(ptr))
-    f.write("// CoreSimAssert {}\n".format((word >> 16) & 0xFFFF))
-    f.write("Load {} Primary\n".format(ptr))
-    f.write("RotateLeft 16 {}\n".format(ptr))
-    f.write("Read {}\n".format(ptr))
-    f.write("// CoreSimAssert {}\n".format(word & 0xFFFF))
-    ptr += 1
+for i in range(0, 16):
+    calculate_subkey_word(s, i, base_key_pointer, base_tweak_pointer)
+    f.write("Save {}\n".format(base_subkey_pointer))
+    check_word_64(base_subkey_pointer, expected_value[i])
 
 f.close()
