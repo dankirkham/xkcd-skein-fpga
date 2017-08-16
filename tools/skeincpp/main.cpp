@@ -52,19 +52,15 @@ int main ()
   key[14] = 0x61FD3062D00A579A;
   key[15] = 0x1DE0536E8682E539;
 
-  tweak[0] = 64; // 64 byte plaintext used
+  tweak[0] = 19; // 64 byte plaintext used
   tweak[1] = 0xF000000000000000; // First = 1, Final = 1, and Type = Message
 
-  // Plaintext 
-  plaintext[0] = 0x412e6c65696e6144;
-  plaintext[1] = 0x6d61686b72694b2e;
-  plaintext[2] = 0x632e6c69616d6740;
-  plaintext[3] = 0x5f303030305f6d6f;
-  plaintext[4] = 0x3030303030303030;
-  plaintext[5] = 0x3030303030303030;
-  plaintext[6] = 0x3030303030303030;
-  plaintext[7] = 0x3030303030303030;
-  for (int i = 8; i < 16; i++)
+  // Plaintext
+  // A = Nonce, B = Core ID
+  plaintext[0] = 0x4141414141414141;
+  plaintext[1] = 0x4141414141414141;
+  plaintext[2] = 0x0000000000424242;
+  for (int i = 3; i < 16; i++)
     plaintext[i] = 0;
 
   // msg pass
