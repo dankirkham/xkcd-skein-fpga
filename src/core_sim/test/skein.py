@@ -346,7 +346,7 @@ class SkeinGenerator():
                 return 20
 
     def calculate_mix(self, d, j, state_ptr, next_state_ptr):
-        """ Skein Mix function from whitepaper 3.3.1
+        """Skein Mix function from whitepaper 3.3.1
 
         Attributes:
         d -- Round counter
@@ -381,3 +381,19 @@ class SkeinGenerator():
 
         # Save y1
         self.f.write("Save {}\n".format(y1))
+
+    def calculate_permute(self, state_ptr, next_state_ptr):
+        """Performs Skein word permutation from whitepaper Table 3
+
+        Attributes:
+        state_ptr -- Pointer to state used as input
+        next_state_ptr -- Pointer to state used as output
+        """
+
+        permute_lut = [
+            0, 9, 2, 13, 6, 11, 4, 15, 10, 7, 12, 3, 14, 5, 8, 1
+        ]
+
+        for (source, destination) in enumerate(permute_lut):
+            self.f.write("Load {} Primary\n".format(state_ptr + source))
+            self.f.write("Save {}\n".format(next_state_ptr + destination))
