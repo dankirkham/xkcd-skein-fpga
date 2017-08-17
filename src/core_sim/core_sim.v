@@ -3,7 +3,7 @@ module core_sim #(
   ) (
   input clk_i,
   input [63:0] input_i,
-  input [16:0] instruction_i,
+  input [17:0] instruction_i,
   output [63:0] output_o,
 
   // Exposed for Verilator debugging.
@@ -24,13 +24,14 @@ wire output_select_w;
 wire output_enable_w;
 wire save_core_selection_w;
 
-assign save_core_selection_w = instruction_i[16];
-assign input_select_w = instruction_i[15:14];
-assign output_select_w = instruction_i[13];
-assign output_enable_w = instruction_i[12];
-assign alu_opcode_w = instruction_i[11:8];
-assign write_w = instruction_i[7];
-assign address_w = { 1'b0, instruction_i[6:0] };
+assign save_core_selection_w = instruction_i[17];
+assign write_w = instruction_i[16];
+assign address_w = instruction_i[15:8] ;
+assign input_select_w = instruction_i[7:6];
+assign output_select_w = instruction_i[5];
+assign output_enable_w = instruction_i[4];
+assign alu_opcode_w = instruction_i[3:0];
+
 
 // Exposed for Verilator debugging.
 assign ram_output_o = ram_output_w;
