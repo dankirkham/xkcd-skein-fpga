@@ -24,13 +24,13 @@ class Outputter:
             save_core_selection = ml.save_core_selection if ml.save_core_selection else 0
 
             binary = (
-                (save_core_selection << 16) |
-                (input_select << 14) |
-                (output_select << 13) |
-                (output_enable << 12) |
-                (alu_opcode << 8) |
-                (ram_write << 7) |
-                (address << 0)
+                (save_core_selection << 17) |
+                (ram_write << 16) |
+                (address << 8) |
+                (input_select << 6) |
+                (output_select << 5) |
+                (output_enable << 4) |
+                (alu_opcode << 0)
             )
 
             out_file.write("{0:0{1}x}".format(binary, 5))

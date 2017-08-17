@@ -30,17 +30,17 @@ xsf_asm code.asm
 The program will be assembled into the machine language output `code.ml`.
 
 ## Output Format
-Output files are currently only in a 17-bit hexadecimal format (between 0x00000 and 0x1ffff). The 17 bits are mapped as follows:
+Output files are currently only in a 18-bit hexadecimal format (between 0x00000 and 0x3ffff). The 18 bits are mapped as follows:
 
-`abbcdeeeefggggggg`
+`abccccccccddefgggg`
 
 - a: Save Core Selection
-- bb: Input Select (2-bit)
+- b: Ram Write Bit
+- cccccccc: Address Bus (8-bit)
+- dd: Input Select (2-bit)
   - 00: Core Input
   - 01: RAM Output
   - 10: Core ID
-- c: Output Select
-- d: Output Enable
-- eeee: ALU Opcode (4-bit) See [ALU Documentation](https://github.com/dankirkham/xkcd-skein-fpga/blob/master/docs/alu.md)
-- f: Ram Write Bit
-- ggggggg: Address Bus (7-bit)
+- e: Output Select
+- f: Output Enable
+- gggg: ALU Opcode (4-bit) See [ALU Documentation](https://github.com/dankirkham/xkcd-skein-fpga/blob/master/docs/alu.md)
