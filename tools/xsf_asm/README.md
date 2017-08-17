@@ -32,15 +32,15 @@ The program will be assembled into the machine language output `code.ml`.
 ## Output Format
 Output files are currently only in a 17-bit hexadecimal format (between 0x00000 and 0x1ffff). The 17 bits are mapped as follows:
 
-`aaaaaaabccccddefg`
+`abbcdeeeefggggggg`
 
-- aaaaaaaa: Address Bus (7-bit)
-- b: Ram Write Bit
-- cccc: ALU Opcode (4-bit) See [ALU Documentation](https://github.com/dankirkham/xkcd-skein-fpga/blob/master/docs/alu.md)
-- dd: Input Select (2-bit)
+- a: Save Core Selection
+- bb: Input Select (2-bit)
   - 00: Core Input
   - 01: RAM Output
   - 10: Core ID
-- e: Output Select
-- f: Output Enable
-- g: Save Core Selection
+- c: Output Select
+- d: Output Enable
+- eeee: ALU Opcode (4-bit) See [ALU Documentation](https://github.com/dankirkham/xkcd-skein-fpga/blob/master/docs/alu.md)
+- f: Ram Write Bit
+- ggggggg: Address Bus (7-bit)

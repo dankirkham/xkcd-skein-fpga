@@ -39,17 +39,28 @@ class TestMlInstruction(unittest.TestCase):
                 output_enable=0,
                 save_core_selection=0,
                 comment="This has a comment!"
-            )
+            ),
+            MlInstruction(
+                address=0x7F,
+                ram_write=0,
+                alu_opcode=None,
+                input_select=None,
+                output_select=None,
+                output_enable=0,
+                save_core_selection=0,
+                comment=None
+            ),
         ]
 
         self.outputter.output(instructions, self.output)
 
         lines = self.output.getvalue().split("\n")
 
-        self.assertEqual(len(lines), 4)
-        self.assertEqual(lines[0], '00100')
+        self.assertEqual(len(lines), 5)
+        self.assertEqual(lines[0], '00800')
         self.assertEqual(lines[1], '// This has a comment.')
-        self.assertEqual(lines[2], '00100 // This has a comment!')
+        self.assertEqual(lines[2], '00800 // This has a comment!')
+        self.assertEqual(lines[3], '00c7f')
 
 if __name__ == '__main__':
     unittest.main()

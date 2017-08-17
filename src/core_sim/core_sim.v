@@ -24,13 +24,13 @@ wire output_select_w;
 wire output_enable_w;
 wire save_core_selection_w;
 
-assign address_w = { 1'b0, instruction_i[16:10] };
-assign write_w = instruction_i[9];
-assign alu_opcode_w = instruction_i[8:5];
-assign input_select_w = instruction_i[4:3];
-assign output_select_w = instruction_i[2];
-assign output_enable_w = instruction_i[1];
-assign save_core_selection_w = instruction_i[0];
+assign save_core_selection_w = instruction_i[16];
+assign input_select_w = instruction_i[15:14];
+assign output_select_w = instruction_i[13];
+assign output_enable_w = instruction_i[12];
+assign alu_opcode_w = instruction_i[11:8];
+assign write_w = instruction_i[7];
+assign address_w = { 1'b0, instruction_i[6:0] };
 
 // Exposed for Verilator debugging.
 assign ram_output_o = ram_output_w;
