@@ -6,7 +6,7 @@ import re
 import yaml
 
 class ParserError(Exception):
-    """Exception raised for parsin errors
+    """Exception raised for parsing errors
 
     Attributes:
         expression -- input expression in which the error occurred
