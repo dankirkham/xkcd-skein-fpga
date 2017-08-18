@@ -19,35 +19,42 @@ class Generator:
             instructions.append(MlInstruction(None, None, None, None, None,
                                               None, None, asm.comment))
         elif asm.operator == "Add":
-            return generate_add(asm, instructions)
+            return generate_add.generate_add(asm, instructions)
         elif asm.operator == "Constant":
-            return generate_constant(asm, instructions)
+            return generate_constant.generate_constant(asm, instructions)
         elif asm.operator == "CoreId":
-            return generate_core_id(asm, instructions)
+            return generate_core_id.generate_core_id(asm, instructions)
         elif asm.operator == "Count":
-            return generate_count(asm, instructions)
+            return generate_count.generate_count(asm, instructions)
         elif asm.operator == "Load":
-            return generate_load(asm, instructions)
+            return generate_load.generate_load(asm, instructions)
         elif asm.operator == "Nonce":
-            return generate_nonce(asm, instructions)
+            return generate_nonce.generate_nonce(asm, instructions)
         elif asm.operator == "Read":
-            return generate_read(asm, instructions)
+            return generate_read.generate_read(asm, instructions)
         elif asm.operator == "RotateLeft":
-            return generate_rotate_left(asm, instructions)
+            return generate_rotate_left.generate_rotate_left(asm, instructions)
         elif asm.operator == "Save":
-            return generate_save(asm, instructions)
+            return generate_save.generate_save(asm, instructions)
         elif asm.operator == "SaveBitCounter":
-            return generate_save_bit_counter(asm, instructions)
+            return generate_save_bit_counter.generate_save_bit_counter(
+                asm,
+                instructions
+            )
         elif asm.operator == "SaveBitsOff":
-            return generate_save_bits_off(asm, instructions)
+            return generate_save_bits_off.generate_save_bits_off(asm,
+                                                                 instructions)
         elif asm.operator == "SaveComparator":
-            return generate_save_comparator(asm, instructions)
+            return generate_save_comparator.generate_save_comparator(
+                asm,
+                instructions
+            )
         elif asm.operator == "SaveNonce":
-            return generate_save_nonce(asm, instructions)
+            return generate_save_nonce.generate_save_nonce(asm, instructions)
         elif asm.operator == "SelectCore":
-            return generate_select_core(asm, instructions)
+            return generate_select_core.generate_select_core(asm, instructions)
         elif asm.operator == "XOR":
-            return generate_xor(asm, instructions)
+            return generate_xor.generate_xor(asm, instructions)
         else:
             raise NotImplementedError(
                 "No generation code for {} exists.".format(asm.operator)

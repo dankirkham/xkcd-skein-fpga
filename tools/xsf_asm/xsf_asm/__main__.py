@@ -1,5 +1,5 @@
 import argparse
-import logging
+# import logging
 import re
 from xsf_asm import generate, parse, output
 
@@ -19,7 +19,7 @@ def main():
     )
     args = argument_parser.parse_args()
 
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
 
     parser = parse.Parser()
     with open(args.input_file, "r") as f:
