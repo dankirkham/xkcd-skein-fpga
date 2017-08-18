@@ -3,7 +3,9 @@ from skein import SkeinGenerator
 state_ptr = 0
 next_state_ptr = 16
 
-expected_value = [ 0, 15, 2, 11, 6, 13, 4, 9, 14, 1, 8, 5, 10, 3, 12, 7 ]
+expected_value = [
+    0, 9, 2, 13, 6, 11, 4, 15, 10, 7, 12, 3, 14, 5, 8, 1
+]
 
 f = open("test/build/permute_test.asm", 'w')
 
