@@ -1,7 +1,11 @@
 from typing import List
 from xsf_asm.asm_instruction import AsmInstruction
 from xsf_asm.ml_instruction import MlInstruction
-from xsf_asm.generate.instructions import *
+from xsf_asm.generate.instructions import generate_add, generate_constant, \
+    generate_core_id, generate_count, generate_load, generate_nonce, \
+    generate_read, generate_rotate_left, generate_save_bit_counter, \
+    generate_save_bits_off, generate_save_comparator, generate_save_nonce, \
+    generate_save, generate_select_core, generate_xor
 
 
 class Generator:
