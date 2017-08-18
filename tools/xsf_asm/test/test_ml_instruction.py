@@ -1,6 +1,7 @@
 import unittest
 from xsf_asm.ml_instruction import MlInstruction
 
+
 class TestMlInstruction(unittest.TestCase):
     def test_comment_only(self):
         ml = MlInstruction(
@@ -61,6 +62,7 @@ class TestMlInstruction(unittest.TestCase):
 
         self.assertTrue(ml.has_comment())
         self.assertTrue(ml.has_instruction())
+
 
 if __name__ == '__main__':
     unittest.main()

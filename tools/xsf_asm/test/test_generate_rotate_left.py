@@ -1,6 +1,8 @@
 import unittest
-from xsf_asm.generate.instructions.generate_rotate_left import generate_rotate_left
-from  xsf_asm.asm_instruction import AsmInstruction
+from xsf_asm.generate.instructions.generate_rotate_left import \
+    generate_rotate_left
+from xsf_asm.asm_instruction import AsmInstruction
+
 
 class TestGenerator(unittest.TestCase):
     def setUp(self):
@@ -11,7 +13,8 @@ class TestGenerator(unittest.TestCase):
         multiple of 16, the comment should go on the first "Rotate Left 1-bit"
         ALU operation machine-language instruction.
         """
-        asm_instruction = AsmInstruction("RotateLeft", ["14", '1'], "This is a comment!")
+        asm_instruction = AsmInstruction("RotateLeft", ["14", '1'],
+                                         "This is a comment!")
 
         generate_rotate_left(asm_instruction, self.ml_instructions)
 
@@ -27,7 +30,8 @@ class TestGenerator(unittest.TestCase):
         instruction.
         """
 
-        asm_instruction = AsmInstruction("RotateLeft", ["32", '1'], "This is a comment!")
+        asm_instruction = AsmInstruction("RotateLeft", ["32", '1'],
+                                         "This is a comment!")
 
         generate_rotate_left(asm_instruction, self.ml_instructions)
 
@@ -36,6 +40,7 @@ class TestGenerator(unittest.TestCase):
 
         for ml in self.ml_instructions[1:]:
             self.assertIsNone(ml.comment)
+
 
 if __name__ == '__main__':
     unittest.main()

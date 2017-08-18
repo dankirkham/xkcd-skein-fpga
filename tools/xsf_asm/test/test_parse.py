@@ -1,6 +1,7 @@
 import unittest
 from xsf_asm.parse import Parser, ParserError
 
+
 class TestParser(unittest.TestCase):
     def setUp(self):
         self.parser = Parser()
@@ -17,7 +18,8 @@ class TestParser(unittest.TestCase):
 
         asm_instructions = self.parser.parse(lines)
 
-        self.assertEqual("This is a comment on it's own line!", asm_instructions[0].comment)
+        self.assertEqual("This is a comment on it's own line!",
+                         asm_instructions[0].comment)
 
     def test_invalid_integer(self):
         lines = ["SaveNonce 1q"]
@@ -33,7 +35,6 @@ class TestParser(unittest.TestCase):
         lines = ["Load 1 Promary"]
 
         self.assertRaises(ParserError, self.parser.parse, lines)
-
 
     def test_unexpected_operand(self):
         lines = ["Add 1"]
@@ -59,6 +60,7 @@ class TestParser(unittest.TestCase):
         self.assertIsNotNone(asm_instructions[2].operands)
         self.assertEqual("1", asm_instructions[2].operands[0])
         self.assertEqual("Primary", asm_instructions[2].operands[1])
+
 
 if __name__ == '__main__':
     unittest.main()

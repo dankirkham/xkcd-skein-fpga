@@ -3,6 +3,7 @@ import unittest
 from xsf_asm.output import Outputter
 from xsf_asm.ml_instruction import MlInstruction
 
+
 class TestMlInstruction(unittest.TestCase):
     def setUp(self):
         self.output = io.StringIO()
@@ -61,6 +62,7 @@ class TestMlInstruction(unittest.TestCase):
         self.assertEqual(lines[1], '// This has a comment.')
         self.assertEqual(lines[2], '00008 // This has a comment!')
         self.assertEqual(lines[3], '0ff0c')
+
 
 if __name__ == '__main__':
     unittest.main()

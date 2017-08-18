@@ -1,6 +1,7 @@
 import unittest
 from xsf_asm.generate import Generator
-from  xsf_asm.asm_instruction import AsmInstruction
+from xsf_asm.asm_instruction import AsmInstruction
+
 
 class TestGenerator(unittest.TestCase):
     def setUp(self):
@@ -14,7 +15,8 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual("This is a comment!", ml_instructions[0].comment)
 
     def test_generate_save_nonce(self):
-        asm_instructions = [AsmInstruction("SaveNonce", ["1"], "This is a comment!")]
+        asm_instructions = [AsmInstruction("SaveNonce", ["1"],
+                                           "This is a comment!")]
 
         ml_instructions = self.generator.generate(asm_instructions)
 
@@ -24,7 +26,8 @@ class TestGenerator(unittest.TestCase):
     def test_no_generate_code_exists(self):
         asm_instructions = [AsmInstruction("Foo", ["Bar"], None)]
 
-        self.assertRaises(NotImplementedError, self.generator.generate, asm_instructions)
+        self.assertRaises(NotImplementedError, self.generator.generate,
+                          asm_instructions)
 
     def test_generate(self):
         asm_instructions = [
@@ -45,7 +48,9 @@ class TestGenerator(unittest.TestCase):
             AsmInstruction("XOR", None, None),
         ]
 
-        ml_instructions = self.generator.generate(asm_instructions)
+        # No assertions here, just want no errors to occur.
+        self.generator.generate(asm_instructions)
+
 
 if __name__ == '__main__':
     unittest.main()
