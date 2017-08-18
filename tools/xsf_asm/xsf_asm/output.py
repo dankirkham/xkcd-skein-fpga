@@ -1,6 +1,7 @@
 from typing import List
 from xsf_asm.ml_instruction import MlInstruction
 
+
 class Outputter:
     def __init__(self):
         pass
@@ -21,7 +22,9 @@ class Outputter:
             input_select = ml.input_select if ml.input_select else 0
             output_select = ml.output_select if ml.output_select else 0
             output_enable = ml.output_enable if ml.output_enable else 0
-            save_core_selection = ml.save_core_selection if ml.save_core_selection else 0
+            save_core_selection = (
+                ml.save_core_selection if ml.save_core_selection else 0
+            )
 
             binary = (
                 (save_core_selection << 17) |

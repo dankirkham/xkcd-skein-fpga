@@ -2,7 +2,9 @@ from typing import List
 from xsf_asm.asm_instruction import AsmInstruction
 from xsf_asm.ml_instruction import MlInstruction
 
-def generate_save_comparator(asm: AsmInstruction, instructions: List[MlInstruction]):
+
+def generate_save_comparator(asm: AsmInstruction,
+                             instructions: List[MlInstruction]):
     instructions.append(MlInstruction(
         address=None,
         ram_write=0,

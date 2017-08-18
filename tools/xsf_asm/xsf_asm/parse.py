@@ -1,9 +1,9 @@
 from xsf_asm.asm_instruction import AsmInstruction
-from enum import Enum
 import logging
 import os
 import re
 import yaml
+
 
 class ParserError(Exception):
     """Exception raised for parsing errors
@@ -17,13 +17,15 @@ class ParserError(Exception):
         self.expression = expression
         self.message = message
 
+
 class Parser:
     """Reads assembly language file, ensures all instructions are of valid
     syntax, and creates AsmInstruction objects that can be used by
     code generators."""
 
     def __init__(self):
-        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), "data/instructions.yml"))) as f:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               "data/instructions.yml"))) as f:
             self.instruction_schema = yaml.load(f)
 
     def _is_int(self, string):
@@ -47,9 +49,19 @@ class Parser:
                 raise ParserError(value, "Operand expected to be of type int")
         elif expected_type["type"] == "choice":
             if value not in expected_type["values"]:
-                raise ParserError(value, "Operand expected to be one of the following values: {}".format(expected_type["values"]))
+                raise ParserError(
+                    value,
+                    (
+                        "Operand expected to be one of the following values: "
+                        "{}".format(expected_type["values"])
+                    )
+                )
         else:
-            raise RuntimeError("{} is not defined in instruction_schema".format(expected_type["type"]))
+            raise RuntimeError(
+                "{} is not defined in instruction_schema".format(
+                    expected_type["type"]
+                )
+            )
 
     def _parse_operands(self, operator, operands):
         """Parses operands and ensures that they are valid.
@@ -67,7 +79,6 @@ class Parser:
             for i in range(len(operands)):
                 self._is_type_valid(operands[i], expected_operands[i])
 
-
     def _seperate_comment(self, line):
         """Takes a line and retuns a tuple with an instruction and a comment
         string.
@@ -79,7 +90,8 @@ class Parser:
         # Separate instruction from comment
         m = re.search("^([^\/]*)\/*(.*)", line)
 
-        # Strip leading and trailing whitespace and save instruction and comments
+        # Strip leading and trailing whitespace and save instruction and
+        # comments
         instruction = m.group(1).strip()
         comment = m.group(2).strip()
 
@@ -99,15 +111,17 @@ class Parser:
 
         instruction, comment = self._seperate_comment(line)
 
-        logging.debug("Instruction: {}; Comment: {}".format(instruction, comment))
+        logging.debug("Instruction: {}; Comment: {}".format(instruction,
+                                                            comment))
 
         words = instruction.split(" ")
 
         if len(words) != 0 and words[0] != '':
-            operator = words[0] # Pull the operator from this list
+            operator = words[0]  # Pull the operator from this list
             operands = words[1:]
 
-            logging.debug("Operator: {}; Operands: {}".format(operator, operands))
+            logging.debug("Operator: {}; Operands: {}".format(operator,
+                                                              operands))
 
             if operator not in self.instruction_schema:
                 raise ParserError(operator, "Invalid instruction")

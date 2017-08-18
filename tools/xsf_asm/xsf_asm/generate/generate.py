@@ -3,13 +3,17 @@ from xsf_asm.asm_instruction import AsmInstruction
 from xsf_asm.ml_instruction import MlInstruction
 from xsf_asm.generate.instructions import *
 
+
 class Generator:
     def __init__(self):
         pass
 
-    def _generate_instruction(self, asm: AsmInstruction, instructions: List[MlInstruction]):
-        if asm.operator is None: # This means that the instruction is only a comment
-            instructions.append(MlInstruction(None, None, None, None, None, None, None, asm.comment))
+    def _generate_instruction(self, asm: AsmInstruction,
+                              instructions: List[MlInstruction]):
+        if asm.operator is None:    # This means that the instruction
+                                    # is only a comment
+            instructions.append(MlInstruction(None, None, None, None, None,
+                                              None, None, asm.comment))
         elif asm.operator == "Add":
             return generate_add(asm, instructions)
         elif asm.operator == "Constant":
@@ -41,7 +45,9 @@ class Generator:
         elif asm.operator == "XOR":
             return generate_xor(asm, instructions)
         else:
-            raise NotImplementedError("No generation code for {} exists.".format(asm.operator))
+            raise NotImplementedError(
+                "No generation code for {} exists.".format(asm.operator)
+            )
 
     def generate(self, asm_instructions: List[AsmInstruction]):
         """Generates machine code for a list of assembly language instructions.

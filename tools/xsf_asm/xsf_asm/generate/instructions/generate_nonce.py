@@ -2,6 +2,7 @@ from typing import List
 from xsf_asm.asm_instruction import AsmInstruction
 from xsf_asm.ml_instruction import MlInstruction
 
+
 def generate_nonce(asm: AsmInstruction, instructions: List[MlInstruction]):
     address = int(asm.operands[0])
 

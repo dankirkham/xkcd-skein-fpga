@@ -2,6 +2,7 @@ from typing import List
 from xsf_asm.asm_instruction import AsmInstruction
 from xsf_asm.ml_instruction import MlInstruction
 
+
 def generate_core_id(asm: AsmInstruction, instructions: List[MlInstruction]):
     instructions.append(MlInstruction(
         address=None,

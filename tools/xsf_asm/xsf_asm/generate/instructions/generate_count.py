@@ -2,6 +2,7 @@ from typing import List
 from xsf_asm.asm_instruction import AsmInstruction
 from xsf_asm.ml_instruction import MlInstruction
 
+
 def generate_count(asm: AsmInstruction, instructions: List[MlInstruction]):
     for i in range(64):
         instructions.append(MlInstruction(
