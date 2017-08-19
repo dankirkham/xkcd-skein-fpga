@@ -1,4 +1,4 @@
-from skein import SkeinGenerator
+from skein import SkeinGenerator, SkeinTypeValue
 
 key = 0
 tweak = 17
@@ -30,61 +30,10 @@ f = open("test/build/encrypt_test.asm", 'w')
 
 sg = SkeinGenerator(f)
 
-sg.select_core()
-sg.initialize_key(key, key)
-sg.initialize_tweak(tweak, tweak)
-sg.calculate_key_extend(key)
-sg.calculate_tweak_extend(tweak)
-sg.initialize_plaintext(state)
-# sg.initialize_plaintext(plaintext)
-
-for d in range(0, 80):
-    if d % 4 == 0:
-        for i in range(0, 16):
-            sg.calculate_subkey_word(int(d / 4), i, key, tweak)
-            f.write("Load {} Secondary\n".format(state + i))
-            f.write("Add // Subkey Add\n")
-            f.write("Save {}\n".format(nextstate + i))
-
-        state, nextstate = nextstate, state
-
-    for j in range(0, 8):
-        sg.calculate_mix(d, j, state, nextstate)
-
-    state, nextstate = nextstate, state
-
-    sg.calculate_permute(state, nextstate)
-
-    state, nextstate = nextstate, state
-
-# Add last subkey
-for i in range(0, 16):
-    sg.calculate_subkey_word(20, i, key, tweak)
-    f.write("Load {} Secondary\n".format(state + i))
-    f.write("Add\n")
-    f.write("Save {}\n".format(nextstate + i))
-
-state, nextstate = nextstate, state
-
-# XOR with plaintext
-f.write("// CoreSimInput {}\n".format(0x4141414141414141))
-f.write("Constant 0\n")
-f.write("Load {} Secondary\n".format(state + 0))
-f.write("XOR\n")
-f.write("Save {}\n".format(state + 0))
-f.write("// CoreSimInput {}\n".format(0x4141414141414141))
-f.write("Constant 0\n")
-f.write("Load {} Secondary\n".format(state + 1))
-f.write("XOR\n")
-f.write("Save {}\n".format(state + 1))
-f.write("// CoreSimInput {}\n".format(0x0000000000424242))
-f.write("Constant 0\n")
-f.write("Load {} Secondary\n".format(state + 2))
-f.write("XOR\n")
-f.write("Save {}\n".format(state + 2))
+sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
 
 # Check result
 for (i, val) in enumerate(expected_value):
-    sg.check_word_64(state + i, val)
+    sg.check_word_64(nextstate + i, val)
 
 f.close()

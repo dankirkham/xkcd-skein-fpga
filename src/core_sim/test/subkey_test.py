@@ -1,4 +1,4 @@
-from skein import SkeinGenerator
+from skein import SkeinGenerator, SkeinTypeValue
 
 base_key_pointer = 0
 base_tweak_pointer = 17
@@ -29,7 +29,8 @@ sg = SkeinGenerator(f)
 
 sg.select_core()
 sg.initialize_key(base_key_pointer, base_key_pointer)
-sg.initialize_tweak(base_tweak_pointer, base_tweak_pointer)
+sg.initialize_tweak(base_tweak_pointer, base_tweak_pointer,
+                    SkeinTypeValue.MESSAGE)
 sg.calculate_key_extend(base_key_pointer)
 sg.calculate_tweak_extend(base_tweak_pointer)
 
