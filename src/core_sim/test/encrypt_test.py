@@ -2,10 +2,8 @@ from skein import SkeinGenerator, SkeinTypeValue
 
 key = 0
 tweak = 17
-subkey = 20
-state = 21
+state = 20
 nextstate = 37
-plaintext = 53
 
 expected_value = [
     0x929e8e3169cbd68b,
@@ -29,6 +27,10 @@ expected_value = [
 f = open("test/build/encrypt_test.asm", 'w')
 
 sg = SkeinGenerator(f)
+
+sg.select_core()
+sg.initialize_key(key, key)
+sg.initialize_plaintext(state, SkeinTypeValue.MESSAGE)
 
 sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
 

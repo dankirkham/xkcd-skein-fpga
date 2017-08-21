@@ -100,11 +100,12 @@ class SkeinGenerator():
         """
 
         for (index, word) in enumerate(SkeinGenerator.tweak[type_value]):
-            self.f.write("// CoreSimInput {}\n".format(word))
+            self.f.write("// CoreSimInput {} // Tweak Word {}\n".format(word,
+                                                                        index))
             self.f.write("Constant {}\n".format(constant + index))
             self.f.write("Save {}\n".format(tweak + index))
 
-    def initialize_plaintext(self, state):
+    def initialize_plaintext(self, state, type_value):
         """
         Loads initial plaintext value into RAM at state.
 
@@ -113,13 +114,19 @@ class SkeinGenerator():
 
         Attributes:
         state -- Pointer to where the plaintext should be loaded.
+        type_value -- type of message being encrypted (whitepaper 3.5.1)
         """
 
-        for word in SkeinGenerator.plaintext:
-            self.f.write("// CoreSimInput {}\n".format(word))
-            self.f.write("Constant 0\n")
-            self.f.write("Save {}\n".format(state))
-            state += 1
+        if type_value == SkeinTypeValue.MESSAGE:
+            for (index, word) in enumerate(SkeinGenerator.plaintext):
+                self.f.write("// CoreSimInput {}\n".format(word))
+                self.f.write("Constant 0 // Plaintext {}\n".format(index))
+                self.f.write("Save {}\n".format(state + index))
+        else:  # type_value == SkeinTypeValue.OUTPUT
+            for index in range(0, 16):
+                self.f.write("// CoreSimInput 0\n")
+                self.f.write("Constant 0 // Plaintext {}\n".format(index))
+                self.f.write("Save {}\n".format(state + index))
 
     def calculate_key_extend(self, key):
         """
@@ -131,7 +138,7 @@ class SkeinGenerator():
         key -- Pointer to the key to be extended.
         """
 
-        self.f.write("Load 0 Primary\n")
+        self.f.write("Load {} Primary\n".format(key))
         for i in range(1, 16):
             self.f.write("Load {} Secondary\n".format(key + i))
             self.f.write("XOR\n")
@@ -154,6 +161,7 @@ class SkeinGenerator():
         Attributes:
         tweak -- Pointer to the tweak to be extended.
         """
+
         self.f.write("Load {} Primary\n".format(tweak))
         self.f.write("Load {} Secondary\n".format(tweak + 1))
         self.f.write("XOR\n")
@@ -326,12 +334,9 @@ class SkeinGenerator():
         type_value -- type of message being encrypted (whitepaper 3.5.1)
         """
 
-        self.select_core()
-        self.initialize_key(key, key)
         self.initialize_tweak(tweak, tweak, type_value)
         self.calculate_key_extend(key)
         self.calculate_tweak_extend(tweak)
-        self.initialize_plaintext(state)
 
         for d in range(0, 80):
             if d % 4 == 0:
