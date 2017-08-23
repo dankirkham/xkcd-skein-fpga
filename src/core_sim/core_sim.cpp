@@ -16,8 +16,20 @@ typedef struct {
   std::string assertion;
 } test_result_t;
 
-bool _assert(std::string assertation, bool condition) {
-  cout << assertation << ": ";
+std::string _int_to_hex(QData addr, int pad_len) {
+  stringstream ss;
+  ss << hex << addr;
+  string s = ss.str();
+  for (int n = s.length(); n < pad_len; n++)
+    s.insert(0, "0");
+
+  s.insert(0, "0x");
+
+  return s;
+}
+
+bool _assert(std::string assertion, bool condition) {
+  cout << assertion << ": ";
   if (condition) {
     cout << "\033[1;35mPass!\033[0m" << endl;
     return true;
@@ -41,7 +53,7 @@ uint64_t _parse_decimal_integer_string(std::string s) {
 }
 
 uint64_t _parse_integer_string(std::string s) {
-  if (s.substr(0, 1) == "0x") {
+  if (s.substr(0, 2) == "0x") {
     return _parse_hex_integer_string(s.substr(2, s.length() - 2));
   } else {
     return _parse_decimal_integer_string(s);
@@ -112,7 +124,7 @@ int main(int argc, char **argv, char **env) {
         test_result_t tr;
         if (_parse_assert_directive(comment, &tr)) {
           assertions++;
-          if (!_assert(to_string(tr.expected) + " == " + to_string(top->output_o), tr.expected == top->output_o)) {
+          if (!_assert(_int_to_hex(tr.expected, 4) + " == " + _int_to_hex(top->output_o, 4), tr.expected == top->output_o)) {
             failures++;
 
             tr.actual = top->output_o;
@@ -136,7 +148,8 @@ int main(int argc, char **argv, char **env) {
           top->clk_i = 0;
           top->eval();
 
-          cout << "Instruction: " << instruction << "; Output: " << top->output_o;
+          cout << "Instruction: " << _int_to_hex(x, 5)
+               << "; Output: " << _int_to_hex(top->output_o, 4);
 
           if (comment.length() > 0) {
             cout << "; Comment = " << comment << endl;
@@ -144,7 +157,11 @@ int main(int argc, char **argv, char **env) {
             cout << endl;
           }
 
-          cout << "  RAM Address: " << to_string(top->ram_address_o) << "; RAM Output: " << to_string(top->ram_output_o) << "; RAM Input: " << to_string(top->ram_input_o) << "; RAM Write: " << to_string(top->ram_write_o) << endl;
+          cout << "  RAM Address: " << _int_to_hex(top->ram_address_o, 2)
+               << "; RAM Output: " << _int_to_hex(top->ram_output_o, 4)
+               << "; RAM Input: " << _int_to_hex(top->ram_input_o, 4)
+               << "; RAM Write: " << _int_to_hex(top->ram_write_o, 1)
+               << endl;
         }
     }
 
@@ -165,8 +182,8 @@ int main(int argc, char **argv, char **env) {
       if (results[i].assertion.length() > 0)
         cout << "  \"" << results[i].assertion << '"' << endl;
 
-      cout << "  Expected " << results[i].actual << " to be "
-           << results[i].expected << endl;
+      cout << "  Expected " << _int_to_hex(results[i].actual, 4)
+           << " to be " << _int_to_hex(results[i].expected, 4) << endl;
     }
 
     cout << endl << endl;
