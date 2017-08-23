@@ -10,7 +10,7 @@ def generate_save_bits_off(asm: AsmInstruction,
     instructions.append(MlInstruction(
         address=address * 4,
         ram_write=1,
-        alu_opcode=0xE,
+        alu_opcode=0xD,
         input_select=None,
         output_select=0,
         output_enable=0,
