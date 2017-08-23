@@ -61,6 +61,25 @@ class SkeinGenerator():
 
     key_extend_word = 0x1BD11BDAA9FC1A22
 
+    xkcd_target = [
+      0x5b4da95f5fa08280,
+      0xfc9879df44f418c8,
+      0xf9f12ba424b7757d,
+      0xe02bbdfbae0d4c4f,
+      0xdf9317c80cc5fe04,
+      0xc6429073466cf297,
+      0x06b8c25999ddd2f6,
+      0x540d4475cc977b87,
+      0xf4757be023f19b8f,
+      0x4035d7722886b788,
+      0x69826de916a79cf9,
+      0xc94cc79cd4347d24,
+      0xb567aa3e2390a573,
+      0xa373a48a5e676640,
+      0xc79cc70197e1c5e7,
+      0xf902fb53ca1858b6
+    ]
+
     def __init__(self, f):
         self.f = f
 
@@ -254,7 +273,7 @@ class SkeinGenerator():
         self.f.write("Add\n")
 
         # Save y0
-        self.f.write("Save {} // {}; d = {}, j = {}\n".format(y0, y0, d, j))
+        self.f.write("Save {} // {}, d = {}, j = {}\n".format(y0, y0, d, j))
 
         # Reload x1, because Add corrupts Primary Register
         self.f.write("Load {} Primary\n".format(x1))
@@ -377,6 +396,28 @@ class SkeinGenerator():
             self.f.write("Save {}\n".format(state + 2))
 
         return state
+
+    def count_bits_off(self, state, result):
+        """Counts the number of bits that the 16-word hash is from the xkcd
+        provided target.
+
+        Attributes:
+        state -- pointer to the first word in the 16-word result.
+        result -- pointer to the one word result that is the bit count.
+        """
+        # Zero bit counter
+        self.f.write("// CoreSimInput 0\n")
+        self.f.write("Constant 0\n")
+        self.f.write("SaveBitCounter\n")
+
+        for (index, value) in enumerate(SkeinGenerator.xkcd_target):
+            self.f.write("// CoreSimInput {}\n".format(value))
+            self.f.write("Constant 0\n")
+            self.f.write("Load {} Secondary\n".format(state + index))
+            self.f.write("XOR\n")
+            self.f.write("Count\n")
+
+        self.f.write("SaveBitsOff {}\n".format(result))
 
     def rotation_constant(self, d_raw, j):
         """

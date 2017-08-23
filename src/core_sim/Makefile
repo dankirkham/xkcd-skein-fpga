@@ -1,5 +1,5 @@
-run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/core_id_test.ml test/build/encrypt_test.ml test/build/hash_test.ml test/build/nonce_test.ml test/build/permute_test.ml test/build/rotate_left_test.ml test/build/subkey_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
-# run: obj_dir/Vcore_sim test/build/hash_test.ml
+run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/bits_off_count_test.ml test/build/core_id_test.ml test/build/encrypt_test.ml test/build/hash_test.ml test/build/nonce_test.ml test/build/permute_test.ml test/build/rotate_left_test.ml test/build/subkey_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
+# run: obj_dir/Vcore_sim test/build/bits_off_count_test.ml
 	obj_dir/Vcore_sim test/build/*.ml
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
@@ -17,6 +17,12 @@ test/build/bit_counter_test.ml: test/build/bit_counter_test.asm
 
 test/build/bits_off_compare_test.ml: test/bits_off_compare_test.asm
 	xsf_asm -o test/build/bits_off_compare_test.ml test/bits_off_compare_test.asm
+
+test/build/bits_off_count_test.asm: test/bits_off_count_test.py
+	python3 test/bits_off_count_test.py
+
+test/build/bits_off_count_test.ml: test/build/bits_off_count_test.asm
+	xsf_asm -o test/build/bits_off_count_test.ml test/build/bits_off_count_test.asm
 
 test/build/core_id_test.ml: test/core_id_test.asm
 	xsf_asm -o test/build/core_id_test.ml test/core_id_test.asm
