@@ -11,4 +11,4 @@ Load 1 Secondary // Load Address 1 '1337' to Secondary Register
 Add // Add Primary and Secondary Register together
 RotateLeft 48 2 // RotateLeft 48 bits and store at 2
 Read 2 // Read RAM at address 2
-// CoreSimAssert 1347
+// CoreSimAssert 1347 It should add 1337 to 10 and get 1347

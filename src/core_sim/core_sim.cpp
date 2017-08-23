@@ -2,10 +2,19 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 // #include <stringstream>
 
 #include "Vcore_sim.h"
 #include "verilated.h"
+
+typedef struct {
+  std::string filename;
+  std::string line;
+  uint64_t expected;
+  uint64_t actual;
+  std::string assertion;
+} test_result_t;
 
 bool _assert(std::string assertation, bool condition) {
   cout << assertation << ": ";
@@ -44,11 +53,31 @@ void _parse_input_directive(std::string comment, QData* output) {
     *output = _parse_integer_string(comment.substr(13, comment.length() - 13));
 }
 
+bool _parse_assert_directive(std::string comment, test_result_t* tr) {
+  if (comment.substr(0, 13) != "CoreSimAssert")
+    return false;
+
+  std::string params = comment.substr(14, comment.length() - 14);
+
+  int space_pos = params.find(' ');
+
+  if (space_pos == std::string::npos) {
+    tr->expected = _parse_integer_string(params);
+    tr->assertion = "";
+  } else {
+    tr->expected = _parse_integer_string(params.substr(0, space_pos));
+    tr->assertion = params.substr(space_pos + 1, params.length() - space_pos);
+  }
+
+  return true;
+}
+
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
 
   int failures = 0;
   int assertions = 0;
+  std::vector<test_result_t> results;
 
   for (int file_index = 1; file_index < argc; file_index++) {
     Vcore_sim* top = new Vcore_sim;
@@ -57,8 +86,11 @@ int main(int argc, char **argv, char **env) {
     ifstream ml_file;
     ml_file.open(argv[file_index]);
 
+    int line_counter = 0;
     for(string line; getline(ml_file, line); )
     {
+      line_counter++;
+
         string instruction = line;
         string comment;
 
@@ -77,11 +109,18 @@ int main(int argc, char **argv, char **env) {
 
         _parse_input_directive(comment, &top->input_i);
 
-        if (comment.substr(0, 13) == "CoreSimAssert") {
-          uint64_t expected = stoull(comment.substr(14, comment.length() - 14));
+        test_result_t tr;
+        if (_parse_assert_directive(comment, &tr)) {
           assertions++;
-          if (!_assert(to_string(expected) + " == " + to_string(top->output_o), expected == top->output_o))
+          if (!_assert(to_string(tr.expected) + " == " + to_string(top->output_o), tr.expected == top->output_o)) {
             failures++;
+
+            tr.actual = top->output_o;
+            tr.filename = argv[file_index];
+            tr.line = std::to_string(line_counter);
+
+            results.push_back(tr);
+          }
         }
 
         if (instruction.length() >= 5) {
@@ -111,6 +150,26 @@ int main(int argc, char **argv, char **env) {
 
     delete top;
     ml_file.close();
+  }
+
+  if (results.size() > 0) {
+    cout << endl << endl;
+    cout << "----------------------------------------" << endl;
+    cout << "Failures:" << endl;
+    cout << "----------------------------------------" << endl;
+
+    for (int i = 0; i < results.size(); i++) {
+      cout << to_string(i + 1) << ". " << results[i].filename << ":"
+           << results[i].line << ": " << endl;
+
+      if (results[i].assertion.length() > 0)
+        cout << "  \"" << results[i].assertion << '"' << endl;
+
+      cout << "  Expected " << results[i].actual << " to be "
+           << results[i].expected << endl;
+    }
+
+    cout << endl << endl;
   }
 
   cout << "Tests finished with " << to_string(failures) << " failures out of " << to_string(assertions) << " assertions." << endl;
