@@ -18,6 +18,32 @@ bool _assert(std::string assertation, bool condition) {
   }
 }
 
+uint64_t _parse_hex_integer_string(std::string s) {
+  uint64_t x;
+  std::stringstream ss;
+  ss << std::hex << s;
+  ss >> x;
+
+  return x;
+}
+
+uint64_t _parse_decimal_integer_string(std::string s) {
+  return stoull(s);
+}
+
+uint64_t _parse_integer_string(std::string s) {
+  if (s.substr(0, 1) == "0x") {
+    return _parse_hex_integer_string(s.substr(2, s.length() - 2));
+  } else {
+    return _parse_decimal_integer_string(s);
+  }
+}
+
+void _parse_input_directive(std::string comment, QData* output) {
+  if (comment.substr(0, 12) == "CoreSimInput")
+    *output = _parse_integer_string(comment.substr(13, comment.length() - 13));
+}
+
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
 
@@ -49,11 +75,7 @@ int main(int argc, char **argv, char **env) {
           }
         }
 
-        if (comment.substr(0, 12) == "CoreSimInput") {
-          string in = comment.substr(13, comment.length() - 13);
-
-          top->input_i = stoull(in);
-        }
+        _parse_input_directive(comment, &top->input_i);
 
         if (comment.substr(0, 13) == "CoreSimAssert") {
           uint64_t expected = stoull(comment.substr(14, comment.length() - 14));
