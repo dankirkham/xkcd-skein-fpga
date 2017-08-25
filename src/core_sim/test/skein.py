@@ -40,24 +40,7 @@ class SkeinGenerator():
         0xFF00000000000000  # First = 1, Final = 1, and Type = Output
     ]
 
-    plaintext = [
-        0x4141414141414141,
-        0x4141414141414141,
-        0x0000000000424242,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000,
-        0x0000000000000000
-    ]
+    plaintext_nonce_word = 0x4141414141414141
 
     key_extend_word = 0x1BD11BDAA9FC1A22
 
@@ -87,7 +70,7 @@ class SkeinGenerator():
         """
         Selects the Core Simulator core so that it's outputs can be read.
         """
-        self.f.write("// CoreSimInput 4645649\n")
+        self.f.write("// CoreSimInput 4342338\n")
         self.f.write("SelectCore // Select the core\n\n")
 
     def initialize_key(self, key, constant):
@@ -128,24 +111,32 @@ class SkeinGenerator():
         """
         Loads initial plaintext value into RAM at state.
 
-        TODO: This currently loads fixed constants. In the real hardware this
-        requires loading the Nonce and CoreId from their appropriate registers.
-
         Attributes:
         state -- Pointer to where the plaintext should be loaded.
         type_value -- type of message being encrypted (whitepaper 3.5.1)
         """
-
         if type_value == SkeinTypeValue.MESSAGE:
-            for (index, word) in enumerate(SkeinGenerator.plaintext):
-                self.f.write("// CoreSimInput {}\n".format(word))
-                self.f.write("Constant 0 // Plaintext {}\n".format(index))
+            # Initialize Nonce
+            for index in range(2):
+                self.f.write("// CoreSimInput {}\n".format(
+                    SkeinGenerator.plaintext_nonce_word
+                ))
+                self.f.write("Nonce {}\n".format(index))
                 self.f.write("Save {}\n".format(state + index))
+
+            # Initialize Core ID
+            self.f.write("CoreId // CoreId\n")
+            self.f.write("Save {}\n".format(state + 2))
+
+            zeros_start = 3
         else:  # type_value == SkeinTypeValue.OUTPUT
-            for index in range(0, 16):
-                self.f.write("// CoreSimInput 0\n")
-                self.f.write("Constant 0 // Plaintext {}\n".format(index))
-                self.f.write("Save {}\n".format(state + index))
+            zeros_start = 0
+
+        # Fill in with zeros
+        for index in range(zeros_start, 16):
+            self.f.write("// CoreSimInput 0\n")
+            self.f.write("Constant 0 // Plaintext {}\n".format(index))
+            self.f.write("Save {}\n".format(state + index))
 
     def calculate_key_extend(self, key):
         """

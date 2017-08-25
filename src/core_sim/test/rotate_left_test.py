@@ -7,7 +7,7 @@ f = open('test/build/rotate_left_test.asm', 'w')
 input_value = 0x76A9CEF522C494EB
 address = 5
 
-f.write("// CoreSimInput 4645649\n")
+f.write("// CoreSimInput 4342338\n")
 f.write("SelectCore // Select the core\n\n")
 
 for bits in range(64):

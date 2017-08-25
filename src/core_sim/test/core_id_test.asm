@@ -1,6 +1,8 @@
-// CoreSimInput 4645649
-SelectCore // Select the wrong core
+// CoreSimInput 4342338
+SelectCore
+// CoreSimInput 0xDEADBEEF
+Constant 0
 CoreId
 RotateLeft 48 0
 Read 0
-// CoreSimAssert 58129
+// CoreSimAssert 16962

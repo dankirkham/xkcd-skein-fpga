@@ -7,8 +7,8 @@ SelectCore // Select the wrong core
 Read 0
 // CoreSimAssert 0
 
-// CoreSimInput 4645649
-SelectCore // Select the wrong core
+// CoreSimInput 4342338
+SelectCore // Select the right core
 Read 0
 // CoreSimAssert 1337
 

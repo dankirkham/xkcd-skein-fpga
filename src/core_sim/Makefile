@@ -1,9 +1,9 @@
 run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/bits_off_count_test.ml test/build/core_id_test.ml test/build/encrypt_test.ml test/build/hash_test.ml test/build/nonce_test.ml test/build/permute_test.ml test/build/rotate_left_test.ml test/build/subkey_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
-# run: obj_dir/Vcore_sim test/build/bits_off_count_test.ml
+# run: obj_dir/Vcore_sim test/build/core_id_test.ml
 	obj_dir/Vcore_sim test/build/*.ml
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
-	verilator -Wall --cc core_sim.v --exe core_sim.cpp -I../alu  -I../alu/comparator -I../core_id_module -I../core -I../block_ram -GCORE_ID=4645649
+	verilator -Wall --cc core_sim.v --exe core_sim.cpp -I../alu  -I../alu/comparator -I../core_id_module -I../core -I../block_ram -GCORE_ID=4342338
 	make -C obj_dir -j -f Vcore_sim.mk Vcore_sim
 
 test/build/add_test.ml: test/add_test.asm
