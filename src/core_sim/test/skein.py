@@ -2,6 +2,7 @@
 Module for generation xkcd-skein-fpga code for Skein hash function calculation.
 """
 from enum import Enum
+from skein_constants import SkeinConstants as Constants
 
 
 class SkeinTypeValue(Enum):
@@ -10,58 +11,7 @@ class SkeinTypeValue(Enum):
 
 
 class SkeinGenerator():
-    # From skein_iv.h
-    key = [
-        0xD593DA0741E72355,
-        0x15B5E511AC73E00C,
-        0x5180E5AEBAF2C4F0,
-        0x03BD41D3FCBCAFAF,
-        0x1CAEC6FD1983A898,
-        0x6E510B8BCDD0589F,
-        0x77E2BDFDC6394ADA,
-        0xC11E1DB524DCB0A3,
-        0xD6D14AF9C6329AB5,
-        0x6A9B0BFC6EB67E0D,
-        0x9243C60DCCFF1332,
-        0x1A1F1DDE743F02D4,
-        0x0996753C10ED0BB8,
-        0x6572DD22F2B4969A,
-        0x61FD3062D00A579A,
-        0x1DE0536E8682E539,
-    ]
-
-    tweak = {}
-    tweak[SkeinTypeValue.MESSAGE] = [
-        19,  # This is length of the plaintext in bytes.
-        0xF000000000000000  # First = 1, Final = 1, and Type = Message
-    ]
-    tweak[SkeinTypeValue.OUTPUT] = [
-        8,
-        0xFF00000000000000  # First = 1, Final = 1, and Type = Output
-    ]
-
     plaintext_nonce_word = 0x4141414141414141
-
-    key_extend_word = 0x1BD11BDAA9FC1A22
-
-    xkcd_target = [
-      0x5b4da95f5fa08280,
-      0xfc9879df44f418c8,
-      0xf9f12ba424b7757d,
-      0xe02bbdfbae0d4c4f,
-      0xdf9317c80cc5fe04,
-      0xc6429073466cf297,
-      0x06b8c25999ddd2f6,
-      0x540d4475cc977b87,
-      0xf4757be023f19b8f,
-      0x4035d7722886b788,
-      0x69826de916a79cf9,
-      0xc94cc79cd4347d24,
-      0xb567aa3e2390a573,
-      0xa373a48a5e676640,
-      0xc79cc70197e1c5e7,
-      0xf902fb53ca1858b6
-    ]
 
     def __init__(self, f):
         self.f = f
@@ -73,20 +23,22 @@ class SkeinGenerator():
         self.f.write("// CoreSimInput 4342338\n")
         self.f.write("SelectCore // Select the core\n\n")
 
-    def initialize_key(self, key, constant):
+    def initialize_key(self, key):
         """
         Loads the key value from the Constants ROM to the RAM.
 
         Attributes:
         key -- Pointer to the first word in the key. Where the key should
         be stored in RAM.
-        constant -- Pointer to the key stored in the Constants ROM.
         """
-        for (index, value) in enumerate(SkeinGenerator.key):
-            self.f.write("// CoreSimInput {} // Key Word: {}\n".format(value,
-                                                                       index))
-            self.f.write("Constant {}\n".format(constant + index))
-            self.f.write("Save {}\n".format(key + index))
+        for i in range(0, 16):
+            self.f.write(
+                "// CoreSimInput {} // Key Word: {}\n".format(
+                    Constants.c[Constants.SKEIN_IV + i], i
+                )
+            )
+            self.f.write("Constant {}\n".format(Constants.SKEIN_IV + i))
+            self.f.write("Save {}\n".format(key + i))
 
     def initialize_tweak(self, tweak, constant, type_value):
         """
@@ -101,11 +53,23 @@ class SkeinGenerator():
         type_value -- type of message being encrypted (whitepaper 3.5.1)
         """
 
-        for (index, word) in enumerate(SkeinGenerator.tweak[type_value]):
-            self.f.write("// CoreSimInput {} // Tweak Word {}\n".format(word,
-                                                                        index))
-            self.f.write("Constant {}\n".format(constant + index))
-            self.f.write("Save {}\n".format(tweak + index))
+        if type_value == SkeinTypeValue.MESSAGE:
+            tweak_words = [
+                Constants.MESSAGE_TWEAK_0,
+                Constants.MESSAGE_TWEAK_1
+            ]
+        else:  # type_value == SkeinTypeValue.OUTPUT
+            tweak_words = [
+                Constants.OUTPUT_TWEAK_0,
+                Constants.OUTPUT_TWEAK_1
+            ]
+
+        for i in range(2):
+            self.f.write("// CoreSimInput {} // Tweak Word {}\n".format(
+                Constants.c[tweak_words[i]], i
+            ))
+            self.f.write("Constant {}\n".format(tweak_words[i]))
+            self.f.write("Save {}\n".format(tweak + i))
 
     def initialize_plaintext(self, state, type_value):
         """
@@ -113,7 +77,7 @@ class SkeinGenerator():
 
         Attributes:
         state -- Pointer to where the plaintext should be loaded.
-        type_value -- type of message being encrypted (whitepaper 3.5.1)
+        type_value -- Type of message being encrypted (whitepaper 3.5.1)
         """
         if type_value == SkeinTypeValue.MESSAGE:
             # Initialize Nonce
@@ -156,9 +120,9 @@ class SkeinGenerator():
         self.f.write("Load {} Secondary\n".format(key + 16))
 
         self.f.write(
-            "// CoreSimInput {}\n".format(SkeinGenerator.key_extend_word)
+            "// CoreSimInput {}\n".format(Constants.c[Constants.KEY_EXTEND])
         )  # This is a constant
-        self.f.write("Constant 0\n")
+        self.f.write("Constant {}\n".format(Constants.KEY_EXTEND))
         self.f.write("XOR\n")
         self.f.write("Save {}\n".format(key + 16))
 
@@ -207,7 +171,7 @@ class SkeinGenerator():
             self.f.write("Add // Subkey in Primary Register\n")
         elif i == 15:
             self.f.write("// CoreSimInput {}\n".format(s))
-            self.f.write("Constant 0\n")
+            self.f.write("Constant {}\n".format(Constants.c[s]))
             self.f.write("Load {} Secondary\n".format(
                 key + ((s + 15) % 17))
             )
@@ -370,18 +334,16 @@ class SkeinGenerator():
 
         # XOR with plaintext
         if type_value == SkeinTypeValue.MESSAGE:
-            self.f.write("// CoreSimInput {}\n".format(0x4141414141414141))
-            self.f.write("Constant 0\n")
-            self.f.write("Load {} Secondary\n".format(state + 0))
-            self.f.write("XOR\n")
-            self.f.write("Save {}\n".format(state + 0))
-            self.f.write("// CoreSimInput {}\n".format(0x4141414141414141))
-            self.f.write("Constant 0\n")
-            self.f.write("Load {} Secondary\n".format(state + 1))
-            self.f.write("XOR\n")
-            self.f.write("Save {}\n".format(state + 1))
-            self.f.write("// CoreSimInput {}\n".format(0x0000000000424242))
-            self.f.write("Constant 0\n")
+            for i in range(2):
+                self.f.write("// CoreSimInput {}\n".format(
+                    SkeinGenerator.plaintext_nonce_word
+                ))
+                self.f.write("Nonce {}\n".format(i))
+                self.f.write("Load {} Secondary\n".format(state + i))
+                self.f.write("XOR\n")
+                self.f.write("Save {}\n".format(state + i))
+
+            self.f.write("CoreId\n")
             self.f.write("Load {} Secondary\n".format(state + 2))
             self.f.write("XOR\n")
             self.f.write("Save {}\n".format(state + 2))
@@ -401,10 +363,12 @@ class SkeinGenerator():
         self.f.write("Constant 0\n")
         self.f.write("SaveBitCounter\n")
 
-        for (index, value) in enumerate(SkeinGenerator.xkcd_target):
-            self.f.write("// CoreSimInput {}\n".format(value))
-            self.f.write("Constant 0\n")
-            self.f.write("Load {} Secondary\n".format(state + index))
+        for i in range(16):
+            self.f.write("// CoreSimInput {}\n".format(
+                Constants.c[Constants.XKCD + i]
+            ))
+            self.f.write("Constant {}\n".format(Constants.XKCD + i))
+            self.f.write("Load {} Secondary\n".format(state + i))
             self.f.write("XOR\n")
             self.f.write("Count\n")
 

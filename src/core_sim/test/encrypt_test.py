@@ -29,7 +29,7 @@ f = open("test/build/encrypt_test.asm", 'w')
 sg = SkeinGenerator(f)
 
 sg.select_core()
-sg.initialize_key(key, key)
+sg.initialize_key(key)
 sg.initialize_plaintext(state, SkeinTypeValue.MESSAGE)
 
 sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
