@@ -16,14 +16,22 @@ class Outputter:
 
         if ml.has_instruction():
             # Default values
-            address = ml.address if ml.address else 0
-            ram_write = ml.ram_write if ml.ram_write else 0
-            alu_opcode = ml.alu_opcode if ml.alu_opcode else 0xC
-            input_select = ml.input_select if ml.input_select else 0
-            output_select = ml.output_select if ml.output_select else 0
-            output_enable = ml.output_enable if ml.output_enable else 0
+            address = ml.address if ml.address is not None else 0
+            ram_write = ml.ram_write if ml.ram_write is not None else 0
+            alu_opcode = ml.alu_opcode if ml.alu_opcode is not None else 0xC
+            input_select = (
+                ml.input_select if ml.input_select is not None else 0
+            )
+            output_select = (
+                ml.output_select if ml.output_select is not None else 0
+            )
+            output_enable = (
+                ml.output_enable if ml.output_enable is not None else 0
+            )
             save_core_selection = (
-                ml.save_core_selection if ml.save_core_selection else 0
+                ml.save_core_selection if (
+                    ml.save_core_selection is not None
+                ) else 0
             )
 
             binary = (

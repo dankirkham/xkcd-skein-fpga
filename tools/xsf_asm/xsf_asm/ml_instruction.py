@@ -19,13 +19,13 @@ class MlInstruction:
         """
 
         return not (
-            not self.address and
-            not self.ram_write and
-            not self.alu_opcode and
-            not self.input_select and
-            not self.output_select and
-            not self.output_enable and
-            not self.save_core_selection
+            self.address is None and
+            self.ram_write is None and
+            self.alu_opcode is None and
+            self.input_select is None and
+            self.output_select is None and
+            self.output_enable is None and
+            self.save_core_selection is None
         )
 
     def has_comment(self):

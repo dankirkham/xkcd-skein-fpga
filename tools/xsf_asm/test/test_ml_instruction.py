@@ -63,6 +63,20 @@ class TestMlInstruction(unittest.TestCase):
         self.assertTrue(ml.has_comment())
         self.assertTrue(ml.has_instruction())
 
+    def test_zero_instructions(self):
+        ml = MlInstruction(
+            address=0,
+            ram_write=0,
+            alu_opcode=0,
+            input_select=0,
+            output_select=0,
+            output_enable=0,
+            save_core_selection=0,
+            comment=None
+        )
+
+        self.assertTrue(ml.has_instruction())
+
 
 if __name__ == '__main__':
     unittest.main()

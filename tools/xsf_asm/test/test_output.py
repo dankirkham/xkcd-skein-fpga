@@ -57,11 +57,35 @@ class TestMlInstruction(unittest.TestCase):
 
         lines = self.output.getvalue().split("\n")
 
-        self.assertEqual(len(lines), 5)
+        self.assertEqual(len(lines), 5)  # Last index is blank line
         self.assertEqual(lines[0], '00008')
         self.assertEqual(lines[1], '// This has a comment.')
         self.assertEqual(lines[2], '00008 // This has a comment!')
         self.assertEqual(lines[3], '0ff0c')
+
+    def test_constant_instruction(self):
+        """Since the "Constant" instruction is zero for every field, it can
+        result in an edge case where it is not generated. This is because of
+        confusion between how Python treats None and 0. 0 == None is False,
+        however "if 0" and "if None" are equivalent.
+        """
+        instruction = MlInstruction(
+            address=0,
+            ram_write=0,
+            alu_opcode=0,
+            input_select=0,
+            output_select=0,
+            output_enable=0,
+            save_core_selection=0,
+            comment=None
+        )
+
+        self.outputter._output_instruction(instruction, self.output)
+
+        lines = self.output.getvalue().split("\n")
+
+        self.assertEqual(len(lines), 2)  # Last index is blank line
+        self.assertEqual(lines[0], '00000')
 
 
 if __name__ == '__main__':
