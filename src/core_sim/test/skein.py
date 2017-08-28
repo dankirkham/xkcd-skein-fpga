@@ -374,6 +374,22 @@ class SkeinGenerator():
 
         self.f.write("SaveBitsOff {}\n".format(result))
 
+    def hash(self, key, tweak, state, nextstate):
+        """Computes Skein1024-1024 hash. Result is stored at "key" address.
+
+        Attributes:
+        key -- pointer to 16-word key
+        tweak -- pointer to where tweak value should be stored
+        state -- pointer to state
+        nextstate -- pointer to nextstate
+        """
+        self.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
+
+        key, nextstate = nextstate, key
+        self.initialize_plaintext(state, SkeinTypeValue.OUTPUT)
+
+        self.encrypt(key, tweak, state, nextstate, SkeinTypeValue.OUTPUT)
+
     def rotation_constant(self, d_raw, j):
         """
         Skein Rotation Constants. See whitepaper 3.3.1.

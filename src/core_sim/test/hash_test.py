@@ -32,15 +32,10 @@ sg.select_core()
 sg.initialize_key(key)
 sg.initialize_plaintext(state, SkeinTypeValue.MESSAGE)
 
-sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
-
-key, nextstate = nextstate, key
-sg.initialize_plaintext(state, SkeinTypeValue.OUTPUT)
-
-sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.OUTPUT)
+sg.hash(key, tweak, state, nextstate)
 
 # Check result
 for (i, val) in enumerate(expected_value):
-    sg.check_word_64(nextstate + i, val)
+    sg.check_word_64(key + i, val)
 
 f.close()
