@@ -4,7 +4,7 @@ module constants_rom (
   output reg [63:0] constant_o
 );
 
-reg [63:0] constants [0:56];
+reg [63:0] constants [0:57];
 
 initial $readmemh("constants.hex", constants);
 
@@ -12,7 +12,7 @@ always @(*) begin
   if (output_enable_i)
     constant_o = constants[address_i];
   else
-    constant_o = 64'bz;
+    constant_o = 64'bZ;
 end
 
 endmodule
