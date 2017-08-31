@@ -32,12 +32,12 @@ f.write("// CoreSimInput 1023\n")
 f.write("Constant 0\n")
 f.write("Save 1\n")
 f.write("Load 1 Secondary\n")
-f.write("SaveComparator\n\n")
+f.write("SaveComparator // SaveComparator\n\n")
 
 # Zero BitCounter Register
 f.write("// CoreSimInput 0\n")
 f.write("Constant 0\n")
-f.write("SaveBitCounter\n\n")
+f.write("SaveBitCounter // SaveBitCounter\n\n")
 
 # Count all the bits
 for word in words:
@@ -46,7 +46,7 @@ for word in words:
     f.write("Count\n\n")
 
 # SaveBitsOff, Rotate, and Assert
-f.write("SaveBitsOff 0\n")
+f.write("SaveBitsOff 0 // SaveBitsOff\n")
 f.write("Load 0 Primary\n")
 f.write("RotateLeft 48 0\n")
 f.write("Read 0\n")

@@ -6,6 +6,7 @@ class SkeinConstants():
     KEY_EXTEND = 0x18
     SKEIN_IV = 0x19
     XKCD = 0x29
+    BEST_BITS_OFF_MAX = 0x39
 
     c = [
         0x0000000000000000,
@@ -65,5 +66,5 @@ class SkeinConstants():
         0xa373a48a5e676640,
         0xc79cc70197e1c5e7,
         0xf902fb53ca1858b6,
-
+        0x00000000000003ff
     ]

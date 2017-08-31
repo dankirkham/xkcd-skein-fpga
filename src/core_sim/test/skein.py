@@ -23,6 +23,20 @@ class SkeinGenerator():
         self.f.write("// CoreSimInput 4342338\n")
         self.f.write("SelectCore // Select the core\n\n")
 
+    def initialize_best_bits_off(self, best_bits_off):
+        """Initializes best_bits_off to max value (1023) so that the first hash
+        computed will be the best hash and improve from there. If best_bits_off
+        was kept at zero, then no work would be recorded.
+
+        Attributes:
+        best_bits_off -- pointer to word where best_bits_off should be stored.
+        """
+        self.f.write("// CoreSimInput {}\n".format(
+            Constants.c[Constants.BEST_BITS_OFF_MAX]
+        ))
+        self.f.write("Constant {}\n".format(Constants.BEST_BITS_OFF_MAX))
+        self.f.write("Save {}\n".format(best_bits_off))
+
     def initialize_key(self, key):
         """
         Loads the key value from the Constants ROM to the RAM.
@@ -71,7 +85,7 @@ class SkeinGenerator():
             self.f.write("Constant {}\n".format(tweak_words[i]))
             self.f.write("Save {}\n".format(tweak + i))
 
-    def initialize_plaintext(self, state, type_value):
+    def initialize_plaintext(self, state, type_value, new_nonce=None):
         """
         Loads initial plaintext value into RAM at state.
 
@@ -87,6 +101,8 @@ class SkeinGenerator():
                 ))
                 self.f.write("Nonce {}\n".format(index))
                 self.f.write("Save {}\n".format(state + index))
+                if new_nonce is not None:
+                    self.f.write("Save {}\n".format(new_nonce + index))
 
             # Initialize Core ID
             self.f.write("CoreId // CoreId\n")
@@ -295,7 +311,7 @@ class SkeinGenerator():
             self.add_subkey_word(s, i, key, tweak, state, nextstate)
 
     def encrypt(self, key, tweak, state, nextstate,
-                type_value: SkeinTypeValue):
+                type_value: SkeinTypeValue, new_nonce=None):
         """Threefish block cipher encrypt function. Result is stored at
         nextstate.
 
@@ -306,8 +322,9 @@ class SkeinGenerator():
         nextstate -- pointer to next state (needed because the implementation
         alternates between the state and nextstate pointer)
         type_value -- type of message being encrypted (whitepaper 3.5.1)
+        new_nonce -- pointer to new nonce, used to XOR with plaintext when
+        type_value is MESSAGE.
         """
-
         self.initialize_tweak(tweak, tweak, type_value)
         self.calculate_key_extend(key)
         self.calculate_tweak_extend(tweak)
@@ -334,14 +351,12 @@ class SkeinGenerator():
 
         # XOR with plaintext
         if type_value == SkeinTypeValue.MESSAGE:
-            for i in range(2):
-                self.f.write("// CoreSimInput {}\n".format(
-                    SkeinGenerator.plaintext_nonce_word
-                ))
-                self.f.write("Nonce {}\n".format(i))
-                self.f.write("Load {} Secondary\n".format(state + i))
-                self.f.write("XOR\n")
-                self.f.write("Save {}\n".format(state + i))
+            if new_nonce is not None:
+                for i in range(2):
+                    self.f.write("Load {} Primary\n".format(new_nonce + i))
+                    self.f.write("Load {} Secondary\n".format(state + i))
+                    self.f.write("XOR\n")
+                    self.f.write("Save {}\n".format(state + i))
 
             self.f.write("CoreId\n")
             self.f.write("Load {} Secondary\n".format(state + 2))
@@ -350,9 +365,13 @@ class SkeinGenerator():
 
         return state
 
-    def count_bits_off(self, state, result):
+    def count_bits_off(self, state, result=None):
         """Counts the number of bits that the 16-word hash is from the xkcd
-        provided target.
+        provided target. The counted value will be stored in the Bit Counter
+        Register.
+
+        If result is provided, then the value will be saved to RAM at the
+        specified address. This is for testing purposes.
 
         Attributes:
         state -- pointer to the first word in the 16-word result.
@@ -372,9 +391,19 @@ class SkeinGenerator():
             self.f.write("XOR\n")
             self.f.write("Count\n")
 
-        self.f.write("SaveBitsOff {}\n".format(result))
+        if result is not None:
+            # Place high value in comparator to ensure that the count value is
+            # read during the test. This only for testing, in real operation,
+            # the counted value shall be immediately compared to the best value
+            # and will not be saved to RAM otherwise.
+            self.f.write("// CoreSimInput 1023\n")
+            self.f.write("Constant 0\n")
+            self.f.write("Save {}\n".format(result))
+            self.f.write("Load {} Secondary\n".format(result))
+            self.f.write("SaveComparator\n\n")
+            self.f.write("SaveBitsOff {}\n".format(result))
 
-    def hash(self, key, tweak, state, nextstate):
+    def hash(self, key, tweak, state, nextstate, new_nonce):
         """Computes Skein1024-1024 hash. Result is stored at "key" address.
 
         Attributes:
@@ -382,13 +411,45 @@ class SkeinGenerator():
         tweak -- pointer to where tweak value should be stored
         state -- pointer to state
         nextstate -- pointer to nextstate
+        new_nonce -- pointer to 2-word nonce
         """
-        self.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
+        self.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE,
+                     new_nonce)
 
         key, nextstate = nextstate, key
         self.initialize_plaintext(state, SkeinTypeValue.OUTPUT)
 
         self.encrypt(key, tweak, state, nextstate, SkeinTypeValue.OUTPUT)
+
+    def compare_bits_off(self, best_nonce, best_bits_off, new_nonce):
+        """Compares the best nonce to the the newly generated one. If
+        new_bits_off is lower than best_bits_off, this will save new_bits_off
+        and new_nonce to best_bits_off and best_nonce, respectively.
+
+        CAUTION: This makes the assumption that the new_bits_off value is
+        already stored in the bit counter. This true if the function is called
+        immediately after SkeinGenerator.count_bits_off().
+
+        Attributes:
+        best_nonce -- pointer to 2-word best nonce in RAM
+        best_bits_off -- pointer to 1-word best bits off in RAM
+        new_nonce -- pointer to 2-word new nonce in RAM.
+        """
+
+        # Load best_bits_off to Secondary Register.
+        self.f.write("Load {} Secondary\n".format(best_bits_off))
+        # Save Secondary Register to Comparator.
+        self.f.write("SaveComparator\n")
+        # Save best_bits_off
+        self.f.write("SaveBitsOff {}\n".format(best_bits_off))
+
+        for i in range(2):
+            # Load word of new_nonce to Primary Register
+            self.f.write("Load {} Primary\n".format(new_nonce + i))
+            # Load word of best_nonce to Secondary Register
+            self.f.write("Load {} Secondary\n".format(best_nonce + i))
+            # Save best nonce word
+            self.f.write("SaveNonce {}\n".format(best_nonce + i))
 
     def rotation_constant(self, d_raw, j):
         """

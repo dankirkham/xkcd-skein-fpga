@@ -1,5 +1,5 @@
-run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/bits_off_count_test.ml test/build/core_id_test.ml test/build/encrypt_test.ml test/build/hash_test.ml test/build/nonce_test.ml test/build/permute_test.ml test/build/rotate_left_test.ml test/build/subkey_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
-# run: obj_dir/Vcore_sim test/build/core_id_test.ml
+run: obj_dir/Vcore_sim test/build/add_test.ml test/build/bit_counter_test.ml test/build/bits_off_compare_test.ml test/build/bits_off_count_test.ml test/build/core_id_test.ml test/build/encrypt_test.ml test/build/full_test.ml test/build/hash_test.ml test/build/nonce_test.ml test/build/permute_test.ml test/build/rotate_left_test.ml test/build/subkey_test.ml test/build/unselected_core_test.ml test/build/xor_test.ml
+# run: obj_dir/Vcore_sim test/build/bit_counter_test.ml
 	obj_dir/Vcore_sim test/build/*.ml
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
@@ -32,6 +32,12 @@ test/build/encrypt_test.asm: test/encrypt_test.py
 
 test/build/encrypt_test.ml: test/build/encrypt_test.asm
 	xsf_asm -o test/build/encrypt_test.ml test/build/encrypt_test.asm
+
+test/build/full_test.asm: test/full_test.py
+	python3 test/full_test.py
+
+test/build/full_test.ml: test/build/full_test.asm
+	xsf_asm -o test/build/full_test.ml test/build/full_test.asm
 
 test/build/hash_test.asm: test/hash_test.py
 	python3 test/hash_test.py

@@ -4,6 +4,7 @@ key = 0
 tweak = 17
 state = 20
 nextstate = 37
+new_nonce = 57
 
 expected_value = [
     0x929e8e3169cbd68b,
@@ -30,9 +31,9 @@ sg = SkeinGenerator(f)
 
 sg.select_core()
 sg.initialize_key(key)
-sg.initialize_plaintext(state, SkeinTypeValue.MESSAGE)
+sg.initialize_plaintext(state, SkeinTypeValue.MESSAGE, new_nonce)
 
-sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE)
+sg.encrypt(key, tweak, state, nextstate, SkeinTypeValue.MESSAGE, new_nonce)
 
 # Check result
 for (i, val) in enumerate(expected_value):

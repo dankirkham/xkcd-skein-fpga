@@ -55,12 +55,13 @@ all loaded using the `Constant <Address>` assembly language instruction.
 | 0x30       | 0x540d4475cc977b87 | XKCD Target; Word 7                                 |
 | 0x31       | 0xf4757be023f19b8f | XKCD Target; Word 8                                 |
 | 0x32       | 0x4035d7722886b788 | XKCD Target; Word 9                                 |
-| 0x34       | 0x69826de916a79cf9 | XKCD Target; Word 10                                |
-| 0x35       | 0xc94cc79cd4347d24 | XKCD Target; Word 11                                |
-| 0x36       | 0xb567aa3e2390a573 | XKCD Target; Word 12                                |
-| 0x37       | 0xa373a48a5e676640 | XKCD Target; Word 13                                |
-| 0x38       | 0xc79cc70197e1c5e7 | XKCD Target; Word 14                                |
-| 0x39       | 0xf902fb53ca1858b6 | XKCD Target; Word 15                                |
+| 0x33       | 0x69826de916a79cf9 | XKCD Target; Word 10                                |
+| 0x34       | 0xc94cc79cd4347d24 | XKCD Target; Word 11                                |
+| 0x35       | 0xb567aa3e2390a573 | XKCD Target; Word 12                                |
+| 0x36       | 0xa373a48a5e676640 | XKCD Target; Word 13                                |
+| 0x37       | 0xc79cc70197e1c5e7 | XKCD Target; Word 14                                |
+| 0x38       | 0xf902fb53ca1858b6 | XKCD Target; Word 15                                |
+| 0x39       | 1023               | best_bits_off initial value (max value possible)    |
 
 ## Useful Aliases
 | Address | Alias                       |
@@ -72,3 +73,4 @@ all loaded using the `Constant <Address>` assembly language instruction.
 | 0x18    | KEY_EXTEND                  |
 | 0x19    | SKEIN_IV                    |
 | 0x29    | XKCD                        |
+| 0x39    | BEST_BITS_OFF_MAX           |
