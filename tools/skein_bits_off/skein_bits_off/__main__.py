@@ -26,7 +26,9 @@ def main():
 
     hash = find_hash(args.nonce + args.increment, args.core_id)
 
-    print(find_bits_off(hash))
+    bits_off = find_bits_off(hash)
+
+    print("{} ({})".format(bits_off, hex(bits_off)))
 
 
 if __name__ == "__main__":
