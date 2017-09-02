@@ -11,7 +11,11 @@ class SkeinTypeValue(Enum):
 
 
 class SkeinGenerator():
-    plaintext_nonce_word = 0x4141414141414141
+    plaintext_nonce_word = [
+        0x4141414141414141,
+        0x4141414141414142,
+        0x4141414141414143,
+    ]
 
     def __init__(self, f):
         self.f = f
@@ -85,24 +89,37 @@ class SkeinGenerator():
             self.f.write("Constant {}\n".format(tweak_words[i]))
             self.f.write("Save {}\n".format(tweak + i))
 
-    def initialize_plaintext(self, state, type_value, new_nonce=None):
+    def initialize_plaintext(self, state, type_value, new_nonce=None,
+                             nonce_index=0):
         """
         Loads initial plaintext value into RAM at state.
 
         Attributes:
         state -- Pointer to where the plaintext should be loaded.
         type_value -- Type of message being encrypted (whitepaper 3.5.1)
+        new_nonce -- Pointer to location where nonce will be stored in RAM,
+        if this is not provided the nonce will not be stored in RAM.
+        nonce_index -- Nonce to use. This is so the nonce can be changed to
+        simulate incrementation.
         """
         if type_value == SkeinTypeValue.MESSAGE:
-            # Initialize Nonce
-            for index in range(2):
-                self.f.write("// CoreSimInput {}\n".format(
-                    SkeinGenerator.plaintext_nonce_word
-                ))
-                self.f.write("Nonce {}\n".format(index))
-                self.f.write("Save {}\n".format(state + index))
-                if new_nonce is not None:
-                    self.f.write("Save {}\n".format(new_nonce + index))
+            # Initialize Nonce High-word
+            self.f.write("// CoreSimInput {}\n".format(
+                SkeinGenerator.plaintext_nonce_word[0]
+            ))
+            self.f.write("Nonce {}\n".format(1))
+            self.f.write("Save {}\n".format(state + 1))
+            if new_nonce is not None:
+                self.f.write("Save {}\n".format(new_nonce + 1))
+
+            # Initialize Nonce Low-word
+            self.f.write("// CoreSimInput {}\n".format(
+                SkeinGenerator.plaintext_nonce_word[nonce_index]
+            ))
+            self.f.write("Nonce {}\n".format(0))
+            self.f.write("Save {}\n".format(state))
+            if new_nonce is not None:
+                self.f.write("Save {}\n".format(new_nonce))
 
             # Initialize Core ID
             self.f.write("CoreId // CoreId\n")
@@ -222,6 +239,10 @@ class SkeinGenerator():
         self.f.write("RotateLeft 16 {}\n".format(address))
         self.f.write("Read {}\n".format(address))
         self.f.write("// CoreSimAssert {}\n".format(expected_value & 0xFFFF))
+
+        # Rotate again so that memory is not corrupted
+        self.f.write("Load {} Primary\n".format(address))
+        self.f.write("RotateLeft 16 {}\n".format(address))
 
     def calculate_mix(self, d, j, state, nextstate):
         """Skein Mix function from whitepaper 3.3.1
