@@ -1,10 +1,5 @@
-#include <stdint.h>
-#include <iostream>
-#include <sstream>
-
-using namespace std;
-
 #include "threefish.h"
+#include "util.h"
 
 int main ()
 {
@@ -77,15 +72,7 @@ int main ()
 
   tf.Encrypt(key, tweak, plaintext, ciphertext);
 
-  for (int i = 0; i < 16; i++)
-    {
-      stringstream ss;
-      ss << hex << ciphertext[i];
-      string s = ss.str();
-      for (int n = s.length(); n < 16; n++)
-	cout << '0';
-      cout << s << endl;
-    }
+  print_hex(ciphertext, 16);
 
   return 0;
 }

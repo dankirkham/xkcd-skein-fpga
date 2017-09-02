@@ -1,12 +1,4 @@
-#include <stdint.h>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-
 #include "threefish.h"
-
-using namespace std;
 
 void Threefish::Extend (const int count, uint64_t words[])
 {
@@ -208,7 +200,6 @@ void Threefish::Mix (const int j,
   uint64_t x1l = x1 << RotationConstant(j, d);
   uint64_t x1r = x1 >> (64 - RotationConstant(j, d));
   uint64_t x1o = x1l | x1r;
-
   y1 = x1o ^ y0;
 }
 
@@ -251,7 +242,7 @@ void Threefish::Encrypt (uint64_t key[],
   uint64_t state[16];
   for (int i = 0; i < 16; i++)
     state[i] = plaintext[i];
-  
+
   uint64_t nextState[16];
 
   // Compute 80 rounds
@@ -283,7 +274,7 @@ void Threefish::Encrypt (uint64_t key[],
 
       // Call permute function
       Permute(state, nextState);
-      
+
       // Lazy copy
       for (int i = 0; i < 16; i++)
 	{
@@ -292,26 +283,26 @@ void Threefish::Encrypt (uint64_t key[],
 
     }
 
-  
+
   // Print subkeys
-  cout << "Subkeys: " << endl;
-  for (int s = 0; s < 21; s++)
-    {
-      cout << s << endl;
-      for (int i = 0; i < 16; i++)
-	{
-	  stringstream ss;
-	  ss << hex << subkeys[s*16 + i];
-	  string s = ss.str();
-	  for (int n = s.length(); n < 16; n++)
-	    cout << '0';
-	  cout << s;
-	  cout << endl;
-	}
-      cout << endl;
-    }
-  cout << endl;
-  
+  // cout << "Subkeys: " << endl;
+  // for (int s = 0; s < 21; s++)
+  //   {
+  //     cout << s << endl;
+  //     for (int i = 0; i < 16; i++)
+	// {
+	//   stringstream ss;
+	//   ss << hex << subkeys[s*16 + i];
+	//   string s = ss.str();
+	//   for (int n = s.length(); n < 16; n++)
+	//     cout << '0';
+	//   cout << s;
+	//   cout << endl;
+	// }
+  //     cout << endl;
+  //   }
+  // cout << endl;
+
 
   //cout << "Ciphertext: " << endl;
   for (int i = 0; i < 16; i++)
