@@ -12,7 +12,7 @@ always @(*) begin
   if (output_enable_i)
     constant_o = constants[address_i];
   else
-    constant_o = 64'bZ;
+    constant_o = 64'bZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ;
 end
 
 endmodule
