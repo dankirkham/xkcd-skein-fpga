@@ -20,7 +20,7 @@ Nonce Initialized bit to high and start processing.
 
 ### Nonce Result
 Data: `Status Byte`, `Best Nonce (little-endian, 16 bytes)`,
-`CoreId (little-endian, 3 bytes)` and `Bits Off (little-endian, 2 bytes)`.
+`CoreId (little-endian, 4 bytes)` and `Bits Off (little-endian, 2 bytes)`.
 
 Periodically the FPGA will send this message. This will be the best hash
 calculated since the last Nonce Result message was sent. The status byte has
