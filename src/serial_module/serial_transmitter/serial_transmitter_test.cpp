@@ -23,11 +23,51 @@ int main(int argc, char **argv, char **env) {
   top->status_byte_i = 0xD4;
   top->tx_busy_i = 0;
   top->ram_i = 0xFF;
+  top->transmit_i = 0;
   top->eval();
   _assert("Module should not be transmitting", top->new_tx_data_o == 0);
 
-  // top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
-  // _assert("Nonce should not be ready", top->nonce_ready_o == 0);
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+
+  top->transmit_i = 1;
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+
+  top->transmit_i = 0;
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should be transmitting", top->new_tx_data_o == 1);
+  _assert("Module should be tansmitting the header byte", top->tx_data_o == 0x9A);
+
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should be transmitting", top->new_tx_data_o == 1);
+  _assert("Module should be tansmitting the status byte", top->tx_data_o == 0xD4);
+
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should be transmitting", top->new_tx_data_o == 1);
+  _assert("Module should be tansmitting the RAM byte", top->tx_data_o == 0xFF);
+
+  top->tx_busy_i = 1;
+  for (int i = 0; i < 10; i++) {
+    top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+    _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  }
+
+  top->tx_busy_i = 0;
+  for (int i = 0; i < 21; i++) {
+    top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+    _assert("Module should be transmitting", top->new_tx_data_o == 1);
+    _assert("Module should be tansmitting the RAM byte", top->tx_data_o == 0xFF);
+  }
+
+  for (int i = 0; i < 10; i++) {
+    top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+    _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  }
 
   delete top;
 
