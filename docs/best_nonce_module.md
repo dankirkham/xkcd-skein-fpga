@@ -8,6 +8,24 @@ uses the same `Save Selection` and `Output Enable` (in this case
 The Best Nonce Module shares a block RAM with the Serial Module. Both modules
 have ready signals that lock shared data.
 
+## Usage
+### Comparison
+1. Using the CoreId for the Core to be compared by the Best Nonce Module, drive
+the CoreId on the main bus.
+2. While the CoreId is on the main bus, use the SelectCore instruction. This
+will drive the Save Selection bit high, which will select the core as well as
+prepare the Best Nonce Module for nonce comparison.
+3. Read the two core-specific best nonce words.
+4. Read the core-specific best bits off word.
+5. After receiving all necessary information, the Best Nonce Module will
+automatically compare the received best bits off with its current best best
+bits off. If the new one is lower, then the bits off, CoreId, and nonce value
+will be saved to the Best Nonce Modules RAM.
+### Initialization/Reset
+1. Set the reset_best_nonce_i bit to high. This will write the value 1023 to
+the bits off address. When the next nonce is compared, it will certainly be
+less than 1023.
+
 ## Memory Map
 | Address (8-bit data)  | Address (16-bit data) | Size (bytes) | Description |
 | --------------------- | --------------------- | ------------ | ----------- |
@@ -41,13 +59,6 @@ RAM write signal
 
 ### ram_address_o
 4-bit RAM address select
-
-### ready_o
-Best Nonce Module has stored a valid best nonce in the RAM and is not currently
-accessing it.
-
-### serial_module_ready_i
-Serial module is currently busy sending the best nonce value.
 
 ### reset_best_nonce_i
 Erase the best nonce value from RAM so that a new set of work can begin. This
