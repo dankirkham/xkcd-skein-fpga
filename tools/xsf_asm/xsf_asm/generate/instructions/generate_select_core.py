@@ -13,5 +13,6 @@ def generate_select_core(asm: AsmInstruction,
         output_select=None,
         output_enable=0,
         save_core_selection=1,
-        comment=asm.comment
+        comment=asm.comment,
+        global_command=0
     ))

@@ -12,5 +12,6 @@ def generate_add(asm: AsmInstruction, instructions: List[MlInstruction]):
         output_select=None,
         output_enable=0,
         save_core_selection=0,
-        comment=asm.comment
+        comment=asm.comment,
+        global_command=0
     ))

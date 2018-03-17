@@ -14,7 +14,8 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
         output_select=1,
         output_enable=1,
         save_core_selection=0,
-        comment=asm.comment
+        comment=asm.comment,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -25,7 +26,8 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
         output_select=1,
         output_enable=1,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -36,7 +38,8 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
         output_select=1,
         output_enable=1,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -47,5 +50,6 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
         output_select=1,
         output_enable=1,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))

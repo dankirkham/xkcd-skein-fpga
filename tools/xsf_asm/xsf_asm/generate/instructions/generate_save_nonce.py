@@ -15,7 +15,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=asm.comment
+        comment=asm.comment,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -26,7 +27,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=None,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -37,7 +39,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -48,7 +51,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=None,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -59,7 +63,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -70,7 +75,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=None,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -81,7 +87,8 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -92,5 +99,6 @@ def generate_save_nonce(asm: AsmInstruction,
         output_select=None,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))

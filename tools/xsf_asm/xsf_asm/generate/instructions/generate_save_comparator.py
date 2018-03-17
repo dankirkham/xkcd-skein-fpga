@@ -13,5 +13,6 @@ def generate_save_comparator(asm: AsmInstruction,
         output_select=None,
         output_enable=0,
         save_core_selection=0,
-        comment=asm.comment
+        comment=asm.comment,
+        global_command=0
     ))

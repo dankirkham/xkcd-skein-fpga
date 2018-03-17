@@ -3,7 +3,8 @@ class MlInstruction:
     Generally, created by a Generator and consumed by a Formatter."""
 
     def __init__(self, address, ram_write, alu_opcode, input_select,
-                 output_select, output_enable, save_core_selection, comment):
+                 output_select, output_enable, save_core_selection, comment,
+                 global_command):
         self.address = address
         self.ram_write = ram_write
         self.alu_opcode = alu_opcode
@@ -12,6 +13,7 @@ class MlInstruction:
         self.output_enable = output_enable
         self.save_core_selection = save_core_selection
         self.comment = comment
+        self.global_command = global_command
 
     def has_instruction(self):
         """Determines if a MlInstruction object is an actual instruction, or if
@@ -25,7 +27,8 @@ class MlInstruction:
             self.input_select is None and
             self.output_select is None and
             self.output_enable is None and
-            self.save_core_selection is None
+            self.save_core_selection is None and
+            self.global_command is None
         )
 
     def has_comment(self):

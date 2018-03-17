@@ -17,7 +17,8 @@ def generate_rotate_left(asm: AsmInstruction,
             output_select=None,
             output_enable=0,
             save_core_selection=0,
-            comment=asm.comment if i == 0 else None
+            comment=asm.comment if i == 0 else None,
+            global_command=0
         ))
 
     instructions.append(MlInstruction(
@@ -28,7 +29,8 @@ def generate_rotate_left(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=asm.comment if bits % 16 == 0 else None
+        comment=asm.comment if bits % 16 == 0 else None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -39,7 +41,8 @@ def generate_rotate_left(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -50,7 +53,8 @@ def generate_rotate_left(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
 
     instructions.append(MlInstruction(
@@ -61,5 +65,6 @@ def generate_rotate_left(asm: AsmInstruction,
         output_select=0,
         output_enable=0,
         save_core_selection=0,
-        comment=None
+        comment=None,
+        global_command=0
     ))
