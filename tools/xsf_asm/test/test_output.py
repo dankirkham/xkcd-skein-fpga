@@ -19,7 +19,8 @@ class TestMlInstruction(unittest.TestCase):
                 output_select=None,
                 output_enable=0,
                 save_core_selection=0,
-                comment=None
+                comment=None,
+                global_command=0
             ),
             MlInstruction(
                 address=None,
@@ -29,7 +30,8 @@ class TestMlInstruction(unittest.TestCase):
                 output_select=None,
                 output_enable=None,
                 save_core_selection=None,
-                comment="This has a comment."
+                comment="This has a comment.",
+                global_command=None
             ),
             MlInstruction(
                 address=None,
@@ -39,7 +41,8 @@ class TestMlInstruction(unittest.TestCase):
                 output_select=None,
                 output_enable=0,
                 save_core_selection=0,
-                comment="This has a comment!"
+                comment="This has a comment!",
+                global_command=0
             ),
             MlInstruction(
                 address=0xFF,
@@ -49,7 +52,8 @@ class TestMlInstruction(unittest.TestCase):
                 output_select=None,
                 output_enable=0,
                 save_core_selection=0,
-                comment=None
+                comment=None,
+                global_command=0
             ),
         ]
 
@@ -77,7 +81,8 @@ class TestMlInstruction(unittest.TestCase):
             output_select=0,
             output_enable=0,
             save_core_selection=0,
-            comment=None
+            comment=None,
+            global_command=0
         )
 
         self.outputter._output_instruction(instruction, self.output)

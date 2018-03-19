@@ -12,7 +12,8 @@ class TestMlInstruction(unittest.TestCase):
             output_select=None,
             output_enable=None,
             save_core_selection=None,
-            comment="This has a comment."
+            comment="This has a comment.",
+            global_command=None
         )
 
         self.assertTrue(ml.has_comment())
@@ -27,7 +28,8 @@ class TestMlInstruction(unittest.TestCase):
             output_select=None,
             output_enable=0,
             save_core_selection=0,
-            comment=None
+            comment=None,
+            global_command=0
         )
 
         self.assertFalse(ml.has_comment())
@@ -42,7 +44,8 @@ class TestMlInstruction(unittest.TestCase):
             output_select=None,
             output_enable=0,
             save_core_selection=0,
-            comment=''
+            comment='',
+            global_command=0
         )
 
         self.assertFalse(ml.has_comment())
@@ -57,7 +60,8 @@ class TestMlInstruction(unittest.TestCase):
             output_select=None,
             output_enable=0,
             save_core_selection=0,
-            comment="This has a comment!"
+            comment="This has a comment!",
+            global_command=0
         )
 
         self.assertTrue(ml.has_comment())
@@ -72,7 +76,8 @@ class TestMlInstruction(unittest.TestCase):
             output_select=0,
             output_enable=0,
             save_core_selection=0,
-            comment=None
+            comment=None,
+            global_command=0
         )
 
         self.assertTrue(ml.has_instruction())

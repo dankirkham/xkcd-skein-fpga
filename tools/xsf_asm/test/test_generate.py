@@ -35,6 +35,7 @@ class TestGenerator(unittest.TestCase):
             AsmInstruction("Constant", ['15'], None),
             AsmInstruction("CoreId", None, None),
             AsmInstruction("Count", None, None),
+            AsmInstruction("IncrementNonce", None, None),
             AsmInstruction("Load", ['2', 'Primary'], None),
             AsmInstruction("Nonce", ['3'], None),
             AsmInstruction("Read", ['15'], None),
@@ -45,6 +46,8 @@ class TestGenerator(unittest.TestCase):
             AsmInstruction("SaveComparator", None, None),
             AsmInstruction("SaveNonce", ['6'], None),
             AsmInstruction("SelectCore", None, None),
+            AsmInstruction("SelectCoreNonce", None, None),
+            AsmInstruction("Transmit", None, None),
             AsmInstruction("XOR", None, None),
         ]
 
