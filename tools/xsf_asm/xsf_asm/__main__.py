@@ -17,6 +17,12 @@ def main():
         help="output file path/name",
         metavar="output_file"
     )
+    argument_parser.add_argument(
+        "--output-format",
+        help="output format to use",
+        choices=["core_sim", "full"],
+        default="full"
+    )
     args = argument_parser.parse_args()
 
     # logging.basicConfig(level=logging.DEBUG)
@@ -28,7 +34,7 @@ def main():
     generator = generate.Generator()
     ml_instructions = generator.generate(asm_instructions)
 
-    outputter = output.Outputter()
+    outputter = output.Outputter(output_format=args.output_format)
 
     if args.o:
         output_filename = args.o

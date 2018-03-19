@@ -138,7 +138,7 @@ int main(int argc, char **argv, char **env) {
         if (instruction.length() >= 5) {
           unsigned int x;
           std::stringstream ss;
-          ss << std::hex << instruction.substr(0, 5);
+          ss << std::hex << instruction.substr(0, 6);
           ss >> x;
 
           top->instruction_i = x;
@@ -148,20 +148,20 @@ int main(int argc, char **argv, char **env) {
           top->clk_i = 0;
           top->eval();
 
-          cout << "Instruction: " << _int_to_hex(x, 5)
-               << "; Output: " << _int_to_hex(top->output_o, 4);
-
-          if (comment.length() > 0) {
-            cout << "; Comment = " << comment << endl;
-          } else {
-            cout << endl;
-          }
-
-          cout << "  RAM Address: " << _int_to_hex(top->ram_address_o, 2)
-               << "; RAM Output: " << _int_to_hex(top->ram_output_o, 4)
-               << "; RAM Input: " << _int_to_hex(top->ram_input_o, 4)
-               << "; RAM Write: " << _int_to_hex(top->ram_write_o, 1)
-               << endl;
+          // cout << "Instruction: " << _int_to_hex(x, 5)
+          //      << "; Output: " << _int_to_hex(top->output_o, 4);
+          //
+          // if (comment.length() > 0) {
+          //   cout << "; Comment = " << comment << endl;
+          // } else {
+          //   cout << endl;
+          // }
+          //
+          // cout << "  RAM Address: " << _int_to_hex(top->ram_address_o, 2)
+          //      << "; RAM Output: " << _int_to_hex(top->ram_output_o, 4)
+          //      << "; RAM Input: " << _int_to_hex(top->ram_input_o, 4)
+          //      << "; RAM Write: " << _int_to_hex(top->ram_write_o, 1)
+          //      << endl;
         }
     }
 

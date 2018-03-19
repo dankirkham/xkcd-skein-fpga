@@ -82,7 +82,7 @@ class TestMlInstruction(unittest.TestCase):
             output_enable=0,
             save_core_selection=0,
             comment=None,
-            global_command=0
+            global_command=4
         )
 
         self.outputter._output_instruction(instruction, self.output)
@@ -90,7 +90,7 @@ class TestMlInstruction(unittest.TestCase):
         lines = self.output.getvalue().split("\n")
 
         self.assertEqual(len(lines), 2)  # Last index is blank line
-        self.assertEqual(lines[0], '00000')
+        self.assertEqual(lines[0], '100000')
 
 
 if __name__ == '__main__':
