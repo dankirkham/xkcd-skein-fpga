@@ -25,6 +25,22 @@ will be saved to the Best Nonce Modules RAM.
 the bits off address. When the next nonce is compared, it will certainly be
 less than 1023.
 
+## Timing
+This shows what is happening each clock cycle.
+1. SelectCoreNonce <CoreId> - Save CoreId to Register
+2. Read BITS_OFF (4 Clocks) - Compare and Save Best Bits off to RAM (If new nonce isn't better, no other RAM operations happen after this point.)
+3. Save High CoreId to RAM
+4. Save Low CoreId to RAM
+5. Wait
+6. Read Best Nonce Low (4 Clocks) - Save to RAM
+7. Save to RAM
+8. Save to RAM
+9. Save to RAM
+10. Read Best Nonce High (4 Clocks) - Save to RAM
+11. Save to RAM
+12. Save to RAM
+13. Save to RAM
+
 ## Memory Map
 | Address (8-bit data)  | Address (16-bit data) | Size (bytes) | Description         |
 | --------------------- | --------------------- | ------------ | ------------------- |
