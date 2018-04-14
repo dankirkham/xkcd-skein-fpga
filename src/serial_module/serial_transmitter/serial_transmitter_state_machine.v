@@ -9,7 +9,8 @@ module serial_transmitter_state_machine (
   output reg address_increment_o,
   input [4:0] address_i,
   input [7:0] header_byte_i,
-  input [7:0] status_byte_i
+  input [7:0] status_byte_i,
+  output reg reset_best_nonce_module_o
 );
 
 reg [1:0] state, nextstate;
@@ -26,6 +27,7 @@ always @(*) begin
   tx_byte_o = 8'bxxxxxxxx;
   address_reset_o = 1'b0;
   address_increment_o = 1'b0;
+  reset_best_nonce_module_o = 1'b0;
 
   case (state)
     IDLE:
@@ -54,9 +56,11 @@ always @(*) begin
       end
 
     SEND_DATA:
-      if (address_i == DATA_LENGTH)
+      if (address_i == DATA_LENGTH) begin
+        reset_best_nonce_module_o = 1'b1;
+
         nextstate = IDLE;
-      else begin
+      end else begin
         if (~tx_busy_i) begin
           address_increment_o = 1'b1;
           tx_byte_o = ram_i;

@@ -26,35 +26,44 @@ int main(int argc, char **argv, char **env) {
   top->transmit_i = 0;
   top->eval();
   _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
 
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
 
   top->transmit_i = 1;
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
 
   top->transmit_i = 0;
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should be transmitting", top->new_tx_data_o == 1);
   _assert("Module should be tansmitting the header byte", top->tx_data_o == 0x9A);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
 
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should be transmitting", top->new_tx_data_o == 1);
   _assert("Module should be tansmitting the status byte", top->tx_data_o == 0xD4);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
 
   top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
   _assert("Module should be transmitting", top->new_tx_data_o == 1);
   _assert("Module should be tansmitting the RAM byte", top->tx_data_o == 0xFF);
+  _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
 
   top->tx_busy_i = 1;
   for (int i = 0; i < 10; i++) {
     top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
     _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+    _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
   }
 
   top->tx_busy_i = 0;
@@ -62,11 +71,17 @@ int main(int argc, char **argv, char **env) {
     top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
     _assert("Module should be transmitting", top->new_tx_data_o == 1);
     _assert("Module should be tansmitting the RAM byte", top->tx_data_o == 0xFF);
+    _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
   }
+
+  top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
+  _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+  _assert("Module SHOULD be reseting Best Nonce Module", top->reset_best_nonce_module_o == 1);
 
   for (int i = 0; i < 10; i++) {
     top->clk_i = 1; top->eval(); top->clk_i = 0; top->eval();
     _assert("Module should not be transmitting", top->new_tx_data_o == 0);
+    _assert("Module should not be reseting Best Nonce Module", top->reset_best_nonce_module_o == 0);
   }
 
   delete top;

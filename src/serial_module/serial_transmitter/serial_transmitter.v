@@ -10,14 +10,17 @@ module serial_transmitter (
   input [7:0] header_byte_i,
   input [7:0] status_byte_i,
 
-  input transmit_i
+  input transmit_i,
+  output reset_best_nonce_module_o
 );
 
 wire [4:0] ram_address_w;
 wire address_reset_w;
 wire address_increment_w;
+wire reset_best_nonce_module_w;
 
 assign ram_address_o = ram_address_w;
+assign reset_best_nonce_module_o = reset_best_nonce_module_w;
 
 serial_transmitter_state_machine serial_transmitter_state_machine0 (
   .clk_i(clk_i),
@@ -30,7 +33,8 @@ serial_transmitter_state_machine serial_transmitter_state_machine0 (
   .address_increment_o(address_increment_w),
   .address_i(ram_address_w),
   .header_byte_i(header_byte_i),
-  .status_byte_i(status_byte_i)
+  .status_byte_i(status_byte_i),
+  .reset_best_nonce_module_o(reset_best_nonce_module_w)
 );
 
 address_register address_register0 (
