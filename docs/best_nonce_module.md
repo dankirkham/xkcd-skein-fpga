@@ -4,8 +4,7 @@ The best nonce module will read core-specific best nonce values from the main
 bus and determine the chip-specific best nonce value. To do this, the module
 uses the same `Save Selection` signal used by the cores.
 
-The Best Nonce Module shares a block RAM with the Serial Module. Both modules
-have ready signals that lock shared data.
+The Best Nonce Module shares a block RAM with the Serial Module.
 
 ## Usage
 ### Comparison
