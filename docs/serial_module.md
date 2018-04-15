@@ -1,8 +1,7 @@
 # Serial Module
 
 The Serial Module sends and receives data to the host machine. It shares a
-block RAM with the Best Nonce Module. Both modules have ready signals that lock
-shared data.
+block RAM with the Best Nonce Module.
 
 The Serial Module is broken down into two sub-modules, one for the receiver and
 one for the transmitter.
@@ -47,6 +46,9 @@ Serial transmitter is busy sending a byte.
 ### transmit_i
 Transmit command bit. When this goes high the serial transmitter will start
 transmitting.
+
+### reset_best_nonce_module_o
+After transmitting, this signal goes high telling the Best Nonce Module to reset.
 
 ## Receiver State Machine
 
