@@ -28,13 +28,19 @@ wire best_nonce_module_save_selection_w;
 wire constants_rom_ouput_enable_w;
 wire nonce_module_ouput_enable_w;
 wire reset_best_nonce_w;
-wire nonce_module_rx_byte_w;
+wire [7:0] nonce_module_rx_byte_w;
 wire nonce_module_shift_in_w;
 wire nonce_module_ready_w;
+wire best_nonce_module_ram_write_enable_w;
+wire [3:0] best_nonce_module_ram_address_w;
+wire [15:0] best_nonce_module_ram_read_w;
+wire [15:0] best_nonce_module_ram_write_w;
+wire [4:0] serial_module_ram_address_w;
+wire [7:0] serial_module_ram_data_w;
 
 assign save_core_selection_w = instruction_i[17];
 assign write_w = instruction_i[16];
-assign address_w = instruction_i[15:8] ;
+assign address_w = instruction_i[15:8];
 assign input_select_w = instruction_i[7:6];
 assign output_select_w = instruction_i[5];
 assign output_enable_w = instruction_i[4];
@@ -44,7 +50,7 @@ wire [15:0] core0_ram_o_w;
 wire [15:0] core0_ram_i_w;
 
 global_command_decoder global_command_decoder0 (
-  .global_command_i(instruction[20:18]),
+  .global_command_i(instruction_i[20:18]),
   .increment_nonce_o(increment_nonce_w),
   .best_nonce_module_save_selection_o(best_nonce_module_save_selection_w),
   .transmit_o(transmit_w),
@@ -83,28 +89,30 @@ best_nonce_module best_nonce_module0 (
   .clk_i(clk_i),
   .rst_i(rst_i),
   .save_selection_i(best_nonce_module_save_selection_w),
-  .main_bus_i(main_bus_w),
+  .main_bus_i(main_bus_w[23:0]),
   .reset_best_nonce_i(reset_best_nonce_w),
-  .ram_i(),
-  .ram_o(),
-  .ram_address_o(),
-  .ram_write_o()
+  .ram_i(best_nonce_module_ram_read_w),
+  .ram_o(best_nonce_module_ram_write_w),
+  .ram_address_o(best_nonce_module_ram_address_w),
+  .ram_write_o(best_nonce_module_ram_write_enable_w)
 );
 
-block_ram block_ram_best_nonce (
+block_ram_tdp block_ram_best_nonce (
   .clk_i(clk_i),
-  .write_i(),
-  .data_i(),
-  .address_i(),
-  .data_o()
+  .write_i(best_nonce_module_ram_write_enable_w),
+  .data_i(best_nonce_module_ram_write_w),
+  .address_i({ 4'b0000, best_nonce_module_ram_address_w }),
+  .data_o(best_nonce_module_ram_read_w),
+  .address_2_i({ 4'b0000, serial_module_ram_address_w }),
+  .data_2_o(serial_module_ram_data_w)
 );
 
 serial_module serial_module0 (
   .clk_i(clk_i),
 
   // Block RAM
-  .ram_address_o(),
-  .ram_data_i(),
+  .ram_address_o(serial_module_ram_address_w),
+  .ram_data_i(serial_module_ram_data_w),
 
   // AVR Interface
   .tx_data_o(tx_data_o),
@@ -119,7 +127,9 @@ serial_module serial_module0 (
   .ready_o(nonce_module_ready_w),
 
   // Best Nonce Module
-  .reset_best_nonce_module_o(reset_best_nonce_w)
+  .reset_best_nonce_module_o(reset_best_nonce_w),
+
+  .transmit_i(transmit_w)
 );
 
 nonce_module nonce_module0 (
@@ -128,7 +138,7 @@ nonce_module nonce_module0 (
   .shift_in_i(nonce_module_shift_in_w),
   .ready_i(nonce_module_ready_w),
   .increment_i(increment_nonce_w),
-  .nonce_address_i(instruction[0]),
+  .nonce_address_i(instruction_i[8]),
   .output_enable_i(nonce_module_ouput_enable_w),
   .output_o(main_bus_w)
 );

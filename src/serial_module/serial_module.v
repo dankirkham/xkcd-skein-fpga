@@ -18,7 +18,10 @@ module serial_module (
   output ready_o,
 
   // Best Nonce Module
-  output reset_best_nonce_module_o
+  output reset_best_nonce_module_o,
+
+  // Processor
+  input transmit_i
 );
 
 wire [7:0] header_constant_w;
@@ -36,8 +39,8 @@ serial_transmitter serial_transmitter0 (
   .new_tx_data_o(new_tx_data_o),
   .tx_data_o(tx_data_o),
   .header_byte_i(header_constant_w),
-  .status_byte_i(),
-  .transmit_i(transmit_w),
+  .status_byte_i(8'd0), // TODO: Wire up nonce ready
+  .transmit_i(transmit_i),
   .reset_best_nonce_module_o(reset_best_nonce_module_o)
 );
 
