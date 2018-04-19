@@ -1,9 +1,14 @@
-run: obj_dir/Vblock_ram
+run: obj_dir/Vblock_ram obj_dir/Vblock_ram_tdp
 	obj_dir/Vblock_ram
+	obj_dir/Vblock_ram_tdp
 
 obj_dir/Vblock_ram: block_ram.v block_ram_test.cpp
 	verilator -Wall --cc block_ram.v --exe block_ram_test.cpp
 	make -C obj_dir -j -f Vblock_ram.mk Vblock_ram
+
+obj_dir/Vblock_ram_tdp: block_ram_tdp.v block_ram_tdp_test.cpp
+	verilator -Wall --cc block_ram_tdp.v --exe block_ram_tdp_test.cpp
+	make -C obj_dir -j -f Vblock_ram_tdp.mk Vblock_ram_tdp
 
 .PHONY: clean
 clean:
