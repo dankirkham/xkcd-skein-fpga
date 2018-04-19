@@ -15,8 +15,10 @@ On April Fool's Day 2013, the webcomic XKCD featured a dynamically updated comic
 3. Compare the output to the target number. If the output is the closest number you have to the target, send the random number to the XKCD server.
 4. Repeat
 
-This problem is one that is far more efficiently solved with parallelism. As long as workers are using unique nonces and they will not be repeating work. GPUs or FPGAs allow the use of several concurrent workers, resulting in faster and more efficient processing.
+This problem is one that is more efficiently solved with parallelism. As long as workers are using unique nonces, they will not be repeating work. GPUs and FPGAs allow the use of several concurrent workers, resulting in faster and more efficient processing.
 
 This problem is an example of proof-of-work, which is the core principle behind Bitcoin mining, as well as most other cryptocurrencies. In the case of mining, miners are hashing a block header and looking for an output that is lower than a certain amount. Doing this requires time and processing power. Bitcoin is actually where my interest in FPGAs began. When FPGA mining became prominent circa 2011, I had no idea what they were. I kept reading more about them and wanted to learn more. Eventually I decided to build this.
+
+## Processor
 
 ![Processor](./gfx/xkcd_skein_processor.png)
