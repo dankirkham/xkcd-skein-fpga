@@ -6,7 +6,7 @@ module constants_rom (
 
 reg [63:0] constants [0:57];
 
-initial $readmemh("constants.hex", constants);
+initial $readmemh("../constants_rom/constants.hex", constants);
 
 always @(*) begin
   if (output_enable_i)
