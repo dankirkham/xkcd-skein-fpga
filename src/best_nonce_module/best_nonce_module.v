@@ -39,8 +39,21 @@ best_nonce_module_register best_nonce_module_register0 (
 );
 
 always @(*) begin
-  // ram_address_o = 4'bxxxx;
-  // ram_o = 16'bxxxxxxxxxxxxxxxx;
+  case(state)
+    IDLE:
+        ram_address_o = RAM_ADDRESS_BEST_BITS_OFF;
+    BITS_OFF:
+        ram_address_o = RAM_ADDRESS_BEST_BITS_OFF;
+    SAVE_HIGH_BEST_COREID_BYTE:
+        ram_address_o = RAM_ADDRESS_BEST_CORE_ID_HIGH_WORD;
+    SAVE_LOW_BEST_COREID_BYTE:
+        ram_address_o = RAM_ADDRESS_BEST_CORE_ID_LOW_WORD;
+    default:
+        ram_address_o = state - RECEIVE_NONCE;
+  endcase
+end
+
+always @(*) begin
   ram_write_o = 1'b0;
   register_write_w = 1'b0;
 
@@ -49,13 +62,11 @@ always @(*) begin
   case(state)
     IDLE:
       if (reset_best_nonce_i) begin
-        ram_address_o = RAM_ADDRESS_BEST_BITS_OFF;
         ram_o = 16'd1023;
         ram_write_o = 1'b1;
 
         nextstate = IDLE;
       end else if (save_selection_i) begin
-        ram_address_o = RAM_ADDRESS_BEST_BITS_OFF;
         register_write_w = 1'b1;
 
         nextstate = BITS_OFF;
@@ -63,19 +74,20 @@ always @(*) begin
         nextstate = IDLE;
       end
     BITS_OFF:
-      if (main_bus_i[15:0] < ram_i) begin
-        // Nonce is better, save it
-        ram_address_o = RAM_ADDRESS_BEST_BITS_OFF;
-        ram_write_o = 1'b1;
+      begin
         ram_o = main_bus_i[15:0];
 
-        nextstate = SAVE_HIGH_BEST_COREID_BYTE;
-      end else begin
-        nextstate = IDLE;
+        if (main_bus_i[15:0] < ram_i) begin
+          // Nonce is better, save it
+          ram_write_o = 1'b1;
+
+          nextstate = SAVE_HIGH_BEST_COREID_BYTE;
+        end else begin
+          nextstate = IDLE;
+        end
       end
     SAVE_HIGH_BEST_COREID_BYTE:
       begin
-        ram_address_o = RAM_ADDRESS_BEST_CORE_ID_HIGH_WORD;
         ram_write_o = 1'b1;
         ram_o = { 8'd0, register_from_w[23:16] };
 
@@ -83,7 +95,6 @@ always @(*) begin
       end
     SAVE_LOW_BEST_COREID_BYTE:
       begin
-        ram_address_o = RAM_ADDRESS_BEST_CORE_ID_LOW_WORD;
         ram_write_o = 1'b1;
         ram_o = register_from_w[15:0];
 
@@ -95,12 +106,14 @@ always @(*) begin
       end
     default: // RECEIVE_NONCE
       if (state < RECEIVE_NONCE + NONCE_LENGTH) begin
-        ram_address_o = state - RECEIVE_NONCE;
         ram_o = main_bus_i[15:0];
         ram_write_o = 1'b1;
 
         nextstate = state + 4'd1;
       end else begin
+        ram_o = 16'bxxxxxxxxxxxxxxxx;
+        ram_write_o = 1'b0;
+
         nextstate = IDLE;
       end
   endcase
