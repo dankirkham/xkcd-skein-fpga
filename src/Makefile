@@ -1,10 +1,12 @@
-SHELL=/bin/bash
+MODULES=alu base64encoder/base64encoder base64encoder/base64encoder_x6 constants_rom core core_id_module core_sim nonce_module serial_module/serial_receiver serial_module/serial_transmitter xkcd_skein_processor
+EXECUTABLES=$(join $(MODULES),$(addprefix /obj_dir/V,$(notdir $(MODULES))))
 
-all:
-	@for a in $$(ls); do \
-		if [ -d $$a ]; then \
-			echo "processing folder $$a"; \
-			$(MAKE) -C $$a; \
-		fi; \
-	done;
-	@echo "Done!"
+test: $(EXECUTABLES)
+	$(foreach f,$^,./$f;)
+
+$(EXECUTABLES):
+	make -C $(subst obj_dir/,,$(dir $@)) $(addprefix obj_dir/,$(notdir $@))
+
+.PHONY: clean
+clean:
+	rm -rf $(addsuffix /obj_dir,$(MODULES))
