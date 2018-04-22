@@ -2,7 +2,7 @@ MODULES=alu base64encoder/base64encoder base64encoder/base64encoder_x6 constants
 EXECUTABLES=$(join $(MODULES),$(addprefix /obj_dir/V,$(notdir $(MODULES))))
 
 test: $(EXECUTABLES)
-	$(foreach f,$^,./$f;)
+	$(foreach f,$(subst obj_dir/,,$(dir $^)),make -C $f run;)
 
 $(EXECUTABLES):
 	make -C $(subst obj_dir/,,$(dir $@)) $(addprefix obj_dir/,$(notdir $@))
