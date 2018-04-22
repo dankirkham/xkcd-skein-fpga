@@ -11,7 +11,7 @@ run: obj_dir/Vcore_sim $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(add
 	obj_dir/Vcore_sim $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
 
 obj_dir/Vcore_sim: core_sim.v core_sim.cpp
-	verilator -Wall --cc core_sim.v --exe core_sim.cpp -I../alu  -I../alu/comparator -I../core_id_module -I../core -I../block_ram -GCORE_ID=4342338
+	verilator -Wall --cc core_sim.v --exe core_sim.cpp -I../alu  -I../alu/comparator -I../core_id_module -I../core -I../block_ram/block_ram -GCORE_ID=4342338
 	make -C obj_dir -j -f Vcore_sim.mk Vcore_sim
 
 $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)):

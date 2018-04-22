@@ -1,8 +1,30 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include "Vblock_ram_tdp.h"
 #include "verilated.h"
+
+int tests = 0;
+int failures = 0;
+
+void _assert(std::string assertation, bool condition) {
+  tests++;
+  cout << assertation << ": ";
+  if (condition) {
+    cout << "\033[1;35mPass!\033[0m" << endl;
+  } else {
+    cout << "\033[1;31mFail!\033[0m" << endl;
+    failures++;
+  }
+}
+
+void _report(std::string name) {
+  ofstream output_file;
+  output_file.open(name + ".txt");
+  output_file << name << ": " << std::to_string(tests) << " assertions; " << std::to_string(tests - failures) << " passed; " << std::to_string(failures) << " failed.\n";
+  output_file.close();
+}
 
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
@@ -36,11 +58,7 @@ int main(int argc, char **argv, char **env) {
   top->eval();
 
   // Check mid-cycle
-  if (top->data_o == 42) {
-    cout << "Pass!" << endl;
-  } else {
-    cout << "Fail!" << endl;
-  }
+  _assert("Read cell", top->data_o == 42);
 
   top->clk_i ^= 1;
   top->eval();
@@ -52,11 +70,7 @@ int main(int argc, char **argv, char **env) {
   top->eval();
 
   // Check mid-cycle
-  if (top->data_o == 1337) {
-    cout << "Pass!" << endl;
-  } else {
-    cout << "Fail!" << endl;
-  }
+  _assert("Read cell", top->data_o == 1337);
 
   top->clk_i ^= 1;
   top->eval();
@@ -123,11 +137,7 @@ int main(int argc, char **argv, char **env) {
     top->eval();
   }
 
-  if (!fail) {
-    cout << "Pass!" << endl;
-  } else {
-    cout << "Fail!" << endl;
-  }
+  _assert("Read all cells", !fail);
 
   // Write all cells, inverted
   for (int i = 0; i < 256; i++) {
@@ -160,13 +170,11 @@ int main(int argc, char **argv, char **env) {
     top->eval();
   }
 
-  if (!fail) {
-    cout << "Pass!" << endl;
-  } else {
-    cout << "Fail!" << endl;
-  }
+  _assert("Read all cells", !fail);
 
   delete top;
+
+  _report(argv[0]);
 
   exit(0);
 }

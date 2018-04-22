@@ -191,5 +191,10 @@ int main(int argc, char **argv, char **env) {
 
   cout << "Tests finished with " << to_string(failures) << " failures out of " << to_string(assertions) << " assertions." << endl;
 
+  ofstream output_file;
+  output_file.open((std::string)argv[0] + ".txt");
+  output_file << (std::string)argv[0] << ": " << std::to_string(assertions) << " assertions; " << std::to_string(assertions - failures) << " passed; " << std::to_string(failures) << " failed.\n";
+  output_file.close();
+
   exit(0);
 }
