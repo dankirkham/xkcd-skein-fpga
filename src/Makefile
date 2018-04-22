@@ -13,4 +13,4 @@ $(EXECUTABLES):
 
 .PHONY: clean
 clean:
-	rm -rf $(addsuffix /obj_dir,$(MODULES))
+	$(foreach f,$(MODULES),make -C $f clean;)
