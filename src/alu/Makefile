@@ -1,9 +1,20 @@
-run: obj_dir/Valu
-	obj_dir/Valu
+# --- MODULE SPECIFIC VARIABLES ---
+MODULE=alu
+SRC_DIR=..
+DEPENDENCIES= \
+	alu/comparator \
+# --- END MODULE SPECIFIC ---
 
-obj_dir/Valu: alu.v alu_test.cpp
-	verilator -Wall --cc alu.v --exe alu_test.cpp -I comparator/comparator.v
-	make -C obj_dir -j -f Valu.mk Valu
+LIB_DIR=$(SRC_DIR)/test
+
+run: obj_dir/V$(MODULE)
+	obj_dir/V$(MODULE)
+
+obj_dir/V$(MODULE): $(MODULE).v $(MODULE)_test.cpp $(LIB_DIR)/test.cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
+	mkdir -p obj_dir
+	g++ -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
+	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE)_test.cpp $(addprefix -I../,$(DEPENDENCIES)) -CFLAGS -I../$(LIB_DIR)
+	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 .PHONY: clean
 clean:

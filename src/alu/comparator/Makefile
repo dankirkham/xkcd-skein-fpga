@@ -1,9 +1,20 @@
-run: obj_dir/Vcomparator
-	obj_dir/Vcomparator
+# --- MODULE SPECIFIC VARIABLES ---
+MODULE=comparator
+SRC_DIR=../..
+DEPENDENCIES= \
 
-obj_dir/Vcomparator: comparator.v comparator_test.cpp
-	verilator -Wall --cc comparator.v --exe comparator_test.cpp
-	make -C obj_dir -j -f Vcomparator.mk Vcomparator
+# --- END MODULE SPECIFIC ---
+
+LIB_DIR=$(SRC_DIR)/test
+
+run: obj_dir/V$(MODULE)
+	obj_dir/V$(MODULE)
+
+obj_dir/V$(MODULE): $(MODULE).v $(MODULE)_test.cpp $(LIB_DIR)/test.cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
+	mkdir -p obj_dir
+	g++ -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
+	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE)_test.cpp $(addprefix -I../,$(DEPENDENCIES)) -CFLAGS -I../$(LIB_DIR)
+	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 .PHONY: clean
 clean:

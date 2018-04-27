@@ -9,20 +9,27 @@ Test::Test(std::string name) {
   module_name = name;
 }
 
-void Test::check(std::string assertation, bool condition) {
+bool Test::check(std::string assertation, bool condition) {
   tests++;
   std::cout << assertation << ": ";
+
   if (condition) {
     std::cout << "\033[1;35mPass!\033[0m" << std::endl;
+
+    return true;
   } else {
     std::cout << "\033[1;31mFail!\033[0m" << std::endl;
     failures++;
+
+    return false;
   }
 }
 
 void Test::report() {
   std::ofstream output_file;
+
   output_file.open(module_name + ".txt");
+
   output_file << module_name
               << ": "
               << std::to_string(tests)
@@ -31,5 +38,6 @@ void Test::report() {
               << " passed; "
               << std::to_string(failures)
               << " failed.\n";
+
   output_file.close();
 }

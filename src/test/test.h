@@ -11,7 +11,7 @@ private:
 
 public:
   Test(std::string module_name);
-  void check(std::string assertation, bool condition);
+  bool check(std::string assertation, bool condition);
   void report();
 };
 

@@ -1,9 +1,20 @@
-run: obj_dir/Vbase64encoder
-	obj_dir/Vbase64encoder
+# --- MODULE SPECIFIC VARIABLES ---
+MODULE=base64encoder
+SRC_DIR=../..
+DEPENDENCIES= \
 
-obj_dir/Vbase64encoder: base64encoder.v base64encoder_test.cpp
-	verilator -Wall --cc base64encoder.v --exe base64encoder_test.cpp
-	make -C obj_dir -j -f Vbase64encoder.mk Vbase64encoder
+# --- END MODULE SPECIFIC ---
+
+LIB_DIR=$(SRC_DIR)/test
+
+run: obj_dir/V$(MODULE)
+	obj_dir/V$(MODULE)
+
+obj_dir/V$(MODULE): $(MODULE).v $(MODULE)_test.cpp $(LIB_DIR)/test.cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
+	mkdir -p obj_dir
+	g++ -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
+	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE)_test.cpp $(addprefix -I../,$(DEPENDENCIES)) -CFLAGS -I../$(LIB_DIR)
+	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 .PHONY: clean
 clean:

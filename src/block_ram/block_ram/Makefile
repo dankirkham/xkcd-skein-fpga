@@ -1,9 +1,19 @@
-run: obj_dir/Vblock_ram
-	obj_dir/Vblock_ram
+# --- MODULE SPECIFIC VARIABLES ---
+MODULE=block_ram
+SRC_DIR=../..
+DEPENDENCIES=
+# --- END MODULE SPECIFIC ---
 
-obj_dir/Vblock_ram: block_ram.v block_ram_test.cpp
-	verilator -Wall --cc block_ram.v --exe block_ram_test.cpp
-	make -C obj_dir -j -f Vblock_ram.mk Vblock_ram
+LIB_DIR=$(SRC_DIR)/test
+
+run: obj_dir/V$(MODULE)
+	obj_dir/V$(MODULE)
+
+obj_dir/V$(MODULE): $(MODULE).v $(MODULE)_test.cpp $(LIB_DIR)/test.cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
+	mkdir -p obj_dir
+	g++ -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
+	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE)_test.cpp $(addprefix -I../,$(DEPENDENCIES)) -CFLAGS -I../$(LIB_DIR)
+	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 .PHONY: clean
 clean:
