@@ -1,5 +1,4 @@
-PYTHON=python
-XSF_ASM=xsf_asm
+MODULE=core_sim
 
 DEPENDENCIES= \
 	alu \
@@ -28,15 +27,17 @@ ASM_FILES= \
 	unselected_core_test.asm \
 	xor_test.asm \
 
+PYTHON=python
+XSF_ASM=xsf_asm
 TEST_DIR=test
 TEST_BUILD_DIR=$(TEST_DIR)/build
 
-run: obj_dir/Vcore_sim $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
-	obj_dir/Vcore_sim $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
+run: obj_dir/V$(MODULE) $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
+	obj_dir/V$(MODULE) $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
 
-obj_dir/Vcore_sim: core_sim.v core_sim.cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
-	verilator -Wall --cc core_sim.v --exe core_sim.cpp $(addprefix -I../,$(DEPENDENCIES)) -GCORE_ID=4342338
-	make -C obj_dir -j -f Vcore_sim.mk Vcore_sim
+obj_dir/V$(MODULE): $(MODULE).v $(MODULE).cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
+	verilator -Wall --cc $(MODULE).v --exe $(MODULE).cpp $(addprefix -I../,$(DEPENDENCIES)) -GCORE_ID=4342338
+	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)):
 	$(PYTHON) $(TEST_DIR)/$(subst .ml,.py,$(notdir $@))
