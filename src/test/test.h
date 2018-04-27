@@ -3,7 +3,17 @@
 
 #include <string>
 
-void _assert(std::string assertation, bool condition);
-void _report(std::string name);
+class Test {
+private:
+  int tests;
+  int failures;
+  std::string module_name;
+
+public:
+  Test(std::string module_name);
+  void check(std::string assertation, bool condition);
+  void report();
+};
+
 
 #endif

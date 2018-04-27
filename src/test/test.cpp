@@ -3,10 +3,13 @@
 #include <fstream>
 #include <string>
 
-int tests = 0;
-int failures = 0;
+Test::Test(std::string name) {
+  tests = 0;
+  failures = 0;
+  module_name = name;
+}
 
-void _assert(std::string assertation, bool condition) {
+void Test::check(std::string assertation, bool condition) {
   tests++;
   std::cout << assertation << ": ";
   if (condition) {
@@ -17,9 +20,16 @@ void _assert(std::string assertation, bool condition) {
   }
 }
 
-void _report(std::string name) {
+void Test::report() {
   std::ofstream output_file;
-  output_file.open(name + ".txt");
-  output_file << name << ": " << std::to_string(tests) << " assertions; " << std::to_string(tests - failures) << " passed; " << std::to_string(failures) << " failed.\n";
+  output_file.open(module_name + ".txt");
+  output_file << module_name
+              << ": "
+              << std::to_string(tests)
+              << " assertions; "
+              << std::to_string(tests - failures)
+              << " passed; "
+              << std::to_string(failures)
+              << " failed.\n";
   output_file.close();
 }
