@@ -4,30 +4,11 @@
 
 #include "Vcore.h"
 #include "verilated.h"
-
-int tests = 0;
-int failures = 0;
-
-void _assert(std::string assertation, bool condition) {
-  tests++;
-  cout << assertation << ": ";
-  if (condition) {
-    cout << "\033[1;35mPass!\033[0m" << endl;
-  } else {
-    cout << "\033[1;31mFail!\033[0m" << endl;
-    failures++;
-  }
-}
-
-void _report(std::string name) {
-  ofstream output_file;
-  output_file.open(name + ".txt");
-  output_file << name << ": " << std::to_string(tests) << " assertions; " << std::to_string(tests - failures) << " passed; " << std::to_string(failures) << " failed.\n";
-  output_file.close();
-}
+#include "test.h"
 
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
+  Test test = Test(argv[0]);
 
   Vcore* top = new Vcore;
 
@@ -44,7 +25,7 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should not be enabled", top->output_o != 0xDEADBEEF);
+  test.check("Output should not be enabled", top->output_o != 0xDEADBEEF);
 
   // Output Primary Register
   top->input_i = 0;
@@ -56,7 +37,7 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should not be valid", top->output_o != 0xDEADBEEF);
+  test.check("Output should not be valid", top->output_o != 0xDEADBEEF);
 
   // Select the Core
   top->input_i = 42;
@@ -70,7 +51,7 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should not be enabled", top->output_o != 0xDEADBEEF);
+  test.check("Output should not be enabled", top->output_o != 0xDEADBEEF);
 
   // Output Primary Register
   top->input_i = 0;
@@ -84,7 +65,7 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should be enabled and valid", top->output_o == 0xDEADBEEF);
+  test.check("Output should be enabled and valid", top->output_o == 0xDEADBEEF);
 
   // Pass Through RAM Value
   top->output_select_i = 1;
@@ -96,7 +77,7 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should be RAM input", top->output_o == 0xFACE);
+  test.check("Output should be RAM input", top->output_o == 0xFACE);
 
   // Save RAM value to secondary register
   top->output_select_i = 0;
@@ -121,7 +102,7 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should be XOR of Primary and Secondary Register", top->output_o == (0xDEADBEEF ^ 0xFACE));
+  test.check("Output should be XOR of Primary and Secondary Register", top->output_o == (0xDEADBEEF ^ 0xFACE));
 
   // Output Primary Register
   top->input_i = 0;
@@ -133,11 +114,11 @@ int main(int argc, char **argv, char **env) {
   top->clk_i = 0;
   top->eval();
 
-  _assert("Output should be XOR of Primary and Secondary Register", top->output_o == (0xDEADBEEF ^ 0xFACE));
+  test.check("Output should be XOR of Primary and Secondary Register", top->output_o == (0xDEADBEEF ^ 0xFACE));
 
   delete top;
 
-  _report(argv[0]);
+  test.report();
 
   exit(0);
 }

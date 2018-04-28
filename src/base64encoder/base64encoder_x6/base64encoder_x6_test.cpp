@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
-  Test test = test(argv[0]);
+  Test test = Test(argv[0]);
 
   Vbase64encoder_x6* top = new Vbase64encoder_x6;
 

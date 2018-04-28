@@ -3,10 +3,10 @@
 #include <sstream>
 #include <string>
 #include <vector>
-// #include <stringstream>
 
 #include "Vxkcd_skein_processor.h"
 #include "verilated.h"
+#include "test.h"
 
 typedef struct {
   std::string filename;
@@ -26,17 +26,6 @@ std::string _int_to_hex(QData addr, int pad_len) {
   s.insert(0, "0x");
 
   return s;
-}
-
-bool _assert(std::string assertion, bool condition) {
-  cout << assertion << ": ";
-  if (condition) {
-    cout << "\033[1;35mPass!\033[0m" << endl;
-    return true;
-  } else {
-    cout << "\033[1;31mFail!\033[0m" << endl;
-    return false;
-  }
 }
 
 uint64_t _parse_hex_integer_string(std::string s) {
@@ -86,6 +75,7 @@ bool _parse_assert_directive(std::string comment, test_result_t* tr) {
 
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
+  Test test = Test(argv[0]);
 
   int failures = 0;
   int assertions = 0;

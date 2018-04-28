@@ -1,10 +1,10 @@
-run: obj_dir/Vcore
-	obj_dir/Vcore
+MODULE=core
+SRC_DIR=..
+DEPENDENCIES= \
+	alu \
+	alu/comparator \
+	core_id_module \
 
-obj_dir/Vcore: core.v core_test.cpp
-	verilator -Wall --cc core.v --exe core_test.cpp -GCORE_ID=42 -I../alu  -I../alu/comparator -I../core_id_module
-	make -C obj_dir -j -f Vcore.mk Vcore
+VERILATOR_FLAGS= -GCORE_ID=42
 
-.PHONY: clean
-clean:
-	rm -rf obj_dir
+include $(SRC_DIR)/module.mk
