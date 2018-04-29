@@ -7,6 +7,7 @@
 
 #include "Vcore_sim.h"
 #include "verilated.h"
+#include "test.h"
 
 typedef struct {
   std::string filename;
@@ -26,17 +27,6 @@ std::string _int_to_hex(QData addr, int pad_len) {
   s.insert(0, "0x");
 
   return s;
-}
-
-bool _assert(std::string assertion, bool condition) {
-  cout << assertion << ": ";
-  if (condition) {
-    cout << "\033[1;35mPass!\033[0m" << endl;
-    return true;
-  } else {
-    cout << "\033[1;31mFail!\033[0m" << endl;
-    return false;
-  }
 }
 
 uint64_t _parse_hex_integer_string(std::string s) {
@@ -86,9 +76,8 @@ bool _parse_assert_directive(std::string comment, test_result_t* tr) {
 
 int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
+  Test test = Test(argv[0]);
 
-  int failures = 0;
-  int assertions = 0;
   std::vector<test_result_t> results;
 
   for (int file_index = 1; file_index < argc; file_index++) {
@@ -123,10 +112,7 @@ int main(int argc, char **argv, char **env) {
 
         test_result_t tr;
         if (_parse_assert_directive(comment, &tr)) {
-          assertions++;
-          if (!_assert(_int_to_hex(tr.expected, 4) + " == " + _int_to_hex(top->output_o, 4), tr.expected == top->output_o)) {
-            failures++;
-
+          if (!test.check(_int_to_hex(tr.expected, 4) + " == " + _int_to_hex(top->output_o, 4), tr.expected == top->output_o)) {
             tr.actual = top->output_o;
             tr.filename = argv[file_index];
             tr.line = std::to_string(line_counter);
@@ -189,12 +175,7 @@ int main(int argc, char **argv, char **env) {
     cout << endl << endl;
   }
 
-  cout << "Tests finished with " << to_string(failures) << " failures out of " << to_string(assertions) << " assertions." << endl;
-
-  ofstream output_file;
-  output_file.open((std::string)argv[0] + ".txt");
-  output_file << (std::string)argv[0] << ": " << std::to_string(assertions) << " assertions; " << std::to_string(assertions - failures) << " passed; " << std::to_string(failures) << " failed.\n";
-  output_file.close();
+  test.report();
 
   exit(0);
 }

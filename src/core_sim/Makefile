@@ -1,4 +1,7 @@
 MODULE=core_sim
+SRC_DIR=..
+
+VERILATOR_FLAGS= -GCORE_ID=4342338
 
 DEPENDENCIES= \
 	alu \
@@ -27,6 +30,8 @@ ASM_FILES= \
 	unselected_core_test.asm \
 	xor_test.asm \
 
+LIB_DIR=$(SRC_DIR)/test
+
 PYTHON=python
 XSF_ASM=xsf_asm
 TEST_DIR=test
@@ -35,8 +40,10 @@ TEST_BUILD_DIR=$(TEST_DIR)/build
 run: obj_dir/V$(MODULE) $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
 	obj_dir/V$(MODULE) $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)) $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml))
 
-obj_dir/V$(MODULE): $(MODULE).v $(MODULE).cpp $(addsuffix /*.v,$(addprefix ../,$(DEPENDENCIES)))
-	verilator -Wall --cc $(MODULE).v --exe $(MODULE).cpp $(addprefix -I../,$(DEPENDENCIES)) -GCORE_ID=4342338
+obj_dir/V$(MODULE): $(MODULE).v $(MODULE).cpp $(LIB_DIR)/test.cpp
+	mkdir -p obj_dir
+	g++ -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
+	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE).cpp $(addprefix -I$(SRC_DIR)/,$(DEPENDENCIES)) $(VERILATOR_FLAGS) -CFLAGS -I../$(LIB_DIR)
 	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)):
