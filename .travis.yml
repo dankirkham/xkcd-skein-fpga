@@ -9,7 +9,7 @@ compiler:
   - gcc
 
 install:
-  - cd tools/xsf_asm && sudo python3 setup.py install
+  - cd $TRAVIS_BUILD_DIR/tools/xsf_asm && sudo python3 setup.py install
 
 script:
-  - cd src && make
+  - cd $TRAVIS_BUILD_DIR/src && make
