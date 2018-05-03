@@ -47,10 +47,12 @@ obj_dir/V$(MODULE): $(MODULE).v $(MODULE).cpp $(LIB_DIR)/test.cpp
 	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 $(addprefix $(TEST_BUILD_DIR)/,$(PY_FILES:.py=.ml)):
+	mkdir -p $(TEST_BUILD_DIR)
 	$(PYTHON) $(TEST_DIR)/$(subst .ml,.py,$(notdir $@))
 	$(XSF_ASM) -o $@ $(subst .ml,.asm,$@)
 
 $(addprefix $(TEST_BUILD_DIR)/,$(ASM_FILES:.asm=.ml)):
+	mkdir -p $(TEST_BUILD_DIR)
 	$(XSF_ASM) -o $@ $(TEST_DIR)/$(subst .ml,.asm,$(notdir $@))
 
 .PHONY: clean
@@ -58,8 +60,10 @@ clean:	clean-test clean-verilator
 
 .PHONY: clean-test
 clean-test:
-	rm -f test/build/*
+	rm -f $(TEST_BUILD_DIR)/*
+	rmdir $(TEST_BUILD_DIR)
 
 .PHONY: clean-verilator
 clean-verilator:
 	rm -f obj_dir/*
+	rmdir obj_dir
