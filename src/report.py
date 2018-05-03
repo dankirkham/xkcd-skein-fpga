@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import re
+import sys
 
 def main():
     parser = argparse.ArgumentParser()
@@ -14,8 +15,11 @@ def main():
     passed = 0
     failed = 0
 
+    print("-------------------- TEST RESULTS --------------------")
+
     report = open(args.report, 'r')
     for line in report:
+        sys.stdout.write(line)
         match = pattern.search(line)
 
         assertions += int(match.group(1))
@@ -25,9 +29,12 @@ def main():
     report.close()
 
     report = open(args.report, 'a')
-    report.write('TOTAL: {} assertions; {} passed; {} failed.\n'.format(assertions, passed, failed))
+    total_string = 'TOTAL: {} assertions; {} passed; {} failed.\n'.format(assertions, passed, failed)
+    report.write(total_string)
+    sys.stdout.write(total_string)
     report.close()
 
+    sys.exit(1) if failed > 0 else sys.exit(0)
 
 if __name__ == "__main__":
     main()

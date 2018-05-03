@@ -25,8 +25,6 @@ test: $(EXECUTABLES)
 	mkdir -pv $(BUILD_DIR)
 	cat $(REPORTS) > $(BUILD_DIR)/$(REPORT)
 	./report.py $(BUILD_DIR)/$(REPORT)
-	@echo -------------------- TEST RESULTS --------------------
-	@cat $(BUILD_DIR)/$(REPORT)
 
 $(EXECUTABLES):
 	make -C $(subst obj_dir/,,$(dir $@)) $(addprefix obj_dir/,$(notdir $@))
