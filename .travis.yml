@@ -1,7 +1,7 @@
 sudo: required
 before_install:
   - sudo apt-get update
-  - sudo apt-get install verilator python3.6
+  - sudo apt-get install verilator python3.5
 
 language: cpp
 
@@ -9,7 +9,7 @@ compiler:
   - gcc
 
 install:
-  - cd tools/xsf_asm && sudo python3.6 setup.py install
+  - cd tools/xsf_asm && sudo python3.5 setup.py install
 
 script:
   - cd src && make
