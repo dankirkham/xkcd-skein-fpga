@@ -10,7 +10,7 @@ x1 = 0xe94a5b59a1742100
 expected_y0 = 0x663e8257025ed6b3
 expected_y1 = 0xf29b37cd151cc6bd
 
-f = open("test/build/mix_test.asm", 'w')
+f = open("test/build/mix_test.asm", 'w+')
 
 sg = SkeinGenerator(f)
 

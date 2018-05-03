@@ -11,7 +11,7 @@ best_nonce = 54
 best_bits_off = 56
 new_nonce = 57
 
-f = open("test/build/multi_test.asm", 'w')
+f = open("test/build/multi_test.asm", 'w+')
 
 sg = SkeinGenerator(f)
 

@@ -1,4 +1,4 @@
-f = open('test/build/bit_counter_test.asm', 'w')
+f = open('test/build/bit_counter_test.asm', 'w+')
 
 f.write("// CoreSimInput 4342338\n")
 f.write("SelectCore // Select the core\n\n")

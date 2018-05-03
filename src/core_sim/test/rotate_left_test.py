@@ -2,7 +2,7 @@ def rotate_left(x, bits):
     return (((input_value << bits) | input_value >> 64 - bits) >> 48) & 0xFFFF
 
 
-f = open('test/build/rotate_left_test.asm', 'w')
+f = open('test/build/rotate_left_test.asm', 'w+')
 
 input_value = 0x76A9CEF522C494EB
 address = 5

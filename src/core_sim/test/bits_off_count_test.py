@@ -22,7 +22,7 @@ hash_result = [
     0x71802626662ab09c
 ]
 
-f = open("test/build/bits_off_count_test.asm", 'w')
+f = open("test/build/bits_off_count_test.asm", 'w+')
 
 sg = SkeinGenerator(f)
 

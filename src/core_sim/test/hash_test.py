@@ -25,7 +25,7 @@ expected_value = [
     0x994ca58ddec3d814
 ]
 
-f = open("test/build/hash_test.asm", 'w')
+f = open("test/build/hash_test.asm", 'w+')
 
 sg = SkeinGenerator(f)
 

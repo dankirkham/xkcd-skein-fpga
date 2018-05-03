@@ -23,7 +23,7 @@ expected_value = [
     0x1de0536e8682e539
 ]
 
-f = open("test/build/subkey_test.asm", 'w')
+f = open("test/build/subkey_test.asm", 'w+')
 
 sg = SkeinGenerator(f)
 
