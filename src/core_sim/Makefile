@@ -32,7 +32,7 @@ ASM_FILES= \
 
 LIB_DIR=$(SRC_DIR)/test
 
-PYTHON=python
+PYTHON=python3
 XSF_ASM=xsf_asm
 TEST_DIR=test
 TEST_BUILD_DIR=$(TEST_DIR)/build
