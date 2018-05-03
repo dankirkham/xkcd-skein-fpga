@@ -1,12 +1,12 @@
 sudo: required
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install verilator python3 python3-setuptools
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq verilator python3 python3-setuptools
 
 language: cpp
 
 compiler:
-  - gcc
+  - clang
 
 install:
   - cd $TRAVIS_BUILD_DIR/tools/xsf_asm && sudo python3 setup.py install
