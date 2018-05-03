@@ -1,0 +1,15 @@
+sudo: required
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install verilator
+
+language: cpp
+
+compiler:
+  - gcc
+
+install:
+  - cd tools/xsf_asm && python setup.py install
+
+script:
+  - cd src && make
