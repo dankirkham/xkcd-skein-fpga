@@ -46,7 +46,7 @@ def main():
         else:
             output_filename = args.input_file + '.ml'
 
-    f = open(output_filename, "w")
+    f = open(output_filename, "w+")
 
     outputter.output(ml_instructions, f)
 
