@@ -20,3 +20,4 @@ install:
 
 script:
   - cd $TRAVIS_BUILD_DIR/src && make
+  - cd $TRAVIS_BUILD_DIR/tools/xsf_asm && python3 -m unittest discover
