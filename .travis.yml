@@ -4,8 +4,8 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq python3 python3-setuptools
   - wget https://github.com/sifive/verilator/releases/download/3.922-0sifive1/verilator_3.922-0sifive1_amd64.deb
-		- sudo dpkg -i verilator_3.922-0sifive1_amd64.deb
-		- sudo apt-get install -f
+  - sudo dpkg -i verilator_3.922-0sifive1_amd64.deb
+  - sudo apt-get install -f
 
 language: cpp
 
