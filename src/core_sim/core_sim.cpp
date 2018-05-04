@@ -18,9 +18,9 @@ typedef struct {
 } test_result_t;
 
 std::string _int_to_hex(QData addr, int pad_len) {
-  stringstream ss;
-  ss << hex << addr;
-  string s = ss.str();
+  std::stringstream ss;
+  ss << std::hex << addr;
+  std::string s = ss.str();
   for (int n = s.length(); n < pad_len; n++)
     s.insert(0, "0");
 
@@ -84,16 +84,16 @@ int main(int argc, char **argv, char **env) {
     Vcore_sim* top = new Vcore_sim;
     top->clk_i = 0;
 
-    ifstream ml_file;
+    std::ifstream ml_file;
     ml_file.open(argv[file_index]);
 
     int line_counter = 0;
-    for(string line; getline(ml_file, line); )
+    for(std::string line; getline(ml_file, line); )
     {
       line_counter++;
 
-        string instruction = line;
-        string comment;
+        std::string instruction = line;
+        std::string comment;
 
         for (int i = 0; i < line.length(); i++) {
           if ((line[i] == '/') && (line[i+1] == '/')) {
@@ -156,23 +156,23 @@ int main(int argc, char **argv, char **env) {
   }
 
   if (results.size() > 0) {
-    cout << endl << endl;
-    cout << "----------------------------------------" << endl;
-    cout << "Failures:" << endl;
-    cout << "----------------------------------------" << endl;
+    std::cout << std::endl << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+    std::cout << "Failures:" << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
 
     for (int i = 0; i < results.size(); i++) {
-      cout << to_string(i + 1) << ". " << results[i].filename << ":"
-           << results[i].line << ": " << endl;
+      std::cout << std::to_string(i + 1) << ". " << results[i].filename << ":"
+                << results[i].line << ": " << std::endl;
 
       if (results[i].assertion.length() > 0)
-        cout << "  \"" << results[i].assertion << '"' << endl;
+        std::cout << "  \"" << results[i].assertion << '"' << std::endl;
 
-      cout << "  Expected " << _int_to_hex(results[i].actual, 4)
-           << " to be " << _int_to_hex(results[i].expected, 4) << endl;
+      std::cout << "  Expected " << _int_to_hex(results[i].actual, 4)
+                << " to be " << _int_to_hex(results[i].expected, 4) << std::endl;
     }
 
-    cout << endl << endl;
+    std::cout << std::endl << std::endl;
   }
 
   test.report();

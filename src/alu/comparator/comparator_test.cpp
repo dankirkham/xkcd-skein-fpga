@@ -27,10 +27,10 @@ int main(int argc, char **argv, char **env) {
 
       if (expected_value != actual_value) {
         pass = false;
-        cout << "Failure: " << endl;
-        cout << "  bit_counter_register_i == " << std::to_string(top->bit_counter_register_i) << endl;
-        cout << "  comparator_register_i ==  " << std::to_string(top->comparator_register_i) << endl;
-        cout << "  output value ==           " << (top->select_o ? "True" : "False") << endl;
+        std::cout << "Failure: " << std::endl;
+        std::cout << "  bit_counter_register_i == " << std::to_string(top->bit_counter_register_i) << std::endl;
+        std::cout << "  comparator_register_i ==  " << std::to_string(top->comparator_register_i) << std::endl;
+        std::cout << "  output value ==           " << (top->select_o ? "True" : "False") << std::endl;
       }
     }
   }

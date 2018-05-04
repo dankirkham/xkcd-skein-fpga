@@ -14,7 +14,6 @@ int main(int argc, char **argv, char **env) {
 
   top->address_i = 0x18;
   top->output_enable_i = 0;
-  cout << top->constant_o << endl;
   test.check("Key Extend Word is not output", top->constant_o != 0x1BD11BDAA9FC1A22);
 
   top->address_i = 0x18;

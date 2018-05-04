@@ -11,7 +11,7 @@ void edge(Vblock_ram_test* top) {
 }
 
 void read_write_test(Test test) {
-  cout << " * Read/Write Test" << endl;
+  std::cout << " * Read/Write Test" << std::endl;
   Vblock_ram_test* top = new Vblock_ram_test;
 
   top->clk_i = 0;
@@ -147,7 +147,7 @@ void read_write_test(Test test) {
 }
 
 void bad_header_test(Test test) {
-  cout << " * Bad Header Test" << endl;
+  std::cout << " * Bad Header Test" << std::endl;
   Vblock_ram_test* top = new Vblock_ram_test;
 
   top->clk_i = 0;
