@@ -13,7 +13,7 @@ before_install:
 language: cpp
 
 compiler:
-  - clang
+  - gcc
 
 install:
   - cd $TRAVIS_BUILD_DIR/tools/xsf_asm && sudo python3 setup.py install
