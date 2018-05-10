@@ -5,8 +5,8 @@ run: obj_dir/V$(MODULE)
 
 obj_dir/V$(MODULE): $(MODULE).v $(MODULE)_test.cpp $(LIB_DIR)/test.cpp
 	mkdir -p obj_dir
-	clang++ -std=c++11 -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
-	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE)_test.cpp $(addprefix -I$(SRC_DIR)/,$(DEPENDENCIES)) $(VERILATOR_FLAGS) -CFLAGS -I../$(LIB_DIR) -CFLAGS -std=c++11
+	clang++ -c $(LIB_DIR)/test.cpp -I$(LIB_DIR) -o obj_dir/test.o
+	verilator -Wall --cc $(MODULE).v --exe test.o $(MODULE)_test.cpp $(addprefix -I$(SRC_DIR)/,$(DEPENDENCIES)) $(VERILATOR_FLAGS) -CFLAGS -I../$(LIB_DIR)
 	make -C obj_dir -j -f V$(MODULE).mk V$(MODULE)
 
 .PHONY: clean
