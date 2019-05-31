@@ -129,9 +129,9 @@ int main(int argc, char **argv, char **env) {
 
           top->instruction_i = x;
 
-          top->clk_i = 1;
-          top->eval();
           top->clk_i = 0;
+          top->eval();
+          top->clk_i = 1;
           top->eval();
 
           // cout << "Instruction: " << _int_to_hex(x, 5)
