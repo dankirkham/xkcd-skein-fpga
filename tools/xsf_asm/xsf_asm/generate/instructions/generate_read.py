@@ -11,11 +11,11 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
         ram_write=0,
         alu_opcode=None,
         input_select=None,
-        output_select=1,
-        output_enable=1,
-        save_core_selection=0,
+        output_select=None,
+        output_enable=None,
+        save_core_selection=None,
         comment=asm.comment,
-        global_command=0
+        global_command=None
     ))
 
     instructions.append(MlInstruction(
