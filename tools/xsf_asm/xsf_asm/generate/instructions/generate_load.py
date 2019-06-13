@@ -8,7 +8,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     register = asm.operands[1]
 
     instructions.append(MlInstruction(
-        address=None,
+        address=address * 4 + 3,
         ram_write=0,
         alu_opcode=0x6,
         input_select=None,
@@ -32,7 +32,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=None,
+        address=address * 4 + 2,
         ram_write=0,
         alu_opcode=0x6,
         input_select=None,
@@ -56,7 +56,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=None,
+        address=address * 4 + 1,
         ram_write=0,
         alu_opcode=0x6,
         input_select=None,
@@ -80,7 +80,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=None,
+        address=address * 4,
         ram_write=0,
         alu_opcode=0x6,
         input_select=None,
