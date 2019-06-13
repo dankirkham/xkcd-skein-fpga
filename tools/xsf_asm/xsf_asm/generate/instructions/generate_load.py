@@ -20,7 +20,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4 + 3,
+        address=None,
         ram_write=0,
         alu_opcode=0x1 if register == "Primary" else 0x5,
         input_select=1,
@@ -44,7 +44,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4 + 2,
+        address=None,
         ram_write=0,
         alu_opcode=0x1 if register == "Primary" else 0x5,
         input_select=1,
@@ -68,7 +68,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4 + 1,
+        address=None,
         ram_write=0,
         alu_opcode=0x1 if register == "Primary" else 0x5,
         input_select=1,
@@ -92,7 +92,7 @@ def generate_load(asm: AsmInstruction, instructions: List[MlInstruction]):
     ))
 
     instructions.append(MlInstruction(
-        address=address * 4,
+        address=None,
         ram_write=0,
         alu_opcode=0x1 if register == "Primary" else 0x5,
         input_select=1,
