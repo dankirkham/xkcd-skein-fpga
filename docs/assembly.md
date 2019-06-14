@@ -88,14 +88,14 @@ Implementation:
 
 | Instruction | Address Bus        | RAM Write | ALU Opcode | Input Select | Output Select | Output Enable | Save Core Selection | Global Command |
 | ----------- | ------------------ | --------- | ---------- | ------------ | ------------- | ------------- | ------------------- | -------------- |
-| 1           | Don't Care         | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
-| 2           | \<Address> * 4 + 3 | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
-| 3           | Don't Care         | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
-| 4           | \<Address> * 4 + 2 | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
-| 5           | Don't Care         | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
-| 6           | \<Address> * 4 + 1 | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
-| 7           | Don't Care         | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
-| 8           | \<Address> * 4     | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
+| 1           | \<Address> * 4 + 3 | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
+| 2           | Don't Care         | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
+| 3           | \<Address> * 4 + 2 | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
+| 4           | Don't Care         | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
+| 5           | \<Address> * 4 + 1 | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
+| 6           | Don't Care         | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
+| 7           | \<Address> * 4     | 0         | 0x6        | Don't Care   | Don't Care    | 0             | 0                   | 0              |
+| 8           | Don't Care         | 0         | 0x1 or 0x5 | 01           | Don't Care    | 0             | 0                   | 0              |
 
 ### Nonce
 Loads a 64-bit nonce word at the specified address on the Nonce Module and stores it in the Primary Register.
@@ -109,7 +109,7 @@ Implementation:
 | 1           | \<Address>         | 0         | 0x0        | 00           | Don't Care    | 0             | 0                   | 5              |
 
 ### Read
-Outputs RAM value at specified address to the main bus.
+Outputs RAM value at specified address to the main bus. Note: This repeats `\<Address> * 4 + 3` twice on the address bus because of the way Core Sim works. Core Sim expects that address to still be output by RAM when checking a CoreSimAssert statement. This will not affect the real core.
 
 Syntax: `Read <Address>`
 
@@ -117,10 +117,11 @@ Implementation:
 
 | Instruction   | Address Bus            | RAM Write | ALU Opcode | Input Select | Output Select | Output Enable | Save Core Selection | Global Command |
 | ------------- | ---------------------- | --------- | ---------- | ------------ | ------------- | ------------- | ------------------- | -------------- |
-| 1             | \<Address> * 4         | 0         | Don't Care | Don't Care   | 1             | 1             | 0                   | 0              |
+| 1             | \<Address> * 4         | 0         | Don't Care | Don't Care   | Don't Care    | 0             | 0                   | 0              |
 | 2             | \<Address> * 4 + 1     | 0         | Don't Care | Don't Care   | 1             | 1             | 0                   | 0              |
 | 3             | \<Address> * 4 + 2     | 0         | Don't Care | Don't Care   | 1             | 1             | 0                   | 0              |
 | 4             | \<Address> * 4 + 3     | 0         | Don't Care | Don't Care   | 1             | 1             | 0                   | 0              |
+| 5             | \<Address> * 4 + 3     | 0         | Don't Care | Don't Care   | 1             | 1             | 0                   | 0              |
 
 ### RotateLeft
 Rotates left the value in the Primary Register and stores it to RAM. Since the ALU can rotate only 16-bits or 1-bit at a time, the machine-level implementation of this instruction can vary in length. For this reason, the "Instruction" column is replaced with a "Repetitions" column. **Caution:** The instruction voids the value stored in the Primary Register and Bit Counter Register. This is because the 16-bit rotations are actually RAM address manipulations and because of the "Rotate Primary Register Left 1-bit and Increment Bit Counter" ALU operation, respectively.

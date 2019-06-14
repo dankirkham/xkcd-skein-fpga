@@ -11,8 +11,8 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
         ram_write=0,
         alu_opcode=None,
         input_select=None,
-        output_select=1,
-        output_enable=1,
+        output_select=None,
+        output_enable=0,
         save_core_selection=0,
         comment=asm.comment,
         global_command=0
@@ -32,6 +32,18 @@ def generate_read(asm: AsmInstruction, instructions: List[MlInstruction]):
 
     instructions.append(MlInstruction(
         address=address * 4 + 2,
+        ram_write=0,
+        alu_opcode=None,
+        input_select=None,
+        output_select=1,
+        output_enable=1,
+        save_core_selection=0,
+        comment=None,
+        global_command=0
+    ))
+
+    instructions.append(MlInstruction(
+        address=address * 4 + 3,
         ram_write=0,
         alu_opcode=None,
         input_select=None,
