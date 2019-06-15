@@ -13,7 +13,8 @@ MODULES= \
 	nonce_module \
 	serial_module/serial_receiver \
 	serial_module/serial_transmitter \
-	state_machine/instuction_state_machine/read_state_machine \
+	state_machine/instruction_state_machine/add_state_machine \
+	state_machine/instruction_state_machine/read_state_machine \
 	# xkcd_skein_processor
 
 EXECUTABLES=$(join $(MODULES),$(addprefix /obj_dir/V,$(notdir $(MODULES))))
