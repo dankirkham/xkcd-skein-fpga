@@ -14,6 +14,9 @@ MODULES= \
 	serial_module/serial_receiver \
 	serial_module/serial_transmitter \
 	state_machine/instruction_state_machine/add_state_machine \
+	state_machine/instruction_state_machine/constant_state_machine \
+	state_machine/instruction_state_machine/core_id_state_machine \
+	state_machine/instruction_state_machine/count_state_machine \
 	state_machine/instruction_state_machine/read_state_machine \
 	# xkcd_skein_processor
 
