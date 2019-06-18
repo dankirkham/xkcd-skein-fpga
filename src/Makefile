@@ -17,6 +17,9 @@ MODULES= \
 	state_machine/instruction_state_machine/constant_state_machine \
 	state_machine/instruction_state_machine/core_id_state_machine \
 	state_machine/instruction_state_machine/count_state_machine \
+	state_machine/instruction_state_machine/increment_nonce_state_machine \
+	state_machine/instruction_state_machine/load_state_machine \
+	state_machine/instruction_state_machine/nonce_state_machine \
 	state_machine/instruction_state_machine/read_state_machine \
 	# xkcd_skein_processor
 
