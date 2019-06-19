@@ -21,6 +21,7 @@ MODULES= \
 	state_machine/instruction_state_machine/load_state_machine \
 	state_machine/instruction_state_machine/nonce_state_machine \
 	state_machine/instruction_state_machine/read_state_machine \
+	state_machine/instruction_state_machine/rotate_left_state_machine \
 	# xkcd_skein_processor
 
 EXECUTABLES=$(join $(MODULES),$(addprefix /obj_dir/V,$(notdir $(MODULES))))
